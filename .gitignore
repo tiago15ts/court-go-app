@@ -1,0 +1,41 @@
+# Node.js dependencies
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# SST build & deployment artifacts
+.sst/
+.sst-outputs.json
+cdk.context.json
+cdk.out/
+constructs.json
+
+# Environment variables & secrets
+.env
+.env.local
+.env.production
+.env.test
+
+# Logs & cache files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs/
+*.log
+*.gz
+
+# AWS Credentials (DO NOT COMMIT!)
+.aws-sam/
+.terraform/
+.aws/
+credentials.json
+
+# VSCode & JetBrains IDE configs
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db

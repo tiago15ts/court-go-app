@@ -1,0 +1,17 @@
+{
+  "name": "@courtandgo/core",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "sst bind vitest",
+    "typecheck": "tsc -noEmit"
+  },
+  "devDependencies": {
+    "vitest": "^3.1.1",
+    "@types/node": "^22.14.0",
+    "sst": "^3.12.3"
+  },
+  "dependencies": {
+    "zod": "^3.24.2"
+  }
+}
