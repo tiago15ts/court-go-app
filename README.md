@@ -1,2 +1,2 @@
 # court-go-app
-Court&amp;Go Web Application 
+Court&amp;Go Application 
