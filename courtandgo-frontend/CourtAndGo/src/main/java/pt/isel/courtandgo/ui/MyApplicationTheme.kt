@@ -1,4 +1,4 @@
-package pt.isel.courtandgo.frontend.android
+package pt.isel.courtandgo.ui
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
