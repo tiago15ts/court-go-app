@@ -11,11 +11,18 @@ androidx-espresso-core = "3.6.1"
 androidx-lifecycle = "2.8.4"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
+awsAndroidSdkCognitoidentityprovider = "2.16.6"
 compose-multiplatform = "1.7.3"
 junit = "4.13.2"
+kmpAuth = "1.0.0"
+kmpauthUihelper = "<version>"
 kotlin = "2.1.10"
 
 [libraries]
+aws-android-sdk-cognitoidentityprovider = { module = "com.amazonaws:aws-android-sdk-cognitoidentityprovider", version.ref = "awsAndroidSdkCognitoidentityprovider" }
+kmp-auth = { module = "com.mirzemehdi:kmp-auth", version.ref = "kmpAuth" }
+kmpauth-google = { module = "io.github.mirzemehdi:kmpauth-google", version.ref = "kmpauthUihelper" }
+kmpauth-uihelper = { module = "io.github.mirzemehdi:kmpauth-uihelper", version.ref = "kmpauthUihelper" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

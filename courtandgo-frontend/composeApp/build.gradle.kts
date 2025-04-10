@@ -43,6 +43,10 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+
+            implementation(libs.kmpauth.google)
+            implementation(libs.kmpauth.uihelper)
+            implementation(libs.kmp.auth)
         }
     }
 }
@@ -76,5 +80,6 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+    implementation(libs.aws.android.sdk.cognitoidentityprovider)
 }
 
