@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.compose.compiler)
+    kotlin("multiplatform") version "1.8.0"
 }
 
 android {
@@ -33,6 +34,21 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+}
+
+kotlin {
+    iosX64()
+    iosArm64()
+
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(kotlin("stdlib"))
+            }
+        }
+        val androidMain by getting
+        val iosMain by getting
     }
 }
 
