@@ -7,7 +7,8 @@ import androidx.core.content.edit
 import androidx.core.net.toUri
 
 class AndroidAuthManager(private val context: Context) : AuthManager {
-
+    // usar lib kmpauth
+    // https://github.com/stevdza-san/KMPAuthDemo/blob/main/composeApp/src/commonMain/kotlin/App.kt
     private val clientId = "1fh5i2j79qsdbqihk2lmo0q6q6"
     private val domain = "eu-west-36c1aj3oez.auth.eu-west-3.amazoncognito.com"
     private val redirectUri = "courtandgo://callback"
@@ -45,4 +46,12 @@ class AndroidAuthManager(private val context: Context) : AuthManager {
     override fun isLoggedIn() = token != null
     override fun getToken() =
         context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE).getString("token", null)
+
+    override fun setToken(token: String) {
+        this.token = token
+        context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+            .edit() {
+                putString("token", token)
+            }
+    }
 }

@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            App(authManager) // Ou passa authManager via DI/ViewModel, etc.
+            CourtAndGoApp() // Ou passa authManager via DI/ViewModel, etc.
         }
 
         // Captura redirecionamento se a app for aberta com o token já no URI

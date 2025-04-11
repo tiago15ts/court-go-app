@@ -79,6 +79,10 @@ android {
 
 dependencies {
     implementation(libs.firebase.database.ktx)
+    implementation(libs.androidx.runtime.android)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.activity.compose)
     debugImplementation(compose.uiTooling)
     implementation(libs.aws.android.sdk.cognitoidentityprovider)
 }

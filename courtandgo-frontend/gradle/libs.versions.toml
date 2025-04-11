@@ -18,6 +18,9 @@ junit = "4.13.2"
 kmpauthUihelper = "2.3.1"
 kotlin = "2.1.10"
 firebaseDatabaseKtx = "21.0.0"
+runtimeAndroid = "1.7.8"
+navigationCompose = "2.8.9"
+activityKtx = "1.10.1"
 
 [libraries]
 aws-android-sdk-cognitoidentityprovider = { module = "com.amazonaws:aws-android-sdk-cognitoidentityprovider", version.ref = "awsAndroidSdkCognitoidentityprovider" }
@@ -37,6 +40,9 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx", version.ref = "firebaseDatabaseKtx" }
+androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "runtimeAndroid" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

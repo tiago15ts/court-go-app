@@ -6,4 +6,5 @@ interface AuthManager {
     fun handleRedirect(uri: String)
     fun isLoggedIn(): Boolean
     fun getToken(): String?
+    fun setToken(token: String)
 }
