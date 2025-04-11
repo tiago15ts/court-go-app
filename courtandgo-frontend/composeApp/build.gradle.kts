@@ -46,7 +46,6 @@ kotlin {
 
             implementation(libs.kmpauth.google)
             implementation(libs.kmpauth.uihelper)
-            implementation(libs.kmp.auth)
         }
     }
 }
@@ -79,6 +78,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.firebase.database.ktx)
     debugImplementation(compose.uiTooling)
     implementation(libs.aws.android.sdk.cognitoidentityprovider)
 }
