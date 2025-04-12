@@ -1,27 +1,27 @@
 package pt.isel.courtandgo.frontend.authentication.login
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.mmk.kmpauth.google.GoogleAuthCredentials
 import com.mmk.kmpauth.google.GoogleAuthProvider
 import com.mmk.kmpauth.google.GoogleButtonUiContainer
 import com.mmk.kmpauth.uihelper.google.GoogleSignInButton
-import pt.isel.courtandgo.frontend.authentication.AuthManager
 
 @Composable
-fun LoginScreen(authManager: AuthManager) {
+fun LoginScreen(
+    onLoginSuccess: (email: String, password: String) -> Unit,
+    onGoogleLogin: (tokenId: String) -> Unit,
+    isLoggingIn: Boolean,
+    onLoginFailure: (String) -> Unit,
+    onNavigateBack: () -> Unit,
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var isLoggingIn by remember { mutableStateOf(false) }
     var authReady by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -41,18 +41,21 @@ fun LoginScreen(authManager: AuthManager) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Button(onClick = onNavigateBack) {
+                Text("← Voltar")
+            }
             Text("Court&Go", style = MaterialTheme.typography.h4)
             Spacer(modifier = Modifier.height(24.dp))
 
             Text("Entrar na sua conta", style = MaterialTheme.typography.subtitle1)
-
             Spacer(modifier = Modifier.height(16.dp))
 
             TextField(
                 value = email,
                 onValueChange = { email = it },
                 placeholder = { Text("email@domain.com") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Email") }
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -61,16 +64,18 @@ fun LoginScreen(authManager: AuthManager) {
                 value = password,
                 onValueChange = { password = it },
                 placeholder = { Text("palavra-passe") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Password") },
+                visualTransformation = PasswordVisualTransformation()
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
             Button(
                 onClick = {
-                    isLoggingIn = true
-                    // TODO: authManager.loginWithEmail(email, password)
+                    onLoginSuccess(email, password)
                 },
+                enabled = email.isNotBlank() && password.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -95,13 +100,17 @@ fun LoginScreen(authManager: AuthManager) {
                 GoogleButtonUiContainer(
                     onGoogleSignInResult = { googleUser ->
                         val tokenId = googleUser?.idToken
-                        println("TOKEN: $tokenId")
-                        authManager.setToken(tokenId ?: "")
+                        if (tokenId != null) {
+                            onGoogleLogin(tokenId)
+                        } else {
+                            onLoginFailure("Autenticação Google falhou.")
+                        }
                     }
                 ) {
                     GoogleSignInButton(
                         onClick = { this.onClick() },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Entrar com Google"
                     )
                 }
             }

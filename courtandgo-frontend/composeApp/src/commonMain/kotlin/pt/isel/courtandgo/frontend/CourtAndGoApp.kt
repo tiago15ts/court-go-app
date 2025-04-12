@@ -4,6 +4,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import pt.isel.courtandgo.frontend.authentication.login.LoginScreen
 import pt.isel.courtandgo.frontend.authentication.register.RegisterDetailsScreen
 import pt.isel.courtandgo.frontend.authentication.register.RegisterFirstScreen
 import pt.isel.courtandgo.frontend.home.HomeScreen
@@ -21,6 +22,9 @@ fun CourtAndGoApp() {
                 onGoogleRegister = { tokenId ->
                     // Podes usar o token para autenticar no backend
                     screen.value = Screen.Home
+                },
+                onAlreadyHaveAccount = {
+                    screen.value = Screen.Login
                 }
             )
 
@@ -35,13 +39,24 @@ fun CourtAndGoApp() {
                 }
             )
 
-            /*is Screen.Login -> LoginScreen(
-                onLogin = { screen.value = Screen.Home },
-                onGoogleLogin = { screen.value = Screen.Home }
-            )*/
+            is Screen.Login -> LoginScreen(
+                onLoginSuccess = { email, password ->
+                    screen.value = Screen.Home
+                },
+                onGoogleLogin = { tokenId ->
+                    // dá para usar o token para autenticar no backend
+                    screen.value = Screen.Home
+                },
+                isLoggingIn = false,
+                onLoginFailure = {
+
+                },
+                onNavigateBack = {
+                    screen.value = Screen.RegisterFirst
+                }
+            )
 
             is Screen.Home -> HomeScreen()
-            Screen.Login -> TODO()
         }
     }
 }

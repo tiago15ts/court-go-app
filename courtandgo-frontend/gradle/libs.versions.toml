@@ -21,6 +21,7 @@ firebaseDatabaseKtx = "21.0.0"
 runtimeAndroid = "1.7.8"
 navigationCompose = "2.8.9"
 activityKtx = "1.10.1"
+uiTextAndroid = "1.7.8"
 
 [libraries]
 aws-android-sdk-cognitoidentityprovider = { module = "com.amazonaws:aws-android-sdk-cognitoidentityprovider", version.ref = "awsAndroidSdkCognitoidentityprovider" }
@@ -43,6 +44,7 @@ firebase-database-ktx = { group = "com.google.firebase", name = "firebase-databa
 androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "runtimeAndroid" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
+androidx-ui-text-android = { group = "androidx.compose.ui", name = "ui-text-android", version.ref = "uiTextAndroid" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

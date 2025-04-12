@@ -7,4 +7,5 @@ interface AuthManager {
     fun isLoggedIn(): Boolean
     fun getToken(): String?
     fun setToken(token: String)
+
 }
