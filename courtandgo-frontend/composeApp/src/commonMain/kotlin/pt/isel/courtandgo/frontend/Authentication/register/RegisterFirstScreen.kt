@@ -1,5 +1,6 @@
 package pt.isel.courtandgo.frontend.authentication.register
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,6 +34,7 @@ import pt.isel.courtandgo.frontend.authentication.isValidEmail
 fun RegisterFirstScreen(
     onContinueWithEmail: (String) -> Unit,
     onGoogleRegister: (String) -> Unit,
+    onAlreadyHaveAccount: () -> Unit,
 ) {
     var email by remember { mutableStateOf("") }
     var authReady by remember { mutableStateOf(false) }
@@ -127,6 +129,17 @@ fun RegisterFirstScreen(
                 )
             }
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Já tem conta? Entrar",
+            color = MaterialTheme.colors.primary,
+            style = MaterialTheme.typography.body2,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .clickable { onAlreadyHaveAccount() }
+        )
     }
 }
 
