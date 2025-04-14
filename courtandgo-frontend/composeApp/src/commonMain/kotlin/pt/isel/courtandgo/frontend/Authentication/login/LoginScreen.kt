@@ -5,6 +5,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.mmk.kmpauth.google.GoogleAuthCredentials
@@ -14,20 +15,22 @@ import com.mmk.kmpauth.uihelper.google.GoogleSignInButton
 
 @Composable
 fun LoginScreen(
-    onLoginSuccess: (email: String, password: String) -> Unit,
-    onGoogleLogin: (tokenId: String) -> Unit,
-    isLoggingIn: Boolean,
-    onLoginFailure: (String) -> Unit,
+    viewModel: LoginViewModel,
+    onLoginSuccess: () -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var authReady by remember { mutableStateOf(false) }
 
+    val isLoggingIn by viewModel.isLoggingIn.collectAsState()
+    val loginError by viewModel.loginError.collectAsState()
+
+
     LaunchedEffect(Unit) {
         GoogleAuthProvider.create(
             credentials = GoogleAuthCredentials(
-                serverId = "O_TEU_CLIENT_ID_WEB_DO_GOOGLE"
+                serverId = "1fh5i2j79qsdbqihk2lmo0q6q6"
             )
         )
         authReady = true
@@ -73,7 +76,9 @@ fun LoginScreen(
 
             Button(
                 onClick = {
-                    onLoginSuccess(email, password)
+                    viewModel.login(email, password) {
+                        onLoginSuccess()
+                    }
                 },
                 enabled = email.isNotBlank() && password.isNotBlank(),
                 modifier = Modifier
@@ -101,9 +106,11 @@ fun LoginScreen(
                     onGoogleSignInResult = { googleUser ->
                         val tokenId = googleUser?.idToken
                         if (tokenId != null) {
-                            onGoogleLogin(tokenId)
+                            viewModel.loginWithGoogle(tokenId) {
+                                onLoginSuccess()
+                            }
                         } else {
-                            onLoginFailure("Autenticação Google falhou.")
+                            // pode mostrar erro local
                         }
                     }
                 ) {
@@ -115,10 +122,15 @@ fun LoginScreen(
                 }
             }
 
-            if (isLoggingIn) {
-                Spacer(modifier = Modifier.height(16.dp))
-                CircularProgressIndicator()
+            if (!loginError.isNullOrEmpty()) {
+                Text(
+                    text = loginError!!,
+                    color = Color.Red,
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
             }
+
         }
     }
 }

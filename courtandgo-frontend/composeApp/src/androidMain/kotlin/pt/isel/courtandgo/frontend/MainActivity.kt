@@ -7,6 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import pt.isel.courtandgo.frontend.authentication.AndroidAuthManager
+import pt.isel.courtandgo.frontend.service.mock.CourtAndGoServiceMock
+import pt.isel.courtandgo.frontend.service.mock.MockUserService
 
 class MainActivity : ComponentActivity() {
 
@@ -16,10 +18,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            CourtAndGoApp() // Ou passa authManager via DI/ViewModel, etc.
+            CourtAndGoApp(courtAndGoService = CourtAndGoServiceMock() )
         }
 
-        // Captura redirecionamento se a app for aberta com o token já no URI
         intent?.data?.let { uri ->
             authManager.handleRedirect(uri.toString())
         }
