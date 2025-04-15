@@ -13,6 +13,24 @@ class AuthRepositoryImpl(
         return user ?: throw Exception("Login failed")
     }
 
+    override suspend fun loginWithGoogle(
+        tokenId: String,
+        name: String,
+        email: String
+    ): User {
+        setToken(tokenId) // Guardar token
+
+        val user = courtAndGoService.userService.getUserByEmail(email)
+            ?: courtAndGoService.userService.register(
+                email = email,
+                name = name,
+                contact = "Atualize o seu contacto",
+                password = "oauth" // ou usa null se for suportado
+            )
+
+        return user
+    }
+
     override fun setToken(token: String) {
         this.token = token
     }
