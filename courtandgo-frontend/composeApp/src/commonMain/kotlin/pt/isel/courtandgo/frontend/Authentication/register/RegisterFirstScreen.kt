@@ -28,7 +28,9 @@ import com.mmk.kmpauth.google.GoogleAuthCredentials
 import com.mmk.kmpauth.google.GoogleAuthProvider
 import com.mmk.kmpauth.google.GoogleButtonUiContainer
 import com.mmk.kmpauth.uihelper.google.GoogleSignInButton
+import pt.isel.courtandgo.frontend.authentication.AuthConstants
 import pt.isel.courtandgo.frontend.authentication.isValidEmail
+import pt.isel.courtandgo.frontend.repository.AuthViewModel
 
 @Composable
 fun RegisterFirstScreen(
@@ -45,7 +47,7 @@ fun RegisterFirstScreen(
     LaunchedEffect(Unit) {
         GoogleAuthProvider.create(
             credentials = GoogleAuthCredentials(
-                serverId = "1fh5i2j79qsdbqihk2lmo0q6q6"
+                serverId = AuthConstants.GOOGLE_SERVER_ID
             )
         )
         authReady = true
@@ -116,10 +118,13 @@ fun RegisterFirstScreen(
 
         if (authReady) {
             GoogleButtonUiContainer(
-                onGoogleSignInResult = { googleUser ->
-                    val tokenId = googleUser?.idToken
-                    println("TOKEN: $tokenId")
-                    if (tokenId != null) onGoogleRegister(tokenId)
+                onGoogleSignInResult = { googleUser -> //todo viewmodel register
+                    googleUser?.let {
+                        val tokenId = it.idToken
+                        println("TOKEN: $tokenId")
+                        onGoogleRegister(tokenId)
+                        AuthViewModel().setName(it.displayName ?: "")
+                    }
                 }
             ) {
                 GoogleSignInButton(

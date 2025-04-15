@@ -13,6 +13,7 @@ import pt.isel.courtandgo.frontend.authentication.register.RegisterFirstScreen
 import pt.isel.courtandgo.frontend.home.HomeScreen
 import pt.isel.courtandgo.frontend.repository.AuthRepository
 import pt.isel.courtandgo.frontend.repository.AuthRepositoryImpl
+import pt.isel.courtandgo.frontend.repository.AuthViewModel
 import pt.isel.courtandgo.frontend.service.CourtAndGoService
 
 @Composable
@@ -57,7 +58,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                 onLoginSuccess = { screen.value = Screen.Home }
             )
 
-            is Screen.Home -> HomeScreen()
+            is Screen.Home -> HomeScreen(loginViewModel) //todo fix here
         }
     }
 }

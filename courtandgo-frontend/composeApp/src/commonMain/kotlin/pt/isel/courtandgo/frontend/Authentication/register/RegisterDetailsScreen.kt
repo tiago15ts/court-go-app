@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color.Companion
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pt.isel.courtandgo.frontend.repository.AuthViewModel
 
 @Composable
 fun RegisterDetailsScreen(
@@ -107,6 +108,7 @@ fun RegisterDetailsScreen(
             Button(
                 onClick = {
                     onRegister(email, name, contact, password)
+                    AuthViewModel().setName(name)
                 },
                 enabled = allValid,
                 modifier = Modifier

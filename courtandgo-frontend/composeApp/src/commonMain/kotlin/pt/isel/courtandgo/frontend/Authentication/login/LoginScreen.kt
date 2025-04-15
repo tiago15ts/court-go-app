@@ -12,6 +12,7 @@ import com.mmk.kmpauth.google.GoogleAuthCredentials
 import com.mmk.kmpauth.google.GoogleAuthProvider
 import com.mmk.kmpauth.google.GoogleButtonUiContainer
 import com.mmk.kmpauth.uihelper.google.GoogleSignInButton
+import pt.isel.courtandgo.frontend.authentication.AuthConstants
 
 @Composable
 fun LoginScreen(
@@ -30,7 +31,7 @@ fun LoginScreen(
     LaunchedEffect(Unit) {
         GoogleAuthProvider.create(
             credentials = GoogleAuthCredentials(
-                serverId = "1fh5i2j79qsdbqihk2lmo0q6q6"
+                serverId = AuthConstants.GOOGLE_SERVER_ID
             )
         )
         authReady = true
@@ -104,14 +105,15 @@ fun LoginScreen(
             if (authReady) {
                 GoogleButtonUiContainer(
                     onGoogleSignInResult = { googleUser ->
-                        val tokenId = googleUser?.idToken
-                        if (tokenId != null) {
-                            viewModel.loginWithGoogle(tokenId) {
+                        googleUser?.let {
+                            viewModel.loginWithGoogle(
+                                tokenId = it.idToken ?: return@let,
+                                name = it.displayName,
+                                email = it.email ?: "Atualize o seu email",
+                            ) {
                                 onLoginSuccess()
                             }
-                        } else {
-                            // pode mostrar erro local
-                        }
+                        } ?: println("Login Google falhou.") //todo: handle error
                     }
                 ) {
                     GoogleSignInButton(
