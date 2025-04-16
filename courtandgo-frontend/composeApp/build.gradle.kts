@@ -42,6 +42,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.androidx.material.icons.extended)
 
             implementation(libs.kmpauth.google)
             implementation(libs.kmpauth.uihelper)
@@ -83,6 +84,9 @@ dependencies {
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.ui.text.android)
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.androidx.ui.graphics.android)
+    implementation(libs.androidx.ui.android)
     debugImplementation(compose.uiTooling)
     implementation(libs.aws.android.sdk.cognitoidentityprovider)
 }

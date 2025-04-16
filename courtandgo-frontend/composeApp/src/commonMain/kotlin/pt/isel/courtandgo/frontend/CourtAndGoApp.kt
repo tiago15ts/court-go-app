@@ -10,6 +10,7 @@ import pt.isel.courtandgo.frontend.authentication.login.LoginScreen
 import pt.isel.courtandgo.frontend.authentication.login.LoginViewModel
 import pt.isel.courtandgo.frontend.authentication.register.RegisterDetailsScreen
 import pt.isel.courtandgo.frontend.authentication.register.RegisterFirstScreen
+import pt.isel.courtandgo.frontend.components.bottomNavBar.Tab
 import pt.isel.courtandgo.frontend.home.HomeScreen
 import pt.isel.courtandgo.frontend.repository.AuthRepository
 import pt.isel.courtandgo.frontend.repository.AuthRepositoryImpl
@@ -21,6 +22,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
     val screen = remember { mutableStateOf<Screen>(Screen.RegisterFirst) }
     val coroutineScope = rememberCoroutineScope()
     val loginViewModel = remember { LoginViewModel(AuthRepositoryImpl(courtAndGoService)) }
+    val selectedTab = remember { mutableStateOf(Tab.Home) }
 
 
     MaterialTheme {
