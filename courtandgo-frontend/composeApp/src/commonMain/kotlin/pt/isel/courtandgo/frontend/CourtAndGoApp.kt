@@ -12,9 +12,7 @@ import pt.isel.courtandgo.frontend.authentication.register.RegisterDetailsScreen
 import pt.isel.courtandgo.frontend.authentication.register.RegisterFirstScreen
 import pt.isel.courtandgo.frontend.components.bottomNavBar.Tab
 import pt.isel.courtandgo.frontend.home.HomeScreen
-import pt.isel.courtandgo.frontend.repository.AuthRepository
 import pt.isel.courtandgo.frontend.repository.AuthRepositoryImpl
-import pt.isel.courtandgo.frontend.repository.AuthViewModel
 import pt.isel.courtandgo.frontend.service.CourtAndGoService
 
 @Composable

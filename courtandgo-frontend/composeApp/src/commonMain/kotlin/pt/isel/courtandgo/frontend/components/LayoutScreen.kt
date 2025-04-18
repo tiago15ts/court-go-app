@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import pt.isel.courtandgo.frontend.components.bottomNavBar.BottomNavigationBar
 import pt.isel.courtandgo.frontend.components.bottomNavBar.Tab
+import pt.isel.courtandgo.frontend.components.topBar.CourtAndGoTopBar
 
 @Composable
 fun LayoutScreen(
@@ -18,6 +19,11 @@ fun LayoutScreen(
     val selectedTab = remember { mutableStateOf(Tab.Home) }
 
     Scaffold(
+        topBar = {
+            CourtAndGoTopBar(
+                onLeftIconClick = { /* TODO: ação botão direito */ }
+            )
+        },
         bottomBar = {
             BottomNavigationBar(
                 selectedTab = selectedTab.value,
