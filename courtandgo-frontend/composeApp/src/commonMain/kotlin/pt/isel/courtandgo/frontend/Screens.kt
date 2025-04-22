@@ -5,5 +5,11 @@ sealed class Screen {
     data class RegisterDetails(val email: String) : Screen()
     data object Login : Screen()
     data object Home : Screen()
+    data object Search : Screen()
+    data object Calendar : Screen()
+    data object Profile : Screen()
+    data object EditProfile : Screen()
+    data object Notifications : Screen()
+
 }
 

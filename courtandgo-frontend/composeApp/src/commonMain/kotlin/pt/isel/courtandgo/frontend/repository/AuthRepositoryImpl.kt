@@ -24,6 +24,7 @@ class AuthRepositoryImpl(
             ?: courtAndGoService.userService.register(
                 email = email,
                 name = name,
+                countryCode = "+351",
                 contact = "Atualize o seu contacto",
                 password = "oauth" // ou usa null se for suportado
             )

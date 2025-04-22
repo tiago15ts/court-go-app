@@ -15,10 +15,13 @@ awsAndroidSdkCognitoidentityprovider = "2.16.6"
 compose-multiplatform = "1.7.3"
 junit = "4.13.2"
 
+kamelImage = "0.5.0"
 kmpauthUihelper = "2.3.1"
 kotlin = "2.1.10"
 firebaseDatabaseKtx = "21.0.0"
+landscapistCoil3 = "2.4.7"
 materialIconsExtended = "1.7.8"
+resources = "1.5.0"
 runtimeAndroid = "1.7.8"
 navigationCompose = "2.8.9"
 activityKtx = "1.10.1"
@@ -31,6 +34,7 @@ uiAndroid = "1.7.8"
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 aws-android-sdk-cognitoidentityprovider = { module = "com.amazonaws:aws-android-sdk-cognitoidentityprovider", version.ref = "awsAndroidSdkCognitoidentityprovider" }
 
+kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamelImage" }
 kmpauth-google = { module = "io.github.mirzemehdi:kmpauth-google", version.ref = "kmpauthUihelper" }
 kmpauth-uihelper = { module = "io.github.mirzemehdi:kmpauth-uihelper", version.ref = "kmpauthUihelper" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -53,6 +57,8 @@ androidx-ui-text-android = { group = "androidx.compose.ui", name = "ui-text-andr
 androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
 androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "uiGraphicsAndroid" }
 androidx-ui-android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "uiAndroid" }
+landscapist-coil3 = { module = "com.github.skydoves:landscapist-coil3", version.ref = "landscapistCoil3" }
+resources = { module = "org.jetbrains.compose.resources:resources", version.ref = "resources" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

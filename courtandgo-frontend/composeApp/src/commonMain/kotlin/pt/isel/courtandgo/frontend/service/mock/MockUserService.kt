@@ -7,8 +7,14 @@ import pt.isel.courtandgo.frontend.service.mock.repo.UserRepoMock
 
 class MockUserService(private val repoMock: UserRepoMock) : UserService {
 
-    override suspend fun register(email: String, name: String, contact: String, password: String): User {
-        return repoMock.createUser(email, name, contact, password)
+    override suspend fun register(
+        email: String,
+        name: String,
+        countryCode: String,
+        contact: String,
+        password: String
+    ): User {
+        return repoMock.createUser(email, name, countryCode, contact, password)
     }
 
     override suspend fun login(email: String, password: String): User? {

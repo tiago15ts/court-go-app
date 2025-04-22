@@ -36,7 +36,7 @@ fun CourtAndGoTopBar(
         )
 
 
-        // Dropdown menu à direita
+        // Dropdown menu à esquerda
         DropdownMenu(
             expanded = showMenu,
             onDismissRequest = { showMenu = false }

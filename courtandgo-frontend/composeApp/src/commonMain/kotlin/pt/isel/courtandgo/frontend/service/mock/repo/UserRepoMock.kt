@@ -7,9 +7,9 @@ class UserRepoMock {
     companion object {
         val users =
             mutableListOf<User>(
-                User(1, "Joao", "joao@example.com","+351912345678"),
-                User(2, "Alice", "alice@example.com", "+351912345679"),
-                User(3, "John", "john@example.com", "+351912345680"),
+                User(1, "Joao", "joao@example.com","+351","912345678", null, null, null),
+                User(2, "Alice", "alice@example.com", "+351","912345679", null, null, null),
+                User(3, "John", "john@example.com", "+351", "912345680", null, null, null),
             )
 
         val passwords = mutableMapOf(
@@ -20,11 +20,17 @@ class UserRepoMock {
         private var currentId = 4
     }
 
-    fun createUser(email: String, name: String, contact: String, password: String): User {
+    fun createUser(
+        email: String,
+        name: String,
+        countryCode: String,
+        phone: String,
+        password: String
+    ): User {
         if (users.any { it.email == email }) {
             throw IllegalArgumentException("Email já utilizado.")
         }
-        val user = User(currentId++, name, email, contact)
+        val user = User(currentId++, name, email, countryCode, phone, null, null, null)
         users.add(user)
         passwords[user.id] = password
         return user

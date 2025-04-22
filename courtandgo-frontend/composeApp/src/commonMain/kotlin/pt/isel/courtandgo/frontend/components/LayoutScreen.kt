@@ -3,39 +3,36 @@ package pt.isel.courtandgo.frontend.components
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
+import pt.isel.courtandgo.frontend.Screen
 import pt.isel.courtandgo.frontend.components.bottomNavBar.BottomNavigationBar
 import pt.isel.courtandgo.frontend.components.bottomNavBar.Tab
 import pt.isel.courtandgo.frontend.components.topBar.CourtAndGoTopBar
 
 @Composable
 fun LayoutScreen(
+    selectedTab: Tab,
+    onTabSelected: (Tab) -> Unit,
+    currentScreen: Screen,
     content: @Composable () -> Unit
 ) {
-    val selectedTab = remember { mutableStateOf(Tab.Home) }
-
+    val scrollState = rememberScrollState()
     Scaffold(
         topBar = {
             CourtAndGoTopBar(
-                onLeftIconClick = { /* TODO: ação botão direito */ }
+                onLeftIconClick = { /* TODO: ação botão esquerdo */ }
             )
         },
         bottomBar = {
             BottomNavigationBar(
-                selectedTab = selectedTab.value,
-                onTabSelected = { tab ->
-                    selectedTab.value = tab
-                    when (tab) {
-                        Tab.Home -> { /* Do nothing, already on Home */ }
-                        Tab.Search -> { /* Navigate to Search */ }
-                        Tab.Calendar -> { /* Navigate to Calendar */ }
-                        Tab.Profile -> { /* Navigate to Profile */ }
-                    }
-                }
+                selectedTab = selectedTab,
+                onTabSelected = onTabSelected
             )
         }
     ) { innerPadding ->
@@ -43,6 +40,7 @@ fun LayoutScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
+                .verticalScroll(scrollState)
         ) {
             content()
         }

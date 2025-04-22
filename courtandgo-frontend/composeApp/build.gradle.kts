@@ -43,7 +43,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.material.icons.extended)
-
+            implementation(libs.landscapist.coil3) // to use images
             implementation(libs.kmpauth.google)
             implementation(libs.kmpauth.uihelper)
         }
@@ -87,6 +87,7 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.ui.graphics.android)
     implementation(libs.androidx.ui.android)
+    implementation(libs.androidx.material3.android)
     debugImplementation(compose.uiTooling)
     implementation(libs.aws.android.sdk.cognitoidentityprovider)
 }
