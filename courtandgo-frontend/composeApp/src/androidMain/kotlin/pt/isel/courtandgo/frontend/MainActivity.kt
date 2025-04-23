@@ -9,6 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import pt.isel.courtandgo.frontend.authentication.AndroidAuthManager
 import pt.isel.courtandgo.frontend.service.mock.CourtAndGoServiceMock
 import pt.isel.courtandgo.frontend.service.mock.MockUserService
+import pt.isel.courtandgo.frontend.ui.CourtAndGoTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -18,7 +19,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            CourtAndGoApp(courtAndGoService = CourtAndGoServiceMock() )
+            CourtAndGoTheme {
+                CourtAndGoApp(courtAndGoService = CourtAndGoServiceMock())
+            }
         }
 
         intent?.data?.let { uri ->
