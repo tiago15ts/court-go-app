@@ -15,9 +15,6 @@ import pt.isel.courtandgo.frontend.authentication.login.LoginViewModel
 @Composable
 fun HomeScreen(vm :LoginViewModel, //todo fix this param
 ) {
-
-    Text("Home of Court&Go")
-
     val name = vm.userName
 
     Column(

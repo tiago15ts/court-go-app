@@ -44,8 +44,14 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.material.icons.extended)
             implementation(libs.landscapist.coil3) // to use images
+
             implementation(libs.kmpauth.google)
             implementation(libs.kmpauth.uihelper)
+
+            implementation(libs.cupertino)
+
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.datetime.ext)
         }
     }
 }

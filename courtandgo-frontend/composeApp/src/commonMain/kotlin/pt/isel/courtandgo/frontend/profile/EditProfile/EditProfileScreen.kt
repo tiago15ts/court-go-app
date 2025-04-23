@@ -1,24 +1,39 @@
 package pt.isel.courtandgo.frontend.profile.editProfile
 
 import ProfileAvatar
-
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
-
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import pt.isel.courtandgo.frontend.authentication.countryPhoneCode
+import pt.isel.courtandgo.frontend.components.datePicker.DatePickerComponent
 import pt.isel.courtandgo.frontend.domain.User
-
 
 
 @Composable
@@ -36,8 +51,6 @@ fun EditProfileScreen(
     var gender by remember { mutableStateOf(user.gender ?: "") }
     var birthDate by remember { mutableStateOf(user.birthDate ?: "") }
     var description by remember { mutableStateOf(user.description ?: "") }
-    val dateRegex = Regex("""\d{2}/\d{2}/\d{4}""")
-    val isValidDate = dateRegex.matches(birthDate)
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -91,40 +104,61 @@ fun EditProfileScreen(
                     Text(countryCode)
                 }
 
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                countryPhoneCode.forEach { code ->
-                    DropdownMenuItem(onClick = {
-                        countryCode = code
-                        expanded = false
-                    }) {
-                        Text(text = code)
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    countryPhoneCode.forEach { code ->
+                        DropdownMenuItem(onClick = {
+                            countryCode = code
+                            expanded = false
+                        }) {
+                            Text(text = code)
+                        }
                     }
                 }
             }
-                }
             Spacer(Modifier.width(8.dp))
             CustomTextField("Telefone", phone, modifier = Modifier.weight(2f)) { phone = it }
         }
 
-        CustomDropdown("Género", gender, options = listOf("Masculino", "Feminino", "Undefined")) {
-            gender = it
+        var genderExpanded by remember { mutableStateOf(false) }
+        Column {
+            Text("Selecione o seu género:", fontWeight = FontWeight.Bold)
+            Box(modifier = Modifier.fillMaxWidth()) {
+                OutlinedButton(
+                    onClick = { genderExpanded = true },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(gender.ifBlank { "Género" })
+                }
+
+                DropdownMenu(
+                    expanded = genderExpanded,
+                    onDismissRequest = { genderExpanded = false }
+                ) {
+                    listOf("Masculino", "Feminino").forEach { option ->
+                        DropdownMenuItem(onClick = {
+                            gender = option
+                            genderExpanded = false
+                        }) {
+                            Text(option)
+                        }
+                    }
+                }
+            }
         }
 
-        OutlinedTextField(
-            value = birthDate,
-            onValueChange = { birthDate = it },
-            label = { Text("Data de nascimento") },
-            placeholder = { Text("dd/mm/aaaa") },
-            isError = birthDate.isNotBlank() && !isValidDate,
-            modifier = Modifier.fillMaxWidth()
+
+        DatePickerComponent(
+            initialDate = birthDate,
+            title = "Data de nascimento",
+            description = "Selecione a sua data de nascimento",
+            pastDates = true,
+            onDateChange = { birthDate = it }
         )
 
-        if (birthDate.isNotBlank() && !isValidDate) {
-            Text("Formato inválido. Usa dd/mm/aaaa", color = Color.Red)
-        }
+
 
         CustomTextField("Descrição", description, singleLine = false) { description = it }
     }

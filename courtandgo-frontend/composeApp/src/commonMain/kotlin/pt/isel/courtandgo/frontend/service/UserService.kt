@@ -14,5 +14,5 @@ interface UserService{
 
     suspend fun getUserByEmail(email: String): User?
 
-    //todo suspend fun updateUser(user: User): User
+    suspend fun updateUser(user: User): User
 }

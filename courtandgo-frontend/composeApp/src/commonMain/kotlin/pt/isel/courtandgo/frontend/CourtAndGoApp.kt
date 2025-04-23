@@ -5,7 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveTheme
+import io.github.alexzhirkevich.cupertino.adaptive.CupertinoThemeSpec
+import io.github.alexzhirkevich.cupertino.adaptive.ExperimentalAdaptiveApi
+import io.github.alexzhirkevich.cupertino.adaptive.MaterialThemeSpec
+import io.github.alexzhirkevich.cupertino.adaptive.Theme
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import pt.isel.courtandgo.frontend.authentication.login.LoginScreen
 import pt.isel.courtandgo.frontend.authentication.login.LoginViewModel
 import pt.isel.courtandgo.frontend.authentication.register.RegisterDetailsScreen
@@ -21,6 +27,7 @@ import pt.isel.courtandgo.frontend.repository.AuthRepositoryImpl
 import pt.isel.courtandgo.frontend.service.CourtAndGoService
 
 @Composable
+@Preview
 fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
     val screen = remember { mutableStateOf<Screen>(Screen.RegisterFirst) }
     val coroutineScope = rememberCoroutineScope()
@@ -39,6 +46,9 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
     }
 
     MaterialTheme {
+
+
+
         if (!isAuthenticated) {
             when (val current = screen.value) {
                 is Screen.RegisterFirst -> RegisterFirstScreen(
@@ -58,7 +68,13 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                     email = current.email,
                     onRegister = { email, name, countryCode, contact, password ->
                         coroutineScope.launch {
-                            courtAndGoService.userService.register(email, name,countryCode, contact, password)
+                            courtAndGoService.userService.register(
+                                email,
+                                name,
+                                countryCode,
+                                contact,
+                                password
+                            )
                             screen.value = Screen.Home
                         }
                     },
@@ -100,14 +116,16 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                     )
 
                     Screen.EditProfile -> EditProfileScreen(
-                        user = User(1, //todo get user from service
+                        user = User(
+                            1, //todo get user from service
                             loginViewModel.userName ?: "user",
                             "email",
                             "countryCode",
                             "phone",
                             null,
                             null,
-                            null),
+                            null
+                        ),
                         onBack = { screen.value = Screen.Profile },
                         onSave = { updatedUser ->
                             currentUser.value = updatedUser
@@ -117,6 +135,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                             //todo change photo
                         }
                     )
+
                     Screen.Notifications -> EditNotificationsScreen()
 
                     is Screen.Search -> TODO()
@@ -126,4 +145,5 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
             }
         }
     }
+
 }

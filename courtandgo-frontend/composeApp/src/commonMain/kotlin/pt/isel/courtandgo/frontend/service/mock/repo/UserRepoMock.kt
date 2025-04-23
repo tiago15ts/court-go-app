@@ -7,7 +7,7 @@ class UserRepoMock {
     companion object {
         val users =
             mutableListOf<User>(
-                User(1, "Joao", "joao@example.com","+351","912345678", null, null, null),
+                User(1, "Joao", "joao@example.com","+351","912345678", null, "17/06/1999", null),
                 User(2, "Alice", "alice@example.com", "+351","912345679", null, null, null),
                 User(3, "John", "john@example.com", "+351", "912345680", null, null, null),
             )
@@ -54,6 +54,15 @@ class UserRepoMock {
     }
 
     //todo Mock logout logic
-    //todo fun update user with optional params
+
+    fun updateUser(user: User): User {
+        val index = users.indexOfFirst { it.id == user.id }
+        if (index != -1) {
+            users[index] = user
+            return user
+        } else {
+            throw IllegalArgumentException("User not found")
+        }
+    }
 
 }

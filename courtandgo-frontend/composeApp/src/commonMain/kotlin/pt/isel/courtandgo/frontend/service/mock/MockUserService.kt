@@ -34,10 +34,9 @@ class MockUserService(private val repoMock: UserRepoMock) : UserService {
         return repoMock.findUserByEmail(email)
     }
 
-/* todo
     override suspend fun updateUser(user: User): User {
-        return repoMock.
+        return repoMock.updateUser(user)
     }
 
- */
+
 }
