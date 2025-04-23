@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.coil3.CoilImage
 
 @Composable
-fun FirstReservationCard(onStartReservation:() -> Unit) {
+fun ReservationCard(onStartReservation:() -> Unit) {
     Card(
         elevation = 4.dp,
         modifier = Modifier
@@ -63,7 +63,7 @@ fun FirstReservationCard(onStartReservation:() -> Unit) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text("Faça a sua primeira reserva", style = MaterialTheme.typography.h6)
+            Text("Faça a sua reserva", style = MaterialTheme.typography.h6)
             Text(
                 "Escolha o campo mais próximo de si.",
                 style = MaterialTheme.typography.body2,

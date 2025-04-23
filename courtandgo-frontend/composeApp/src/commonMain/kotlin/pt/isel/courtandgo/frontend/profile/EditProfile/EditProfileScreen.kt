@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
@@ -33,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import pt.isel.courtandgo.frontend.authentication.countryPhoneCode
 import pt.isel.courtandgo.frontend.components.datePicker.DatePickerComponent
+import pt.isel.courtandgo.frontend.components.dropdownMenu.DropdownMenuField
 import pt.isel.courtandgo.frontend.domain.User
 
 
@@ -52,11 +55,13 @@ fun EditProfileScreen(
     var birthDate by remember { mutableStateOf(user.birthDate ?: "") }
     var description by remember { mutableStateOf(user.description ?: "") }
 
+    val scrollState = rememberScrollState()
+
     Column(modifier = Modifier
         .fillMaxSize()
-        .padding(24.dp)) {
-
-        // Top Bar
+        .padding(24.dp)
+        .verticalScroll(scrollState)
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -94,37 +99,23 @@ fun EditProfileScreen(
         CustomTextField("Email", email) { email = it }
 
         Row {
-            var expanded by remember { mutableStateOf(false) }
+            DropdownMenuField(
+                optionsList = countryPhoneCode,
+                preSelected = countryCode,
+                onOptionSelected = { countryCode = it }
+            )
 
-            Box(modifier = Modifier.weight(1f)) {
-                OutlinedButton(
-                    onClick = { expanded = true },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(countryCode)
-                }
-
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    countryPhoneCode.forEach { code ->
-                        DropdownMenuItem(onClick = {
-                            countryCode = code
-                            expanded = false
-                        }) {
-                            Text(text = code)
-                        }
-                    }
-                }
-            }
             Spacer(Modifier.width(8.dp))
+
             CustomTextField("Telefone", phone, modifier = Modifier.weight(2f)) { phone = it }
         }
 
         var genderExpanded by remember { mutableStateOf(false) }
         Column {
+
             Text("Selecione o seu género:", fontWeight = FontWeight.Bold)
+
+
             Box(modifier = Modifier.fillMaxWidth()) {
                 OutlinedButton(
                     onClick = { genderExpanded = true },

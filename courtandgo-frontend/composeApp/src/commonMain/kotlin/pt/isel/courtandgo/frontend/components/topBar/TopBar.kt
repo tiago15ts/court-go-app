@@ -1,55 +1,54 @@
 package pt.isel.courtandgo.frontend.components.topBar
+
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-
+import androidx.compose.ui.text.style.TextAlign
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CourtAndGoTopBar(
-    onLeftIconClick: () -> Unit,
+    onLeftIconClick: () -> Unit
 ) {
+    var showMenu by remember { mutableStateOf(false) }
+
     TopAppBar(
-        elevation = 4.dp,
-        backgroundColor = MaterialTheme.colors.primary,
-        contentPadding = PaddingValues(horizontal = 16.dp)
-    ) {
-        var showMenu by remember { mutableStateOf(false) }
+        title = {
+            Text(
+                text = "Court&Go",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        },
+        navigationIcon = {
+            Box {
+                IconButton(onClick = { showMenu = !showMenu }) {
+                    Icon(Icons.Filled.Menu, contentDescription = "Menu")
+                }
 
-        // Left icon (menu)
-        IconButton(onClick = { showMenu = !showMenu }) {
-            Icon(Icons.Default.Menu, contentDescription = "Menu")
-        }
-
-        // Title
-        Text(
-            text = "Court&Go",
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier
-                .weight(1f)
-                .align(Alignment.CenterVertically),
-            textAlign = TextAlign.Center
-        )
-
-
-        // Dropdown menu à esquerda
-        DropdownMenu(
-            expanded = showMenu,
-            onDismissRequest = { showMenu = false }
-        ) {
-            DropdownMenuItem(onClick = {
-                showMenu = false
-                onLeftIconClick()
-            }) {
-                Text("Opção 1")
+                DropdownMenu(
+                    expanded = showMenu,
+                    onDismissRequest = { showMenu = false },
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("Opção 1") },
+                        onClick = {
+                            showMenu = false
+                            onLeftIconClick()
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text("Opção 2") },
+                        onClick = { showMenu = false }
+                    )
+                }
             }
-            DropdownMenuItem(onClick = { showMenu = false }) {
-                Text("Opção 2")
-            }
-        }
-    }
+        },
+        actions = {},
+        modifier = Modifier.fillMaxWidth()
+    )
 }

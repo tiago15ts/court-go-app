@@ -22,7 +22,6 @@ fun LayoutScreen(
     currentScreen: Screen,
     content: @Composable () -> Unit
 ) {
-    val scrollState = rememberScrollState()
     Scaffold(
         topBar = {
             CourtAndGoTopBar(
@@ -40,7 +39,6 @@ fun LayoutScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .verticalScroll(scrollState)
         ) {
             content()
         }

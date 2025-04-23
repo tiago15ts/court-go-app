@@ -5,11 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveTheme
-import io.github.alexzhirkevich.cupertino.adaptive.CupertinoThemeSpec
-import io.github.alexzhirkevich.cupertino.adaptive.ExperimentalAdaptiveApi
-import io.github.alexzhirkevich.cupertino.adaptive.MaterialThemeSpec
-import io.github.alexzhirkevich.cupertino.adaptive.Theme
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import pt.isel.courtandgo.frontend.authentication.login.LoginScreen
@@ -24,7 +19,10 @@ import pt.isel.courtandgo.frontend.notifications.EditNotificationsScreen
 import pt.isel.courtandgo.frontend.profile.ProfileScreen
 import pt.isel.courtandgo.frontend.profile.editProfile.EditProfileScreen
 import pt.isel.courtandgo.frontend.repository.AuthRepositoryImpl
+import pt.isel.courtandgo.frontend.reservations.LastReservationsScreen
+import pt.isel.courtandgo.frontend.reservations.SearchCourtScreen
 import pt.isel.courtandgo.frontend.service.CourtAndGoService
+import pt.isel.courtandgo.frontend.ui.CourtAndGoTheme
 
 @Composable
 @Preview
@@ -45,9 +43,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
         else -> true
     }
 
-    MaterialTheme {
-
-
+    CourtAndGoTheme {
 
         if (!isAuthenticated) {
             when (val current = screen.value) {
@@ -98,7 +94,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                     selectedTab.value = tab
                     screen.value = when (tab) {
                         Tab.Home -> Screen.Home
-                        Tab.Search -> Screen.Search
+                        Tab.Search -> Screen.SearchCourt
                         Tab.Calendar -> Screen.Calendar
                         Tab.Profile -> Screen.Profile
                     }
@@ -106,7 +102,10 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                 currentScreen = screen.value
             ) {
                 when (screen.value) {
-                    is Screen.Home -> HomeScreen(loginViewModel) //todo fix home deve receber vm de login e de registo
+                    is Screen.Home -> HomeScreen(loginViewModel, //todo fix home deve receber vm de login e de registo
+                        onStartReservationClick = {screen.value= Screen.SearchCourt},
+                        onLastReservationsClick = {screen.value= Screen.LastReservations}
+                    )
 
                     is Screen.Profile -> ProfileScreen(
                         name = loginViewModel.userName ?: "User",
@@ -138,7 +137,22 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
 
                     Screen.Notifications -> EditNotificationsScreen()
 
-                    is Screen.Search -> TODO()
+                    is Screen.SearchCourt -> SearchCourtScreen(
+                        onBackClick = { screen.value = Screen.Home },
+                        onSearch = { searchText ->
+                            //todo search court
+                            //screen.value = Screen.Calendar
+                        }
+                    )
+
+                    is Screen.LastReservations -> LastReservationsScreen(
+                        onReservationClick = { reservationId ->
+                            //todo open reservation details
+                            //screen.value = Screen.ReservationDetails(reservationId)
+                        },
+                        onBack = { screen.value = Screen.Home }
+                    )
+
                     is Screen.Calendar -> TODO()
                     else -> {}
                 }

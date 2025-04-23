@@ -1,9 +1,9 @@
 package pt.isel.courtandgo.frontend.authentication.register
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,10 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -31,6 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pt.isel.courtandgo.frontend.authentication.countryPhoneCode
 import pt.isel.courtandgo.frontend.repository.AuthViewModel
+import pt.isel.courtandgo.frontend.components.dropdownMenu.DropdownMenuField
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.*
+
 
 @Composable
 fun RegisterDetailsScreen(
@@ -104,33 +105,13 @@ fun RegisterDetailsScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // Country code selector
-                var expanded by remember { mutableStateOf(false) }
 
-                Box(modifier = Modifier.weight(1f)) {
-                    OutlinedButton(
-                        onClick = { expanded = true },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(countryCode)
-                    }
+                DropdownMenuField(
+                    optionsList = countryPhoneCode,
+                    preSelected = countryCode,
+                    onOptionSelected = { countryCode = it }
+                )
 
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
-                    ) {
-                        countryPhoneCode.forEach { code ->
-                            DropdownMenuItem(onClick = {
-                                countryCode = code
-                                expanded = false
-                            }) {
-                                Text(text = code)
-                            }
-                        }
-                    }
-                }
-
-                // Contact input field
                 TextField(
                     value = contact,
                     onValueChange = { contact = it },
@@ -138,7 +119,6 @@ fun RegisterDetailsScreen(
                     modifier = Modifier.weight(3f)
                 )
             }
-
 
             Spacer(Modifier.height(16.dp))
 
