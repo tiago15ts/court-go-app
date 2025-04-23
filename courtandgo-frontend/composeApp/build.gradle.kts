@@ -42,7 +42,6 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.androidx.material.icons.extended)
             implementation(libs.landscapist.coil3) // to use images
 
             implementation(libs.kmpauth.google)
