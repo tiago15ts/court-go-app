@@ -12,15 +12,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import pt.isel.courtandgo.frontend.authentication.login.LoginViewModel
+import pt.isel.courtandgo.frontend.authentication.AuthViewModel
 
 @Composable
-fun HomeScreen(vm :LoginViewModel, //todo fix this param
+fun HomeScreen(vm :AuthViewModel, //todo fix this param
                onStartReservationClick: () -> Unit,
                onLastReservationsClick: () -> Unit,
                ) {
     val scrollState = rememberScrollState()
-    val name = vm.userName
+    val userName = vm.currentUser.value?.name
 
 
     Column(
@@ -32,7 +32,7 @@ fun HomeScreen(vm :LoginViewModel, //todo fix this param
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Olá${if (!name.isNullOrBlank()) ", $name 👋" else "!"}",
+            text = "Olá${if (!userName.isNullOrBlank()) ", $userName 👋" else "!"}",
             style = MaterialTheme.typography.h4
         )
         ReservationCard(onStartReservation = onStartReservationClick)

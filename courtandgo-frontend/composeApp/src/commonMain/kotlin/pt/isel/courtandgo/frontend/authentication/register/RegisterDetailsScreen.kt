@@ -1,47 +1,31 @@
 package pt.isel.courtandgo.frontend.authentication.register
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pt.isel.courtandgo.frontend.authentication.AuthViewModel
 import pt.isel.courtandgo.frontend.authentication.countryPhoneCode
-import pt.isel.courtandgo.frontend.repository.AuthViewModel
 import pt.isel.courtandgo.frontend.components.dropdownMenu.DropdownMenuField
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.*
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterDetailsScreen(
     email: String,
-    onRegister: (String, String, String, String, String) -> Unit, // email, nome, countryCode, contacto, password
+    viewModel: AuthViewModel,
+    onRegisterSuccess: () -> Unit,
     onNavigateBack: () -> Unit = { }
 ) {
     var name by remember { mutableStateOf("") }
     var countryCode by remember { mutableStateOf("+351") }
-    var contact by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     val hasUppercase = password.any { it.isUpperCase() }
@@ -50,7 +34,7 @@ fun RegisterDetailsScreen(
     val hasMinLength = password.length >= 8
 
     val allValid = hasUppercase && hasDigit && hasSpecialChar &&
-            hasMinLength && name.isNotBlank() && contact.isNotBlank()
+            hasMinLength && name.isNotBlank() && phone.isNotBlank()
 
     val scrollState = rememberScrollState()
 
@@ -67,19 +51,19 @@ fun RegisterDetailsScreen(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Button(onClick = onNavigateBack) {
+            OutlinedButton(onClick = onNavigateBack) {
                 Text("← Voltar")
             }
         }
 
         Spacer(Modifier.height(16.dp))
 
-        Text("Court&Go", style = MaterialTheme.typography.h4)
+        Text("Court&Go", style = MaterialTheme.typography.headlineMedium)
         Spacer(Modifier.height(24.dp))
 
         Column(modifier = Modifier.fillMaxWidth()) {
             Text("O seu email:")
-            TextField(
+            OutlinedTextField(
                 value = email,
                 onValueChange = {},
                 enabled = false,
@@ -89,7 +73,7 @@ fun RegisterDetailsScreen(
             Spacer(Modifier.height(16.dp))
 
             Text("Nome:")
-            TextField(
+            OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
                 placeholder = { Text("primeiro e último nome") },
@@ -99,22 +83,20 @@ fun RegisterDetailsScreen(
             Spacer(Modifier.height(16.dp))
 
             Text("Contacto:")
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-
                 DropdownMenuField(
                     optionsList = countryPhoneCode,
-                    preSelected = countryCode,
+                    selectedOption = countryCode,
                     onOptionSelected = { countryCode = it }
                 )
 
-                TextField(
-                    value = contact,
-                    onValueChange = { contact = it },
+                OutlinedTextField(
+                    value = phone,
+                    onValueChange = { phone = it },
                     placeholder = { Text("912345678") },
                     modifier = Modifier.weight(3f)
                 )
@@ -123,7 +105,7 @@ fun RegisterDetailsScreen(
             Spacer(Modifier.height(16.dp))
 
             Text("Palavra-passe:")
-            TextField(
+            OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
                 placeholder = { Text("palavra-passe") },
@@ -142,8 +124,14 @@ fun RegisterDetailsScreen(
 
             Button(
                 onClick = {
-                    onRegister(email, name, countryCode, contact, password)
-                    AuthViewModel().setName(name)
+                    viewModel.registerWithEmail(
+                        name = name,
+                        email = email,
+                        password = password,
+                        countryCode = countryCode,
+                        phone = phone,
+                        onSuccess = onRegisterSuccess
+                    )
                 },
                 enabled = allValid,
                 modifier = Modifier
@@ -161,12 +149,12 @@ fun PasswordRequirement(text: String, valid: Boolean) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = if (valid) "✔" else "❌",
-            color = if (valid) Companion.Green else Companion.Red,
+            color = if (valid) Color(0xFF4CAF50) else Color.Red,
             modifier = Modifier.padding(end = 4.dp)
         )
         Text(
             text = text,
-            color = if (valid) Companion.Gray else Companion.LightGray,
+            color = if (valid) Color.Gray else Color.LightGray,
             fontSize = 14.sp
         )
     }

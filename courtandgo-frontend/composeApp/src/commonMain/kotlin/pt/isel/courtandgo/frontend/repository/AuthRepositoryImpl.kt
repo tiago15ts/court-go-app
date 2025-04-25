@@ -13,7 +13,7 @@ class AuthRepositoryImpl(
         return user ?: throw Exception("Login failed")
     }
 
-    override suspend fun loginWithGoogle(
+    override suspend fun authenticateGoogle(
         tokenId: String,
         name: String,
         email: String
@@ -21,7 +21,7 @@ class AuthRepositoryImpl(
         setToken(tokenId) // Guardar token
 
         val user = courtAndGoService.userService.getUserByEmail(email)
-            ?: courtAndGoService.userService.register(
+            ?: courtAndGoService.userService.register( //todo fix this
                 email = email,
                 name = name,
                 countryCode = "+351",
@@ -30,6 +30,27 @@ class AuthRepositoryImpl(
             )
 
         return user
+    }
+
+    override suspend fun registerWithEmail(
+        name: String,
+        email: String,
+        password: String,
+        countryCode: String,
+        phone: String
+    ): User {
+        val user = courtAndGoService.userService.register(
+            email = email,
+            name = name,
+            countryCode = countryCode,
+            contact = phone,
+            password = password
+        )
+        return user ?: throw Exception("Registration failed")
+    }
+
+    override suspend fun updateUser(user: User): User {
+        return courtAndGoService.userService.updateUser(user)
     }
 
     override fun setToken(token: String) {

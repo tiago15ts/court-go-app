@@ -19,9 +19,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            CourtAndGoTheme {
+            //CourtAndGoTheme {
                 CourtAndGoApp(courtAndGoService = CourtAndGoServiceMock())
-            }
+            //}
         }
 
         intent?.data?.let { uri ->

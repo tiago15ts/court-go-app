@@ -1,7 +1,7 @@
 package pt.isel.courtandgo.frontend.authentication.login
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,10 +13,12 @@ import com.mmk.kmpauth.google.GoogleAuthProvider
 import com.mmk.kmpauth.google.GoogleButtonUiContainer
 import com.mmk.kmpauth.uihelper.google.GoogleSignInButton
 import pt.isel.courtandgo.frontend.authentication.AuthConstants
+import pt.isel.courtandgo.frontend.authentication.AuthViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel,
+    viewModel: AuthViewModel,
     onLoginSuccess: () -> Unit,
     onNavigateBack: () -> Unit,
 ) {
@@ -24,9 +26,8 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
     var authReady by remember { mutableStateOf(false) }
 
-    val isLoggingIn by viewModel.isLoggingIn.collectAsState()
-    val loginError by viewModel.loginError.collectAsState()
-
+    val isLoggingIn by viewModel.isLoading.collectAsState()
+    val loginError by viewModel.error.collectAsState()
 
     LaunchedEffect(Unit) {
         GoogleAuthProvider.create(
@@ -37,102 +38,102 @@ fun LoginScreen(
         authReady = true
     }
 
-    MaterialTheme {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(32.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(onClick = onNavigateBack) {
-                Text("← Voltar")
-            }
-            Text("Court&Go", style = MaterialTheme.typography.h4)
-            Spacer(modifier = Modifier.height(24.dp))
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(32.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        OutlinedButton(onClick = onNavigateBack) {
+            Text("← Voltar")
+        }
 
-            Text("Entrar na sua conta", style = MaterialTheme.typography.subtitle1)
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            TextField(
-                value = email,
-                onValueChange = { email = it },
-                placeholder = { Text("email@domain.com") },
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text("Email") }
-            )
+        Text("Court&Go", style = MaterialTheme.typography.headlineMedium)
+        Spacer(modifier = Modifier.height(24.dp))
 
-            Spacer(modifier = Modifier.height(12.dp))
+        Text("Entrar na sua conta", style = MaterialTheme.typography.titleMedium)
+        Spacer(modifier = Modifier.height(16.dp))
 
-            TextField(
-                value = password,
-                onValueChange = { password = it },
-                placeholder = { Text("palavra-passe") },
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text("Password") },
-                visualTransformation = PasswordVisualTransformation()
-            )
+        OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            placeholder = { Text("email@domain.com") },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("Email") }
+        )
 
-            Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-            Button(
-                onClick = {
-                    viewModel.login(email, password) {
-                        onLoginSuccess()
-                    }
-                },
-                enabled = email.isNotBlank() && password.isNotBlank(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-            ) {
-                Text("Entrar")
-            }
+        OutlinedTextField(
+            value = password,
+            onValueChange = { password = it },
+            placeholder = { Text("palavra-passe") },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("Password") },
+            visualTransformation = PasswordVisualTransformation()
+        )
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Divider(modifier = Modifier.weight(1f))
-                Text("  ou  ", style = MaterialTheme.typography.caption)
-                Divider(modifier = Modifier.weight(1f))
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            if (authReady) {
-                GoogleButtonUiContainer(
-                    onGoogleSignInResult = { googleUser ->
-                        googleUser?.let {
-                            viewModel.loginWithGoogle(
-                                tokenId = it.idToken ?: return@let,
-                                name = it.displayName,
-                                email = it.email ?: "Atualize o seu email",
-                            ) {
-                                onLoginSuccess()
-                            }
-                        } ?: println("Login Google falhou.") //todo: handle error
-                    }
-                ) {
-                    GoogleSignInButton(
-                        onClick = { this.onClick() },
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Entrar com Google"
-                    )
+        Button(
+            onClick = {
+                viewModel.loginWithEmail(email, password) {
+                    onLoginSuccess()
                 }
-            }
+            },
+            enabled = email.isNotBlank() && password.isNotBlank(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+        ) {
+            Text("Entrar")
+        }
 
-            if (!loginError.isNullOrEmpty()) {
-                Text(
-                    text = loginError!!,
-                    color = Color.Red,
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.padding(top = 8.dp)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            HorizontalDivider(modifier = Modifier.weight(1f))
+            Text("  ou  ", style = MaterialTheme.typography.bodySmall)
+            HorizontalDivider(modifier = Modifier.weight(1f))
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        if (authReady) {
+            GoogleButtonUiContainer(
+                onGoogleSignInResult = { googleUser ->
+                    googleUser?.let {
+                        viewModel.authenticateWithGoogle(
+                            tokenId = it.idToken,
+                            name = it.displayName,
+                            email = it.email ?: "Atualize o seu email",
+                        ) {
+                            onLoginSuccess()
+                        }
+                    } ?: println("Login Google falhou.")  //todo handle error
+                }
+            ) {
+                GoogleSignInButton(
+                    onClick = { this.onClick() },
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Entrar com Google"
                 )
             }
+        }
 
+        if (!loginError.isNullOrEmpty()) {
+            Text(
+                text = loginError!!,
+                color = Color.Red,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(top = 8.dp)
+            )
         }
     }
 }

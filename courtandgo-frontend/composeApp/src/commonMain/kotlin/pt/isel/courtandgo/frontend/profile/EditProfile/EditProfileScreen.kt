@@ -2,7 +2,6 @@ package pt.isel.courtandgo.frontend.profile.editProfile
 
 import ProfileAvatar
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,17 +12,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,30 +35,27 @@ import pt.isel.courtandgo.frontend.authentication.countryPhoneCode
 import pt.isel.courtandgo.frontend.components.datePicker.DatePickerComponent
 import pt.isel.courtandgo.frontend.components.dropdownMenu.DropdownMenuField
 import pt.isel.courtandgo.frontend.domain.User
-
+import pt.isel.courtandgo.frontend.profile.ProfileViewModel
 
 @Composable
 fun EditProfileScreen(
-    user: User,
+    viewModel: ProfileViewModel,
+    currentUser: User?,
     onBack: () -> Unit,
-    onSave: (User) -> Unit,
-    onChangePhoto: () -> Unit
+    onSaved: () -> Unit
 ) {
-    val id by remember{mutableStateOf(user.id)}
-    var name by remember { mutableStateOf(user.name) }
-    var email by remember { mutableStateOf(user.email) }
-    var phone by remember { mutableStateOf(user.phone) }
-    var countryCode by remember { mutableStateOf(user.countryCode) }
-    var gender by remember { mutableStateOf(user.gender ?: "") }
-    var birthDate by remember { mutableStateOf(user.birthDate ?: "") }
-    var description by remember { mutableStateOf(user.description ?: "") }
+    LaunchedEffect(currentUser) {
+        currentUser?.let { viewModel.loadUser(it) }
+    }
+    val user by viewModel.user.collectAsState()
 
     val scrollState = rememberScrollState()
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(24.dp)
-        .verticalScroll(scrollState)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp)
+            .verticalScroll(scrollState)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -72,7 +67,10 @@ fun EditProfileScreen(
             }
             Text("Editar perfil", style = MaterialTheme.typography.h6)
             TextButton(onClick = {
-                onSave(User(id, name, email, countryCode, phone, gender, birthDate, description))
+                viewModel.updateUser(
+                    onSuccess = onSaved,
+                    onError = { /* mostra erro se quiseres */ }
+                )
             }) {
                 Text("Guardar")
             }
@@ -80,10 +78,9 @@ fun EditProfileScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        // Avatar
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-            ProfileAvatar(name)
-            TextButton(onClick = onChangePhoto) {
+            user?.let { ProfileAvatar(it.name) }
+            TextButton(onClick = { /* onChangePhoto() */ }) {
                 Text("Alterar foto de perfil", color = Color.Blue)
             }
         }
@@ -91,66 +88,68 @@ fun EditProfileScreen(
         Spacer(Modifier.height(24.dp))
 
         Text("Informação pessoal", fontWeight = FontWeight.Bold)
+        Spacer(Modifier.height(12.dp))
+
+        user?.let { user1 ->
+            CustomTextField("Nome e apelido", user1.name) { newName ->
+                viewModel.updateField { it.copy(name = newName) }
+            }
+        }
 
         Spacer(Modifier.height(12.dp))
 
-        // Campos
-        CustomTextField("Nome e apelido", name) { name = it }
-        CustomTextField("Email", email) { email = it }
-
-        Row {
-            DropdownMenuField(
-                optionsList = countryPhoneCode,
-                preSelected = countryCode,
-                onOptionSelected = { countryCode = it }
-            )
-
-            Spacer(Modifier.width(8.dp))
-
-            CustomTextField("Telefone", phone, modifier = Modifier.weight(2f)) { phone = it }
+        user?.let { user1 ->
+            CustomTextField("Email", user1.email) { newEmail ->
+                viewModel.updateField { it.copy(email = newEmail) }
+            }
         }
 
-        var genderExpanded by remember { mutableStateOf(false) }
-        Column {
+        Spacer(Modifier.height(12.dp))
 
-            Text("Selecione o seu género:", fontWeight = FontWeight.Bold)
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            user?.let { user1 ->
+                DropdownMenuField(
+                    optionsList = countryPhoneCode,
+                    selectedOption = user1.countryCode,
+                    onOptionSelected = { newCountryCode ->
+                        viewModel.updateField { it.copy(countryCode = newCountryCode) }
+                    },
+                )
+            }
+            Spacer(Modifier.width(8.dp))
 
-
-            Box(modifier = Modifier.fillMaxWidth()) {
-                OutlinedButton(
-                    onClick = { genderExpanded = true },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(gender.ifBlank { "Género" })
-                }
-
-                DropdownMenu(
-                    expanded = genderExpanded,
-                    onDismissRequest = { genderExpanded = false }
-                ) {
-                    listOf("Masculino", "Feminino").forEach { option ->
-                        DropdownMenuItem(onClick = {
-                            gender = option
-                            genderExpanded = false
-                        }) {
-                            Text(option)
-                        }
-                    }
+            user?.let {
+                CustomTextField("Telefone", it.phone, modifier = Modifier.weight(2f)) { newPhone ->
+                    viewModel.updateField { it.copy(phone = newPhone) }
                 }
             }
         }
 
+        Column {
+            Text("Selecione o seu género:", fontWeight = FontWeight.Bold)
+            DropdownMenuField(
+                optionsList = listOf("Masculino", "Feminino"),
+                selectedOption = user?.gender ?: "Undefined",
+                onOptionSelected = { newGender ->
+                    viewModel.updateField { it.copy(gender = newGender) }
+                },
+                modifier = Modifier.fillMaxWidth(1f)
+            )
+        }
 
         DatePickerComponent(
-            initialDate = birthDate,
+            initialDate = user?.birthDate ?: "",
             title = "Data de nascimento",
             description = "Selecione a sua data de nascimento",
             pastDates = true,
-            onDateChange = { birthDate = it }
+            onDateChange = { newBirthDate ->
+                viewModel.updateField { it.copy(birthDate = newBirthDate) }
+            }
         )
 
-
-
-        CustomTextField("Descrição", description, singleLine = false) { description = it }
+        CustomTextField("Descrição", user?.description ?: "", singleLine = false) { newDescription ->
+            viewModel.updateField { it.copy(description = newDescription) }
+        }
     }
 }
+

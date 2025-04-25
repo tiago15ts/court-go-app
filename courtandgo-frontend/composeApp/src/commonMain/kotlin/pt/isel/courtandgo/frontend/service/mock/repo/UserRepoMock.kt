@@ -58,11 +58,12 @@ class UserRepoMock {
     fun updateUser(user: User): User {
         val index = users.indexOfFirst { it.id == user.id }
         if (index != -1) {
-            users[index] = user
+            users[index] = user.copy()
             return user
         } else {
             throw IllegalArgumentException("User not found")
         }
     }
+
 
 }

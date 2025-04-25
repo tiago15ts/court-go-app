@@ -86,7 +86,7 @@ fun DatePickerComponent(initialDate: String,
             },
             dismissButton = {
                 TextButton(onClick = { showDatePicker = false }) {
-                    Text("Cancel", color = Color(0xFF3F51B5))
+                    Text("Fechar", color = Color(0xFF3F51B5))
                 }
             },
             colors = DatePickerDefaults.colors(
