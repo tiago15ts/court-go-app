@@ -7,7 +7,7 @@ sealed class Screen {
     data object Home : Screen()
     data object SearchCourt : Screen()
     data object LastReservations : Screen()
-    data object Calendar : Screen()
+    //data object Calendar : Screen()
     data object Profile : Screen()
     data object EditProfile : Screen()
     data object Notifications : Screen()

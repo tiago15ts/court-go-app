@@ -1,11 +1,13 @@
 package pt.isel.courtandgo.frontend.reservations.courts
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -32,11 +34,15 @@ fun CourtCard(name: String, location: String, price: String, hours: List<String>
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
             ) {
-                Text(text = "1h desde", style = MaterialTheme.typography.bodySmall)
-                Text(text = price, style = MaterialTheme.typography.bodyMedium)
+                Text(text = "Distancia Soon", style = MaterialTheme.typography.bodySmall)
+                Text(text = price + "€", style = MaterialTheme.typography.bodyMedium)
             }
 
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(
+                modifier = Modifier
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 hours.forEach { time ->
                     Text(
                         text = time,

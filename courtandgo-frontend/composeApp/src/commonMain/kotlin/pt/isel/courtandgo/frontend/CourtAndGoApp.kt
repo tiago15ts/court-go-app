@@ -7,7 +7,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import pt.isel.courtandgo.frontend.authentication.AuthViewModel
 import pt.isel.courtandgo.frontend.authentication.login.LoginScreen
@@ -15,27 +14,27 @@ import pt.isel.courtandgo.frontend.authentication.register.RegisterDetailsScreen
 import pt.isel.courtandgo.frontend.authentication.register.RegisterFirstScreen
 import pt.isel.courtandgo.frontend.components.LayoutScreen
 import pt.isel.courtandgo.frontend.components.bottomNavBar.Tab
-import pt.isel.courtandgo.frontend.domain.User
 import pt.isel.courtandgo.frontend.home.HomeScreen
 import pt.isel.courtandgo.frontend.notifications.EditNotificationsScreen
 import pt.isel.courtandgo.frontend.profile.ProfileScreen
 import pt.isel.courtandgo.frontend.profile.ProfileViewModel
 import pt.isel.courtandgo.frontend.profile.editProfile.EditProfileScreen
-import pt.isel.courtandgo.frontend.repository.AuthRepository
 import pt.isel.courtandgo.frontend.repository.AuthRepositoryImpl
 import pt.isel.courtandgo.frontend.reservations.LastReservationsScreen
-import pt.isel.courtandgo.frontend.reservations.SearchCourtScreen
+import pt.isel.courtandgo.frontend.reservations.searchCourt.CourtSearchViewModel
+import pt.isel.courtandgo.frontend.reservations.searchCourt.SearchCourtScreen
 import pt.isel.courtandgo.frontend.service.CourtAndGoService
+import pt.isel.courtandgo.frontend.service.mock.MockCourtService
+import pt.isel.courtandgo.frontend.service.mock.repo.CourtRepoMock
 
 @Composable
 @Preview
 fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
     val screen = remember { mutableStateOf<Screen>(Screen.RegisterFirst) }
-    val authViewModel = remember { AuthViewModel(AuthRepositoryImpl(courtAndGoService)) }
-
     val selectedTab = remember { mutableStateOf(Tab.Home) }
-    val coroutineScope = rememberCoroutineScope()
+    val authViewModel = remember { AuthViewModel(AuthRepositoryImpl(courtAndGoService)) }
     val profileViewModel = remember { ProfileViewModel(AuthRepositoryImpl(courtAndGoService)) }
+    val courtSearchViewModel = remember { CourtSearchViewModel(MockCourtService(courtRepoMock = CourtRepoMock())) }
 
     val currentUser by authViewModel.currentUser.collectAsState()
 
@@ -90,14 +89,14 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                     screen.value = when (tab) {
                         Tab.Home -> Screen.Home
                         Tab.Search -> Screen.SearchCourt
-                        Tab.Calendar -> Screen.Calendar
+                        Tab.Calendar -> Screen.LastReservations
                         Tab.Profile -> Screen.Profile
                     }
                 },
                 currentScreen = screen.value
             ) {
                 when (screen.value) {
-                    is Screen.Home -> HomeScreen(authViewModel, //todo fix home deve receber vm de login e de registo
+                    is Screen.Home -> HomeScreen(authViewModel,
                         onStartReservationClick = {screen.value= Screen.SearchCourt},
                         onLastReservationsClick = {screen.value= Screen.LastReservations}
                     )
@@ -130,11 +129,8 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                     Screen.Notifications -> EditNotificationsScreen()
 
                     is Screen.SearchCourt -> SearchCourtScreen(
+                        viewModel = courtSearchViewModel,
                         onBackClick = { screen.value = Screen.Home },
-                        onSearch = { searchText ->
-                            //todo search court
-                            //screen.value = Screen.Calendar
-                        }
                     )
 
                     is Screen.LastReservations -> LastReservationsScreen(
@@ -145,7 +141,6 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                         onBack = { screen.value = Screen.Home }
                     )
 
-                    is Screen.Calendar -> TODO()
                     else -> {}
                 }
             }

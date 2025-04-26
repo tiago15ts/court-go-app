@@ -5,9 +5,10 @@ data class Court (
     val name: String,
     val district: String,
     //todo val location: Location,
-    val type: String,
-    val surfaceType: String,
+    val sportType: String,
+    val surfaceType: String?,
     val capacity: Int,
-    val courtOwner: Owner,
+    val courtOwnerId: Int,
     val price: Double,
+    val availableHours: List<String>,
 )

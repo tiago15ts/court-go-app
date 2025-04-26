@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import pt.isel.courtandgo.frontend.components.bottomNavBar.Tab.*
+import pt.isel.courtandgo.frontend.ui.CalendarIcon
 
 @Composable
 fun BottomNavigationBar(
@@ -56,7 +57,7 @@ fun BottomNavigationBar(
         NavigationBarItem(
             icon = {
                 Icon(
-                    imageVector = Icons.Default.Notifications, // Replace if you add a calendar icon later
+                    imageVector = CalendarIcon,
                     contentDescription = "Calendário"
                 )
             },
