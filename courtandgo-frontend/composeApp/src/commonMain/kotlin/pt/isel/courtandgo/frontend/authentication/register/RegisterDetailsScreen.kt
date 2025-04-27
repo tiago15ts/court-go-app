@@ -58,7 +58,7 @@ fun RegisterDetailsScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        Text("Court&Go", style = MaterialTheme.typography.headlineMedium)
+        Text("Court&Go\uD83C\uDFBE", style = MaterialTheme.typography.headlineMedium)
         Spacer(Modifier.height(24.dp))
 
         Column(modifier = Modifier.fillMaxWidth()) {

@@ -30,7 +30,7 @@ fun CourtAndGoTopBar(
     TopAppBar(
         title = {
             Text(
-                text = "Court&Go",
+                text = "Court&Go\uD83C\uDFBE",
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center

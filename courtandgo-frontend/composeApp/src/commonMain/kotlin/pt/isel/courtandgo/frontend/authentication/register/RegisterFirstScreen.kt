@@ -57,7 +57,7 @@ fun RegisterFirstScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Court&Go", style = MaterialTheme.typography.headlineMedium)
+        Text("Court&Go\uD83C\uDFBE", style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(24.dp))
 
         Text("Crie a sua conta", style = MaterialTheme.typography.titleMedium)
