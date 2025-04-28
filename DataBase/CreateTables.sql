@@ -22,7 +22,7 @@ CREATE TABLE Location (
 CREATE TABLE Owner (
     ownerId SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    email VARCHAR(100),
+    email VARCHAR(100) UNIQUE NOT NULL,
     phone VARCHAR(20),
     type VARCHAR(50), -- Individual, Empresa, etc.
     numberOfLocations INT
@@ -31,6 +31,7 @@ CREATE TABLE Owner (
 
 CREATE TABLE Court (
     courtId SERIAL PRIMARY KEY,
+    name VARCHAR(100),
     locationId INT REFERENCES Location(locationId),
     type VARCHAR(20) CHECK (type IN ('Tennis', 'Padel')),
     surfaceType VARCHAR(50),
@@ -50,9 +51,9 @@ CREATE TABLE Court_Price (
 CREATE TABLE Player (
     playerId SERIAL PRIMARY KEY,
     name VARCHAR(100),
-    age INT,
+    birthDate TIMESTAMP,
     gender VARCHAR(10),
-    email VARCHAR(100),
+    email VARCHAR(100) NOT NULL,
     countryId INT REFERENCES Country(countryId),
     weight DECIMAL(5,2),
     height DECIMAL(5,2),
@@ -80,6 +81,24 @@ CREATE TABLE Player_Reservation (
     status VARCHAR(20), -- Ex: Confirmado, Convidado, etc.
     PRIMARY KEY (reservationId, playerId)
 );
+
+CREATE TABLE WeeklySchedule (
+    scheduleId SERIAL PRIMARY KEY,
+    courtId INT REFERENCES Court(courtId),
+    dayOfWeek VARCHAR(50) NOT NULL,
+    startTime TIMESTAMP NOT NULL,
+    endTime TIMESTAMP NOT NULL
+);
+
+CREATE TABLE SpecialSchedule (
+    specialId SERIAL PRIMARY KEY,
+    courtId INT REFERENCES Court(courtId),
+    date DATE NOT NULL,
+    startTime TIME,
+    endTime TIME,
+    working BOOLEAN NOT NULL -- true = aberto nesse dia, false = fechado (feriado)
+);
+
 
 CREATE TABLE Tournament (
     tournamentId SERIAL PRIMARY KEY,

@@ -38,7 +38,6 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
 
     val currentUser by authViewModel.currentUser.collectAsState()
 
-
     val isAuthenticated = when (screen.value) {
         is Screen.Login,
         is Screen.RegisterFirst,
