@@ -18,6 +18,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,6 +37,7 @@ import pt.isel.courtandgo.frontend.components.datePicker.DatePickerComponent
 import pt.isel.courtandgo.frontend.components.dropdownMenu.DropdownMenuField
 import pt.isel.courtandgo.frontend.domain.User
 import pt.isel.courtandgo.frontend.profile.ProfileViewModel
+import pt.isel.courtandgo.frontend.reservations.utils.distritosPortugal
 
 @Composable
 fun EditProfileScreen(
@@ -63,7 +65,7 @@ fun EditProfileScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar")
             }
             Text("Editar perfil", style = MaterialTheme.typography.h6)
             TextButton(onClick = {
@@ -125,6 +127,31 @@ fun EditProfileScreen(
             }
         }
 
+        Spacer(Modifier.height(12.dp))
+
+        Column {
+            Text("Selecione o seu distrito:", fontWeight = FontWeight.Bold)
+            DropdownMenuField(
+                optionsList = distritosPortugal,
+                selectedOption = user?.location ?: "Undefined",
+                onOptionSelected = { newLocation ->
+                    viewModel.updateField { it.copy(location = newLocation) }
+                },
+                modifier = Modifier.fillMaxWidth(1f)
+            )
+        }
+
+
+        DatePickerComponent(
+            initialDate = user?.birthDate ?: "",
+            title = "Data de nascimento",
+            description = "Selecione a sua data de nascimento",
+            pastDates = true,
+            onDateChange = { newBirthDate ->
+                viewModel.updateField { it.copy(birthDate = newBirthDate) }
+            }
+        )
+
         Column {
             Text("Selecione o seu género:", fontWeight = FontWeight.Bold)
             DropdownMenuField(
@@ -137,19 +164,19 @@ fun EditProfileScreen(
             )
         }
 
-        DatePickerComponent(
-            initialDate = user?.birthDate ?: "",
-            title = "Data de nascimento",
-            description = "Selecione a sua data de nascimento",
-            pastDates = true,
-            onDateChange = { newBirthDate ->
-                viewModel.updateField { it.copy(birthDate = newBirthDate) }
-            }
-        )
+        Spacer(Modifier.height(12.dp))
 
-        CustomTextField("Descrição", user?.description ?: "", singleLine = false) { newDescription ->
-            viewModel.updateField { it.copy(description = newDescription) }
+        CustomTextField("Peso",
+            (user?.weight ?: "").toString(), singleLine = false) { newWeight ->
+            viewModel.updateField { it.copy(weight = newWeight.toDouble()) }
         }
+
+        CustomTextField("Altura",
+            (user?.height ?: "").toString(), singleLine = false) { newHeight ->
+            viewModel.updateField { it.copy(height = newHeight.toDouble()) }
+        }
+
+
     }
 }
 

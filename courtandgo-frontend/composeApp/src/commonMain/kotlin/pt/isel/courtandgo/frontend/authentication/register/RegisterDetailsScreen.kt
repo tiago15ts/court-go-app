@@ -13,6 +13,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pt.isel.courtandgo.frontend.authentication.AuthViewModel
 import pt.isel.courtandgo.frontend.authentication.countryPhoneCode
+import pt.isel.courtandgo.frontend.authentication.isValidName
+import pt.isel.courtandgo.frontend.authentication.isValidPhoneNumber
 import pt.isel.courtandgo.frontend.components.dropdownMenu.DropdownMenuField
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,7 +36,7 @@ fun RegisterDetailsScreen(
     val hasMinLength = password.length >= 8
 
     val allValid = hasUppercase && hasDigit && hasSpecialChar &&
-            hasMinLength && name.isNotBlank() && phone.isNotBlank()
+            hasMinLength && isValidName(name) && isValidPhoneNumber(phone, countryCode)
 
     val scrollState = rememberScrollState()
 

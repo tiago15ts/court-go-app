@@ -23,7 +23,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -42,11 +41,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 @Composable
 fun SearchByDistrictField(
+    initialValue: String = "",
     onDistrictSelected: (String) -> Unit
 ) {
     val categories = distritosPortugal
 
-    var category by remember { mutableStateOf("") }
+    var category by remember { mutableStateOf(initialValue) }
     val heightTextFields = 55.dp
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
     var expanded by remember { mutableStateOf(false) }

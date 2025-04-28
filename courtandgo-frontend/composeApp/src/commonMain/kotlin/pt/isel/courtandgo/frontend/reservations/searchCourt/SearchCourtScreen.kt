@@ -19,13 +19,22 @@ import pt.isel.courtandgo.frontend.reservations.utils.SportToggleButton
 @Composable
 fun SearchCourtScreen(
     viewModel: CourtSearchViewModel,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    defaultDistrict: String = ""
 ) {
     val courts by viewModel.courts.collectAsState()
     val selectedSport by viewModel.selectedSport.collectAsState()
+    var initialized by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.fetchCourts()
+    }
+
+    LaunchedEffect(defaultDistrict) {
+        if (!initialized && defaultDistrict.isNotBlank()) {
+            viewModel.updateDistrict(defaultDistrict)
+            initialized = true
+        }
     }
 
     LazyColumn(
@@ -58,7 +67,7 @@ fun SearchCourtScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            SearchByDistrictField { selectedDistrict ->
+            SearchByDistrictField(defaultDistrict) { selectedDistrict ->
                 viewModel.updateDistrict(selectedDistrict)
             }
 

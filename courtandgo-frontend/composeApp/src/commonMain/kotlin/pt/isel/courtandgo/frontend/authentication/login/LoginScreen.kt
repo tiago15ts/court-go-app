@@ -1,6 +1,9 @@
 package pt.isel.courtandgo.frontend.authentication.login
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,6 +17,7 @@ import com.mmk.kmpauth.google.GoogleButtonUiContainer
 import com.mmk.kmpauth.uihelper.google.GoogleSignInButton
 import pt.isel.courtandgo.frontend.authentication.AuthConstants
 import pt.isel.courtandgo.frontend.authentication.AuthViewModel
+import pt.isel.courtandgo.frontend.authentication.isValidEmail
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,6 +27,7 @@ fun LoginScreen(
     onNavigateBack: () -> Unit,
 ) {
     var email by remember { mutableStateOf("") }
+    val emailValid = isValidEmail(email)
     var password by remember { mutableStateOf("") }
     var authReady by remember { mutableStateOf(false) }
 
@@ -45,8 +50,30 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        OutlinedButton(onClick = onNavigateBack) {
-            Text("← Voltar")
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            OutlinedButton(
+                onClick = onNavigateBack,
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .height(40.dp),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Voltar",
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Voltar",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -62,7 +89,8 @@ fun LoginScreen(
             onValueChange = { email = it },
             placeholder = { Text("email@domain.com") },
             modifier = Modifier.fillMaxWidth(),
-            label = { Text("Email") }
+            label = { Text("Email") },
+            isError = email.isNotBlank() && !emailValid,
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -84,7 +112,7 @@ fun LoginScreen(
                     onLoginSuccess()
                 }
             },
-            enabled = email.isNotBlank() && password.isNotBlank(),
+            enabled = emailValid && password.isNotBlank(),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)

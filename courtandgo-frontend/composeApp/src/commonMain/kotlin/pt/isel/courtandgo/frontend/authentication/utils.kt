@@ -1,7 +1,14 @@
 package pt.isel.courtandgo.frontend.authentication
 
 fun isValidEmail(email: String): Boolean {
-    return Regex("^[A-Za-z](.*)(@)(.+)(\\.)(.+)").matches(email)
+    if (email.length !in 5..320) return false
+    val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$"
+    return email.matches(emailRegex.toRegex())
+}
+
+fun isValidName(name: String): Boolean {
+    val nameRegex = "^[a-zA-ZÀ-ÿ\\s'-]{2,50}$"
+    return name.matches(nameRegex.toRegex())
 }
 
 object AuthConstants {
@@ -10,6 +17,15 @@ object AuthConstants {
     const val GOOGLE_SERVER_ID = "238910147216-7oaafnt8q83d0t016afcn6hdt2jb5gqp.apps.googleusercontent.com"
 }
 
+fun isValidPhoneNumber(phone: String, countryCode: String): Boolean {
+    val phoneRegex = when (countryCode) {
+        "+351" -> "^9\\d{8}$" // Portugal: Começa por 9 e tem 9 dígitos
+        "+34" -> "^[6-7]\\d{8}$" // Espanha: começa por 6 ou 7 e 9 dígitos
+        "+44" -> "^7\\d{9}$" // UK mobile: começa por 7 e 10 dígitos
+        else -> "^\\d{7,15}$" // Default genérico
+    }
+    return phone.matches(phoneRegex.toRegex())
+}
 
 val countryPhoneCode = listOf(
     "+1",    // USA, Canada

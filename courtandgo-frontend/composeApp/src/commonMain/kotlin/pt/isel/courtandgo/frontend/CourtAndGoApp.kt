@@ -130,6 +130,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                     is Screen.SearchCourt -> SearchCourtScreen(
                         viewModel = courtSearchViewModel,
                         onBackClick = { screen.value = Screen.Home },
+                        defaultDistrict = authViewModel.currentUser.value?.location ?: ""
                     )
 
                     is Screen.LastReservations -> LastReservationsScreen(
