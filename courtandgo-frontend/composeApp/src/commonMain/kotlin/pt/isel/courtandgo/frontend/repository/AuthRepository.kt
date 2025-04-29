@@ -7,11 +7,11 @@ interface AuthRepository {
     suspend fun authenticateGoogle(tokenId: String, name: String, email: String): User
 
     suspend fun registerWithEmail(
-        name: String,
         email: String,
-        password: String,
+        name: String,
         countryCode: String,
-        phone: String
+        phone: String,
+        password: String
     ): User
 
     suspend fun updateUser(user: User): User

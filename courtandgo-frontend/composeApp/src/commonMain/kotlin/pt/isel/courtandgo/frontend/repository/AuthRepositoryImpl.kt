@@ -33,11 +33,11 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun registerWithEmail(
-        name: String,
         email: String,
-        password: String,
+        name: String,
         countryCode: String,
-        phone: String
+        phone: String,
+        password: String
     ): User {
         val user = courtAndGoService.userService.register(
             email = email,

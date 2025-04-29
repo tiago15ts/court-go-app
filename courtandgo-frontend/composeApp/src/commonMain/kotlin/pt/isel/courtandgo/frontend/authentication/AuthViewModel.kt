@@ -8,7 +8,9 @@ import kotlinx.coroutines.launch
 import pt.isel.courtandgo.frontend.domain.User
 import pt.isel.courtandgo.frontend.repository.AuthRepository
 
-
+/**
+ * ViewModel for managing authentication (register and login) state and actions.
+ */
 class AuthViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
@@ -69,7 +71,13 @@ class AuthViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val user = authRepository.registerWithEmail(email, name, countryCode, phone, password)
+                val user = authRepository.registerWithEmail(
+                    email,
+                    name,
+                    countryCode,
+                    phone,
+                    password
+                )
                 _currentUser.value = user
                 onSuccess()
             } catch (e: Exception) {

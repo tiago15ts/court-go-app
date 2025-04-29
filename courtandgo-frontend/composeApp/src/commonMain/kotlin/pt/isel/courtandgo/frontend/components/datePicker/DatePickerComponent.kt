@@ -22,10 +22,18 @@ fun DatePickerComponent(initialDate: String,
                         pastDates: Boolean,
                         onDateChange: (String) -> Unit
 ) {
-    val parsedInitialDate = parseDisplayDate(initialDate)
+    //val parsedInitialDate = parseDisplayDate(initialDate)
     var showDatePicker by remember { mutableStateOf(false) } // Toggle dialog visibility
-    var selectedDate by remember { mutableStateOf(parsedInitialDate) } // Store selected date
+    //var selectedDate by remember { mutableStateOf(parsedInitialDate) } // Store selected date
     var showError by remember { mutableStateOf(false) }
+
+    val parsedInitialDate = parseDisplayDate(initialDate)
+    var selectedDate by remember { mutableStateOf(parsedInitialDate) }
+
+    LaunchedEffect(initialDate) {
+        selectedDate = parseDisplayDate(initialDate)
+    }
+
 
     Column(
         Modifier
