@@ -1,4 +1,11 @@
 package pt.isel.courtandgo.frontend.service
 
-class ReservationService {
+import pt.isel.courtandgo.frontend.domain.Reservation
+
+interface ReservationService {
+    suspend fun getReservations(): List<Reservation>
+    suspend fun getReservationById(id: Int): Reservation?
+    suspend fun createReservation(reservation: Reservation): Reservation
+    suspend fun updateReservation(reservation: Reservation): Reservation?
+    suspend fun deleteReservation(id: Int): Boolean
 }

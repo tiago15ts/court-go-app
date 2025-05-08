@@ -93,9 +93,9 @@ CREATE TABLE WeeklySchedule (
 CREATE TABLE SpecialSchedule (
     specialId SERIAL PRIMARY KEY,
     courtId INT REFERENCES Court(courtId),
-    date DATE NOT NULL,
-    startTime TIME,
-    endTime TIME,
+    date DATE NOT NULL, -- por o dia em especifico
+    startTime TIMESTAMP,
+    endTime TIMESTAMP,
     working BOOLEAN NOT NULL -- true = aberto nesse dia, false = fechado (feriado)
 );
 

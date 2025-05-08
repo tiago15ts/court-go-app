@@ -3,9 +3,14 @@ package pt.isel.courtandgo.frontend.domain
 data class Reservation(
     val id: Int,
     val courtId: Int,
-    val userId: Int,
+    val playerId: Int,
     val startTime: String,
     val endTime: String,
-    val status: String,
-    val price: Double
+    val estimatedPrice: Double,
+    val status: ReservationStatus = ReservationStatus.PENDING
 )
+
+enum class ReservationStatus {
+    PENDING, CONFIRMED, CANCELLED
+}
+

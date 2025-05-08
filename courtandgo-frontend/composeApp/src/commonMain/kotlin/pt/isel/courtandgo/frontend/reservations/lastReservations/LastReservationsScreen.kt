@@ -1,4 +1,4 @@
-package pt.isel.courtandgo.frontend.reservations
+package pt.isel.courtandgo.frontend.reservations.lastReservations
 
 import androidx.compose.runtime.Composable
 

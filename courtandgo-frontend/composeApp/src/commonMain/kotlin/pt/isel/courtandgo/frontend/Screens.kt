@@ -1,5 +1,7 @@
 package pt.isel.courtandgo.frontend
 
+import pt.isel.courtandgo.frontend.domain.Court
+
 sealed class Screen {
     data object RegisterFirst : Screen()
     data class RegisterDetails(val email: String) : Screen()
@@ -11,6 +13,7 @@ sealed class Screen {
     data object Profile : Screen()
     data object EditProfile : Screen()
     data object Notifications : Screen()
+    data class Reservation(val court: Court) : Screen()
 
 }
 

@@ -1,4 +1,4 @@
-package pt.isel.courtandgo.frontend.reservations.utils
+package pt.isel.courtandgo.frontend.courts.utils
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border

@@ -1,6 +1,6 @@
 package pt.isel.courtandgo.frontend.domain
 
-data class Court (
+data class Court(
     val id: Int,
     val name: String,
     val district: String,
@@ -10,5 +10,4 @@ data class Court (
     val capacity: Int,
     val courtOwnerId: Int,
     val price: Double,
-    val availableHours: List<String>,
 )

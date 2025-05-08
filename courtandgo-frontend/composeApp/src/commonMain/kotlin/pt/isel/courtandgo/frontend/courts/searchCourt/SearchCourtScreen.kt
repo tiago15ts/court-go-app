@@ -1,4 +1,5 @@
-package pt.isel.courtandgo.frontend.reservations.searchCourt
+package pt.isel.courtandgo.frontend.courts.searchCourt
+
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,22 +13,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import pt.isel.courtandgo.frontend.reservations.courts.CourtCard
-import pt.isel.courtandgo.frontend.reservations.utils.SearchByDistrictField
-import pt.isel.courtandgo.frontend.reservations.utils.SportToggleButton
+import pt.isel.courtandgo.frontend.courts.courts.CourtCard
+import pt.isel.courtandgo.frontend.courts.utils.SearchByDistrictField
+import pt.isel.courtandgo.frontend.courts.utils.SportToggleButton
+import pt.isel.courtandgo.frontend.domain.Court
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+
 
 @Composable
 fun SearchCourtScreen(
     viewModel: CourtSearchViewModel,
     onBackClick: () -> Unit,
-    defaultDistrict: String = ""
+    defaultDistrict: String = "",
+    onCourtClick: (Court) -> Unit,
 ) {
     val courts by viewModel.courts.collectAsState()
     val selectedSport by viewModel.selectedSport.collectAsState()
     var initialized by remember { mutableStateOf(false) }
+    val today = remember { Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date }
 
     LaunchedEffect(Unit) {
         viewModel.fetchCourts()
+        viewModel.loadTimesForAllCourts(today)
     }
 
     LaunchedEffect(defaultDistrict) {
@@ -36,6 +45,8 @@ fun SearchCourtScreen(
             initialized = true
         }
     }
+
+    val courtHours by viewModel.courtHours.collectAsState()
 
     LazyColumn(
         modifier = Modifier
@@ -94,12 +105,16 @@ fun SearchCourtScreen(
             )
         }
 
+
         items(courts) { court ->
+            val hours = courtHours[court.id] ?: emptyList()
+
             CourtCard(
                 name = court.name,
                 location = court.district,
                 price = court.price.toString(),
-                hours = court.availableHours
+                hours = hours,
+                onClick = { onCourtClick(court) }
             )
         }
 

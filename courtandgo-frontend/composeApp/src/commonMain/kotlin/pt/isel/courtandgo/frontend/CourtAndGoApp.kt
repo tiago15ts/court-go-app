@@ -6,7 +6,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import pt.isel.courtandgo.frontend.authentication.AuthViewModel
 import pt.isel.courtandgo.frontend.authentication.login.LoginScreen
@@ -20,12 +19,16 @@ import pt.isel.courtandgo.frontend.profile.ProfileScreen
 import pt.isel.courtandgo.frontend.profile.ProfileViewModel
 import pt.isel.courtandgo.frontend.profile.editProfile.EditProfileScreen
 import pt.isel.courtandgo.frontend.repository.AuthRepositoryImpl
-import pt.isel.courtandgo.frontend.reservations.LastReservationsScreen
-import pt.isel.courtandgo.frontend.reservations.searchCourt.CourtSearchViewModel
-import pt.isel.courtandgo.frontend.reservations.searchCourt.SearchCourtScreen
+import pt.isel.courtandgo.frontend.reservations.lastReservations.LastReservationsScreen
+import pt.isel.courtandgo.frontend.courts.searchCourt.CourtSearchViewModel
+import pt.isel.courtandgo.frontend.courts.searchCourt.SearchCourtScreen
 import pt.isel.courtandgo.frontend.service.CourtAndGoService
 import pt.isel.courtandgo.frontend.service.mock.MockCourtService
 import pt.isel.courtandgo.frontend.service.mock.repo.CourtRepoMock
+import pt.isel.courtandgo.frontend.reservations.reservations.ReserveCourtScreen
+import pt.isel.courtandgo.frontend.reservations.reservations.ReserveCourtViewModel
+import pt.isel.courtandgo.frontend.service.mock.MockScheduleCourtService
+import pt.isel.courtandgo.frontend.service.mock.repo.ScheduleCourtRepoMock
 
 @Composable
 @Preview
@@ -34,7 +37,8 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
     val selectedTab = remember { mutableStateOf(Tab.Home) }
     val authViewModel = remember { AuthViewModel(AuthRepositoryImpl(courtAndGoService)) }
     val profileViewModel = remember { ProfileViewModel(AuthRepositoryImpl(courtAndGoService)) }
-    val courtSearchViewModel = remember { CourtSearchViewModel(MockCourtService(courtRepoMock = CourtRepoMock())) }
+    val courtSearchViewModel = remember { CourtSearchViewModel(MockCourtService(CourtRepoMock()), MockScheduleCourtService(ScheduleCourtRepoMock())) }
+    val reserveCourtViewModel = remember { ReserveCourtViewModel(MockScheduleCourtService(ScheduleCourtRepoMock())) }
 
     val currentUser by authViewModel.currentUser.collectAsState()
 
@@ -130,7 +134,10 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                     is Screen.SearchCourt -> SearchCourtScreen(
                         viewModel = courtSearchViewModel,
                         onBackClick = { screen.value = Screen.Home },
-                        defaultDistrict = authViewModel.currentUser.value?.location ?: ""
+                        defaultDistrict = authViewModel.currentUser.value?.location ?: "",
+                        onCourtClick = { court ->
+                            screen.value = Screen.Reservation(court)
+                        }
                     )
 
                     is Screen.LastReservations -> LastReservationsScreen(
@@ -140,6 +147,13 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                         },
                         onBack = { screen.value = Screen.Home }
                     )
+
+                    is Screen.Reservation ->
+                        ReserveCourtScreen(
+                            courtInfo = (screen.value as Screen.Reservation).court,
+                            onBack = { screen.value = Screen.SearchCourt },
+                            viewModel = reserveCourtViewModel
+                        )
 
                     else -> {}
                 }

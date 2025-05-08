@@ -1,16 +1,27 @@
-package pt.isel.courtandgo.frontend.reservations.searchCourt
+package pt.isel.courtandgo.frontend.courts.searchCourt
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import pt.isel.courtandgo.frontend.domain.Court
+import pt.isel.courtandgo.frontend.reservations.reservations.getTimeSlotsForCourt
 import pt.isel.courtandgo.frontend.service.CourtService
+import pt.isel.courtandgo.frontend.service.ScheduleCourtsService
 
 class CourtSearchViewModel(
-    private val courtService: CourtService
+    private val courtService: CourtService,
+    private val scheduleService : ScheduleCourtsService
 ) : ViewModel() {
 
     private val _courts = MutableStateFlow<List<Court>>(emptyList())
@@ -21,6 +32,10 @@ class CourtSearchViewModel(
 
     private val _selectedSport = MutableStateFlow("Ténis")
     val selectedSport: StateFlow<String> = _selectedSport.asStateFlow()
+
+    private val _courtHours = MutableStateFlow<Map<Int, List<LocalTime>>>(emptyMap())
+    val courtHours: StateFlow<Map<Int, List<LocalTime>>> = _courtHours.asStateFlow()
+
 
     fun updateDistrict(district: String) {
         _selectedDistrict.value = district
@@ -41,6 +56,19 @@ class CourtSearchViewModel(
         viewModelScope.launch {
             val result = courtService.getCourtsFiltered(district, sport)
             _courts.value = result
+
         }
     }
+
+    fun loadTimesForAllCourts(date: LocalDate) {
+        viewModelScope.launch {
+            val courtsList = _courts.value
+            val updated = courtsList.associate { court ->
+                val times = getTimeSlotsForCourt(scheduleService, court.id, date)
+                court.id to times
+            }
+            _courtHours.value = updated
+        }
+    }
+
 }

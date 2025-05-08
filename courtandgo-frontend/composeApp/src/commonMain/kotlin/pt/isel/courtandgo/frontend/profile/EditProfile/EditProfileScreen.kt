@@ -37,7 +37,7 @@ import pt.isel.courtandgo.frontend.components.datePicker.DatePickerComponent
 import pt.isel.courtandgo.frontend.components.dropdownMenu.DropdownMenuField
 import pt.isel.courtandgo.frontend.domain.User
 import pt.isel.courtandgo.frontend.profile.ProfileViewModel
-import pt.isel.courtandgo.frontend.reservations.utils.distritosPortugal
+import pt.isel.courtandgo.frontend.courts.utils.distritosPortugal
 
 @Composable
 fun EditProfileScreen(

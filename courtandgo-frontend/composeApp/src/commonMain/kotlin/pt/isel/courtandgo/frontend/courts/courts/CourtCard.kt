@@ -1,6 +1,7 @@
-package pt.isel.courtandgo.frontend.reservations.courts
+package pt.isel.courtandgo.frontend.courts.courts
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,14 +17,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import kotlinx.datetime.LocalTime
+import pt.isel.courtandgo.frontend.domain.CourtAvailableHours
 
 
 @Composable
-fun CourtCard(name: String, location: String, price: String, hours: List<String>) {
+fun CourtCard(
+    name: String,
+    location: String,
+    price: String,
+    hours: List<LocalTime>,
+    onClick: () -> Unit
+) {
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .clickable { onClick() },
 
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -44,8 +55,9 @@ fun CourtCard(name: String, location: String, price: String, hours: List<String>
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 hours.forEach { time ->
+                    val formatted = formatTimeToHHmm(time)
                     Text(
-                        text = time,
+                        text = formatted,
                         modifier = Modifier
                             .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
                             .padding(horizontal = 8.dp, vertical = 4.dp),
@@ -55,4 +67,10 @@ fun CourtCard(name: String, location: String, price: String, hours: List<String>
             }
         }
     }
+}
+
+fun formatTimeToHHmm(time: LocalTime): String {
+    val hour = time.hour.toString().padStart(2, '0')
+    val minute = time.minute.toString().padStart(2, '0')
+    return "$hour:$minute"
 }
