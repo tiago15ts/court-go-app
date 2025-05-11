@@ -77,7 +77,7 @@ fun ReserveCourtScreen(
 
         // Botão para continuar (ativo só com hora selecionada)
         Button(
-            onClick = { /* todo ir para confirmação */ },
+            onClick = { /* todo ir para confirmação de uma reserva*/ },
             enabled = selectedTime.value != null,
             modifier = Modifier
                 .fillMaxWidth()

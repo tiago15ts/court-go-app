@@ -19,14 +19,10 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,9 +31,9 @@ import androidx.compose.ui.unit.dp
 import pt.isel.courtandgo.frontend.authentication.countryPhoneCode
 import pt.isel.courtandgo.frontend.components.datePicker.DatePickerComponent
 import pt.isel.courtandgo.frontend.components.dropdownMenu.DropdownMenuField
+import pt.isel.courtandgo.frontend.courts.utils.distritosPortugal
 import pt.isel.courtandgo.frontend.domain.User
 import pt.isel.courtandgo.frontend.profile.ProfileViewModel
-import pt.isel.courtandgo.frontend.courts.utils.distritosPortugal
 
 @Composable
 fun EditProfileScreen(

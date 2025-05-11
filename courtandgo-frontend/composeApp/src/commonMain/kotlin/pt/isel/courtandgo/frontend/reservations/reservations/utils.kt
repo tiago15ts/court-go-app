@@ -1,8 +1,6 @@
 package pt.isel.courtandgo.frontend.reservations.reservations
 
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
-import pt.isel.courtandgo.frontend.service.ScheduleCourtsService
 
 /*
 suspend fun getTimeSlotsForCourtOnDate(

@@ -3,8 +3,12 @@ package pt.isel.courtandgo.frontend.service.mock.repo
 import pt.isel.courtandgo.frontend.domain.Reservation
 
 class ReservationRepoMock {
-    // Mock implementation of reservation repository methods
-    private val reservations = mutableListOf<Reservation>()
+
+    private val reservations = mutableListOf<Reservation>(
+        Reservation(1, 1, 1, "11:00", "13:00", 25.0),
+        Reservation(2, 1, 1, "16:00", "17:00", 12.5)
+
+    )
 
     fun getAllReservations(): List<Reservation> {
         return reservations

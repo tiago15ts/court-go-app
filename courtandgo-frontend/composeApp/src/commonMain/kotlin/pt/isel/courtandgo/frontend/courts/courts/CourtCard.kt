@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalTime
-import pt.isel.courtandgo.frontend.domain.CourtAvailableHours
 
 
 @Composable

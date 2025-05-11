@@ -1,5 +1,6 @@
 import SwiftUI
 import GoogleSignIn
+import UserNotifications
 
 @main
 struct iOSApp: App {
@@ -14,23 +15,41 @@ struct iOSApp: App {
     }
 }
 
-class AppDelegate: NSObject, UIApplicationDelegate {
+class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     func application(
-      _ app: UIApplication,
-      open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
     ) -> Bool {
-      var handled: Bool
 
-    // Let Google Sign-In handle the URL if it's related to Google Sign-In
-      handled = GIDSignIn.sharedInstance.handle(url)
-      if handled {
+        // Pede permissão para notificações
+        UNUserNotificationCenter.current().delegate = self
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+            if let error = error {
+                print("Erro ao pedir permissão para notificações: \(error.localizedDescription)")
+            } else {
+                print("Permissão de notificações concedida? \(granted)")
+            }
+        }
+
         return true
-      }
+    }
 
-      // Handle other custom URL types.
+    func application(
+        _ app: UIApplication,
+        open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]
+    ) -> Bool {
+        // Lidar com o login do Google
+        return GIDSignIn.sharedInstance.handle(url)
+    }
 
-      // If not handled by this app, return false.
-      return false
+    // Opcional: Mostrar notificações mesmo com app aberta
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        completionHandler([.banner, .sound])
     }
 }
+

@@ -32,6 +32,8 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+            implementation(libs.androidx.work.runtime.ktx)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -52,6 +54,7 @@ kotlin {
 
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.datetime.ext)
+            implementation(libs.uuid)
         }
     }
 }
@@ -70,6 +73,7 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
         }
     }
     buildTypes {
@@ -96,6 +100,8 @@ dependencies {
     implementation(libs.androidx.foundation.android)
     implementation(libs.foundation.android)
     implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.identity.jvm)
+
     debugImplementation(compose.uiTooling)
 
 }
