@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalTime
+import pt.isel.courtandgo.frontend.dateUtils.formatToHourMinute
 
 @Composable
 fun TimeSlotGrid(
@@ -45,9 +46,5 @@ fun TimeSlotGrid(
     }
 }
 
-fun LocalTime.formatToHourMinute(): String {
-    val hourStr = if (this.hour < 10) "0${this.hour}" else "${this.hour}"
-    val minuteStr = if (this.minute < 10) "0${this.minute}" else "${this.minute}"
-    return "$hourStr:$minuteStr"
-}
+
 

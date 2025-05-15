@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.coil3.CoilImage
 
 @Composable
-fun ReservationCard(onStartReservation:() -> Unit) {
+fun ReservationHomeCard(onStartReservation:() -> Unit) {
     Card(
         elevation = 4.dp,
         modifier = Modifier

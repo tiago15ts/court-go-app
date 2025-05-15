@@ -13,21 +13,24 @@ import pt.isel.courtandgo.frontend.authentication.register.RegisterDetailsScreen
 import pt.isel.courtandgo.frontend.authentication.register.RegisterFirstScreen
 import pt.isel.courtandgo.frontend.components.LayoutScreen
 import pt.isel.courtandgo.frontend.components.bottomNavBar.Tab
+import pt.isel.courtandgo.frontend.courts.searchCourt.CourtSearchViewModel
+import pt.isel.courtandgo.frontend.courts.searchCourt.SearchCourtScreen
 import pt.isel.courtandgo.frontend.home.HomeScreen
 import pt.isel.courtandgo.frontend.notifications.EditNotificationsScreen
 import pt.isel.courtandgo.frontend.profile.ProfileScreen
 import pt.isel.courtandgo.frontend.profile.ProfileViewModel
 import pt.isel.courtandgo.frontend.profile.editProfile.EditProfileScreen
 import pt.isel.courtandgo.frontend.repository.AuthRepositoryImpl
-import pt.isel.courtandgo.frontend.reservations.lastReservations.LastReservationsScreen
-import pt.isel.courtandgo.frontend.courts.searchCourt.CourtSearchViewModel
-import pt.isel.courtandgo.frontend.courts.searchCourt.SearchCourtScreen
-import pt.isel.courtandgo.frontend.service.CourtAndGoService
-import pt.isel.courtandgo.frontend.service.mock.MockCourtService
-import pt.isel.courtandgo.frontend.service.mock.repo.CourtRepoMock
+import pt.isel.courtandgo.frontend.reservations.lastReservations.ReservationViewModel
+import pt.isel.courtandgo.frontend.reservations.lastReservations.ReservationsScreen
 import pt.isel.courtandgo.frontend.reservations.reservations.ReserveCourtScreen
 import pt.isel.courtandgo.frontend.reservations.reservations.ReserveCourtViewModel
+import pt.isel.courtandgo.frontend.service.CourtAndGoService
+import pt.isel.courtandgo.frontend.service.mock.MockCourtService
+import pt.isel.courtandgo.frontend.service.mock.MockReservationService
 import pt.isel.courtandgo.frontend.service.mock.MockScheduleCourtService
+import pt.isel.courtandgo.frontend.service.mock.repo.CourtRepoMock
+import pt.isel.courtandgo.frontend.service.mock.repo.ReservationRepoMock
 import pt.isel.courtandgo.frontend.service.mock.repo.ScheduleCourtRepoMock
 
 @Composable
@@ -39,6 +42,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
     val profileViewModel = remember { ProfileViewModel(AuthRepositoryImpl(courtAndGoService)) }
     val courtSearchViewModel = remember { CourtSearchViewModel(MockCourtService(CourtRepoMock()), MockScheduleCourtService(ScheduleCourtRepoMock())) }
     val reserveCourtViewModel = remember { ReserveCourtViewModel(MockScheduleCourtService(ScheduleCourtRepoMock())) }
+    val reservationVm = remember { ReservationViewModel(MockReservationService(ReservationRepoMock()), MockCourtService(CourtRepoMock())) }
 
     val currentUser by authViewModel.currentUser.collectAsState()
 
@@ -140,11 +144,9 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                         }
                     )
 
-                    is Screen.LastReservations -> LastReservationsScreen(
-                        onReservationClick = { reservationId ->
-                            //todo open reservation details
-                            //screen.value = Screen.ReservationDetails(reservationId)
-                        },
+                    is Screen.LastReservations -> ReservationsScreen(
+                        viewModel = reservationVm,
+                        userId = currentUser?.id ?: 0,
                         onBack = { screen.value = Screen.Home }
                     )
 

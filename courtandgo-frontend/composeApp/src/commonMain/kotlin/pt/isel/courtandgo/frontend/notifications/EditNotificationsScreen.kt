@@ -14,7 +14,7 @@ fun EditNotificationsScreen() {
         Text("Soon!")
         val scheduler = provideNotificationScheduler()
         Button(onClick = {
-            val triggerAtMillis = Clock.System.now().toEpochMilliseconds() + 10_000 // 10 segundos
+            val triggerAtMillis = Clock.System.now().toEpochMilliseconds() + 5_000 // 5 segundos
             scheduler.scheduleReservationReminder(
                 reservationId = "test-id",
                 message = "Tens uma reserva dentro de 24h!",

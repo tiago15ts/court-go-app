@@ -1,4 +1,4 @@
-package pt.isel.courtandgo.frontend.reservations.components
+package pt.isel.courtandgo.frontend.dateUtils
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -14,6 +14,10 @@ class MockReservationService(private val repoMock: ReservationRepoMock) : Reserv
         return repoMock.getReservationById(id)
     }
 
+    override suspend fun getReservationsForPlayer(playerId: Int): List<Reservation> {
+        return repoMock.getAllReservations().filter { it.playerId == playerId }
+    }
+
     override suspend fun createReservation(reservation: Reservation): Reservation {
         return repoMock.createReservation(reservation)
     }

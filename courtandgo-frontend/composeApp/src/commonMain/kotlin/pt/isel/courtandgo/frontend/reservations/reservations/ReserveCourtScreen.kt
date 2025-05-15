@@ -21,7 +21,7 @@ import kotlinx.datetime.LocalTime
 import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.reservations.components.CourtHeaderSection
 import pt.isel.courtandgo.frontend.reservations.components.CourtTabs
-import pt.isel.courtandgo.frontend.reservations.components.DatePickerRow
+import pt.isel.courtandgo.frontend.dateUtils.DatePickerRow
 import pt.isel.courtandgo.frontend.reservations.components.TimeSlotGrid
 
 @Composable

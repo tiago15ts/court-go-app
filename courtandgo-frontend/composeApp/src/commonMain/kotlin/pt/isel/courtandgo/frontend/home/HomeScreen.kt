@@ -35,7 +35,7 @@ fun HomeScreen(vm :AuthViewModel, //todo fix this param
             text = "Olá${if (!userName.isNullOrBlank()) ", $userName 👋" else "!"}",
             style = MaterialTheme.typography.h4
         )
-        ReservationCard(onStartReservation = onStartReservationClick)
+        ReservationHomeCard(onStartReservation = onStartReservationClick)
         LastReservationCard(onReservations = onLastReservationsClick)
     }
 
