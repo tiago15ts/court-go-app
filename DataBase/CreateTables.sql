@@ -33,7 +33,7 @@ CREATE TABLE Court (
     courtId SERIAL PRIMARY KEY,
     name VARCHAR(100),
     locationId INT REFERENCES Location(locationId),
-    type VARCHAR(20) CHECK (type IN ('Tennis', 'Padel')),
+    type VARCHAR(20) CHECK (type IN ('Tennis', 'Padel', 'Both')),
     surfaceType VARCHAR(50),
     capacity INT,
     ownerId INT REFERENCES Owner(ownerId)
