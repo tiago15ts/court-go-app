@@ -1,4 +1,4 @@
-package pt.isel.courtandgo.frontend.reservations.reservations
+package pt.isel.courtandgo.frontend.reservations.reservationTimes.sections
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,18 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.raedghazal.kotlinx_datetime_ext.now
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import pt.isel.courtandgo.frontend.domain.Court
-import pt.isel.courtandgo.frontend.reservations.components.CourtHeaderSection
-import pt.isel.courtandgo.frontend.reservations.components.CourtTabs
 import pt.isel.courtandgo.frontend.dateUtils.DatePickerRow
+import pt.isel.courtandgo.frontend.dateUtils.currentDate
+import pt.isel.courtandgo.frontend.dateUtils.currentTime
 import pt.isel.courtandgo.frontend.reservations.components.TimeSlotGrid
+import pt.isel.courtandgo.frontend.reservations.reservationTimes.ReserveCourtViewModel
 
 @Composable
-fun ReserveCourtScreen(
+fun ReserveCourtSection(
     courtInfo: Court,
-    onBack: () -> Unit,
     viewModel: ReserveCourtViewModel,
+    onContinueToConfirmation: (Court, LocalDateTime) -> Unit,
     ) {
     val selectedDate = remember { mutableStateOf(LocalDate.now()) }
     val selectedTime = remember { mutableStateOf<LocalTime?>(null) }
@@ -39,24 +41,11 @@ fun ReserveCourtScreen(
         viewModel.loadTimesForDate(courtInfo.id, selectedDate.value)
     }
 
-
     Column(modifier = Modifier.fillMaxSize()) {
-        // Foto e nome do court
-        CourtHeaderSection(courtName = courtInfo.name, location = courtInfo.district, onBack = onBack)
-
-        // Tabs: Detalhes | Reservar | Open Matches | Torneios (apenas mockados)
-        val selectedTab = remember { mutableStateOf("Reservar") }
-
-        CourtTabs(
-            selectedTab = selectedTab.value,
-            onTabSelected = { selectedTab.value = it }
-        )
-
-
         // Seletor de data horizontal (dias da semana)
         DatePickerRow(selectedDate.value) { selectedDate.value = it }
 
-        // Mostrar apenas disponíveis toggle
+        // todo mostrar apenas disponíveis toggle
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -68,22 +57,32 @@ fun ReserveCourtScreen(
             )
         }
 
+        val filteredTimes = if (selectedDate.value == currentDate) {
+            availableTimes.filter { it > currentTime }
+        } else {
+            availableTimes
+        }
         // Grid de horas
         TimeSlotGrid(
-            availableTimes = availableTimes,
+            availableTimes = filteredTimes,
             selectedTime = selectedTime.value,
             onSelect = { selectedTime.value = it }
         )
 
-        // Botão para continuar (ativo só com hora selecionada)
         Button(
-            onClick = { /* todo ir para confirmação de uma reserva*/ },
+            onClick = {
+                selectedTime.value?.let { time ->
+                    val dateTime = LocalDateTime(selectedDate.value, time)
+                    onContinueToConfirmation(courtInfo, dateTime)
+                    selectedTime.value = null // Limpa a seleção após continuar
+                }
+            },
             enabled = selectedTime.value != null,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            Text("Confirmar Reserva")
+            Text("Continuar")
         }
     }
 }

@@ -9,4 +9,5 @@ interface ReservationService {
     suspend fun createReservation(reservation: Reservation): Reservation
     suspend fun updateReservation(reservation: Reservation): Reservation?
     suspend fun deleteReservation(id: Int): Boolean
+    suspend fun setConfirmedReservation(id: Int): Boolean
 }

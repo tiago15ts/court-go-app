@@ -29,4 +29,8 @@ class MockReservationService(private val repoMock: ReservationRepoMock) : Reserv
     override suspend fun deleteReservation(id: Int): Boolean {
         return repoMock.deleteReservation(id)
     }
+
+    override suspend fun setConfirmedReservation(id: Int): Boolean {
+        return repoMock.setConfirmedReservation(id)
+    }
 }

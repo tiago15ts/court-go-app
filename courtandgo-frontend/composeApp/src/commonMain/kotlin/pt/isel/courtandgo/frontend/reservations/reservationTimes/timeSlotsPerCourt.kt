@@ -1,6 +1,7 @@
-package pt.isel.courtandgo.frontend.reservations.reservations
+package pt.isel.courtandgo.frontend.reservations.reservationTimes
 
 import kotlinx.datetime.*
+import pt.isel.courtandgo.frontend.dateUtils.plusMinutes
 import pt.isel.courtandgo.frontend.domain.SpecialSchedule
 import pt.isel.courtandgo.frontend.domain.WeeklySchedule
 import pt.isel.courtandgo.frontend.service.ScheduleCourtsService

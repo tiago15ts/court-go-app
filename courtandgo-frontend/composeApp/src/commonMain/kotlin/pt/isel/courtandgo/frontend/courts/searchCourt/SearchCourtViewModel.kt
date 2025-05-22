@@ -9,7 +9,8 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import pt.isel.courtandgo.frontend.domain.Court
-import pt.isel.courtandgo.frontend.reservations.reservations.getTimeSlotsForCourt
+import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.reservations.reservationTimes.getTimeSlotsForCourt
 import pt.isel.courtandgo.frontend.service.CourtService
 import pt.isel.courtandgo.frontend.service.ScheduleCourtsService
 
@@ -24,8 +25,8 @@ class CourtSearchViewModel(
     private val _selectedDistrict = MutableStateFlow("")
     val selectedDistrict: StateFlow<String> = _selectedDistrict.asStateFlow()
 
-    private val _selectedSport = MutableStateFlow("Ténis")
-    val selectedSport: StateFlow<String> = _selectedSport.asStateFlow()
+    private val _selectedSport = MutableStateFlow(SportType.TENNIS)
+    val selectedSport: StateFlow<SportType> = _selectedSport.asStateFlow()
 
     private val _courtHours = MutableStateFlow<Map<Int, List<LocalTime>>>(emptyMap())
     val courtHours: StateFlow<Map<Int, List<LocalTime>>> = _courtHours.asStateFlow()
@@ -36,11 +37,9 @@ class CourtSearchViewModel(
         fetchCourts()
     }
 
-    fun updateSport(sport: String) {
-        if (sport != _selectedSport.value) {
-            _selectedSport.value = sport
-            fetchCourts()
-        }
+    fun updateSport(sport: SportType) {
+        _selectedSport.value = sport
+        fetchCourts()
     }
 
      fun fetchCourts() {
@@ -64,5 +63,4 @@ class CourtSearchViewModel(
             _courtHours.value = updated
         }
     }
-
 }

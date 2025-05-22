@@ -1,6 +1,7 @@
 package pt.isel.courtandgo.frontend.service.mock
 
 import pt.isel.courtandgo.frontend.domain.Court
+import pt.isel.courtandgo.frontend.domain.SportType
 import pt.isel.courtandgo.frontend.service.CourtService
 import pt.isel.courtandgo.frontend.service.mock.repo.CourtRepoMock
 
@@ -13,11 +14,11 @@ class MockCourtService(private val courtRepoMock: CourtRepoMock) : CourtService 
         return courtRepoMock.getCourtsByDistrict(district)
     }
 
-    override suspend fun getCourtsBySport(sport: String): List<Court> {
+    override suspend fun getCourtsBySport(sport: SportType): List<Court> {
         return courtRepoMock.getCourtsBySport(sport)
     }
 
-    override suspend fun getCourtsFiltered(district: String, sport: String): List<Court> {
+    override suspend fun getCourtsFiltered(district: String, sport: SportType): List<Court> {
         return courtRepoMock.getCourtsFiltered(district, sport)
     }
 

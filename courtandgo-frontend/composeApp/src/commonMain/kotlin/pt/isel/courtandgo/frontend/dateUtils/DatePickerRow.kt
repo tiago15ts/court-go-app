@@ -16,17 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.plus
-import kotlinx.datetime.toLocalDateTime
 
 
 @Composable
 fun DatePickerRow(selectedDate: LocalDate, onDateSelected: (LocalDate) -> Unit) {
-    val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+    val today = nowTime.date
     val dates = (0..6).map { today.plus(it.toInt(), DateTimeUnit.DAY) }
 
     LazyRow(modifier = Modifier.padding(vertical = 8.dp)) {

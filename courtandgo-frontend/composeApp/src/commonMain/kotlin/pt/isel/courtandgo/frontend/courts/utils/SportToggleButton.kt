@@ -10,12 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
+import pt.isel.courtandgo.frontend.domain.SportType
 
 @Composable
-fun SportToggleButton(label: String, selected: Boolean, onClick: () -> Unit) {
+fun SportToggleButton(label: SportType, selected: Boolean, onClick: () -> Unit) {
     val backgroundColor = when {
-        selected && label == "Ténis" -> Color(0xFFDAF94D) // Bola de ténis
-        selected && label == "Padel" -> Color(0xFF0077B6) // Azul padel
+        selected && label == SportType.TENNIS -> Color(0xFFDAF94D) // Bola de ténis
+        selected && label == SportType.PADEL -> Color(0xFF0077B6) // Azul padel
         else -> Color.White
     }
 
@@ -29,6 +30,9 @@ fun SportToggleButton(label: String, selected: Boolean, onClick: () -> Unit) {
 
             .height(48.dp)
     ) {
-        Text(label, color = textColor)
+        when (label) {
+            SportType.TENNIS -> Text("Ténis", color = textColor)
+            SportType.PADEL -> Text("Padel", color = textColor)
+        }
     }
 }

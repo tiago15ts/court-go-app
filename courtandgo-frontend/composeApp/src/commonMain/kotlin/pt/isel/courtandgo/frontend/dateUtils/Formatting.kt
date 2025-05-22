@@ -16,3 +16,10 @@ fun LocalTime.formatToHourMinute(): String {
     val minuteStr = if (this.minute < 10) "0${this.minute}" else "${this.minute}"
     return "$hourStr:$minuteStr"
 }
+
+fun formatTimeToHHmm(time: LocalTime): String {
+    val hour = time.hour.toString().padStart(2, '0')
+    val minute = time.minute.toString().padStart(2, '0')
+    return "$hour:$minute"
+}
+

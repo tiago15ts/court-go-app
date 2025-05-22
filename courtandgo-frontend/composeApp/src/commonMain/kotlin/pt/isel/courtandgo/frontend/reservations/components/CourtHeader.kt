@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.coil3.CoilImage
 
 @Composable
-fun CourtHeaderSection(courtName: String, location: String, onBack: () -> Unit) {
+fun CourtHeader(courtName: String, location: String, onBack: () -> Unit) {
     Box {
         CoilImage(
             imageModel = {"https://americanpadelsystems.com/images/portfolio/projects-1.jpg"},

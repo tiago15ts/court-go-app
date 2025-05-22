@@ -36,6 +36,7 @@ identityJvm = "202411.1"
 uuid = "0.8.4"
 workRuntimeKtx = "2.10.1"
 composeMaterialCore = "1.4.1"
+foundationLayoutAndroidVersion = "1.8.1"
 
 [libraries]
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
@@ -75,6 +76,7 @@ identity-jvm = { group = "com.android.identity", name = "identity-jvm", version.
 uuid = { module = "com.benasher44:uuid", version.ref = "uuid" }
 androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workRuntimeKtx" }
 androidx-compose-material-core = { group = "androidx.wear.compose", name = "compose-material-core", version.ref = "composeMaterialCore" }
+foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroidVersion" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

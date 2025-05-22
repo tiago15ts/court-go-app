@@ -53,7 +53,7 @@ kotlin {
             implementation(libs.cupertino)
 
             implementation(libs.kotlinx.datetime)
-            implementation(libs.kotlinx.datetime.ext)
+            implementation(libs.kotlinx.datetime.ext) // alternative to complete kotlinx.datetime
             implementation(libs.uuid)
         }
     }
@@ -101,6 +101,7 @@ dependencies {
     implementation(libs.foundation.android)
     implementation(libs.androidx.foundation.layout.android)
     implementation(libs.identity.jvm)
+    implementation(libs.foundation.layout.android)
 
     debugImplementation(compose.uiTooling)
 

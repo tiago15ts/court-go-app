@@ -1,28 +1,49 @@
 package pt.isel.courtandgo.frontend.reservations.components
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.skydoves.landscapist.coil3.CoilImage
 import pt.isel.courtandgo.frontend.dateUtils.formatToDisplay
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.domain.ReservationStatus
-import com.skydoves.landscapist.coil3.CoilImage
+import kotlinx.datetime.*
 
 
 @Composable
 fun ReservationCard(
     reservation: Reservation,
     courtName : String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
+            .clickable { onClick() }
             .padding(horizontal = 16.dp, vertical = 8.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -69,21 +90,74 @@ fun ReservationCard(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Preço estimado: ${reservation.estimatedPrice} €",
+                    text = "Preço: ${reservation.estimatedPrice} €",
                     style = MaterialTheme.typography.bodySmall
                 )
 
-                Text(
-                    text = "Estado: ${
-                        reservation.status.name.lowercase().replaceFirstChar { it.uppercase() }
-                    }",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = when (reservation.status) {
-                        ReservationStatus.CONFIRMED -> MaterialTheme.colorScheme.primary
-                        ReservationStatus.CANCELLED -> MaterialTheme.colorScheme.error
-                        ReservationStatus.PENDING -> MaterialTheme.colorScheme.secondary
-                    }
-                )
+                if (reservation.status == ReservationStatus.CANCELLED) {
+                    Text(
+                        text = "Cancelado",
+                        color = Color(0xFFB00020),
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .background(
+                                color = Color(0xFFFFEBEE),
+                                shape = RoundedCornerShape(6.dp)
+                            )
+                            .border(
+                                width = 1.dp,
+                                color = Color(0xFFB00020),
+                                shape = RoundedCornerShape(6.dp)
+                            )
+                            .padding(horizontal = 8.dp, vertical = 2.dp)
+                    )
+                }
+
+                val isFuture = reservation.startTime.toInstant(TimeZone.currentSystemDefault()) > Clock.System.now()
+
+                if (isFuture && reservation.status == ReservationStatus.PENDING) {
+                    Text(
+                        text = "Por Confirmar",
+                        color = Color(0xFFFFA000),
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .background(
+                                color = Color(0xFFFFF8E1),
+                                shape = RoundedCornerShape(6.dp)
+                            )
+                            .border(
+                                width = 1.dp,
+                                color = Color(0xFFFFA000),
+                                shape = RoundedCornerShape(6.dp)
+                            )
+                            .padding(horizontal = 8.dp, vertical = 2.dp)
+                    )
+                }
+
+                if (isFuture && reservation.status == ReservationStatus.CONFIRMED) {
+                    Text(
+                        text = "Confirmado",
+                        color = Color(0xFF2E7D32),
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .background(
+                                color = Color(0xFFE8F5E9),
+                                shape = RoundedCornerShape(6.dp)
+                            )
+                            .border(
+                                width = 1.dp,
+                                color = Color(0xFF2E7D32),
+                                shape = RoundedCornerShape(6.dp)
+                            )
+                            .padding(horizontal = 8.dp, vertical = 2.dp)
+                    )
+                }
             }
         }
     }

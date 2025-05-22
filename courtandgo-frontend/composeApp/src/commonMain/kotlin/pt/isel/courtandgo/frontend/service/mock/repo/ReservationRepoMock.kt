@@ -8,10 +8,12 @@ class ReservationRepoMock {
 
     private val reservations = mutableListOf<Reservation>(
         Reservation(1, 1, 1, LocalDateTime(2025, 5, 20, 11, 0), LocalDateTime(2025, 5, 20, 13, 0), 25.0),
-        Reservation(2, 1, 1, LocalDateTime(2025, 5, 21, 16, 0), LocalDateTime(2025, 5, 21, 17, 0), 12.5),
-        Reservation(1, 1, 1, LocalDateTime(2025, 5, 10, 10, 30), LocalDateTime(2025, 5, 10, 13, 0), 23.0, ReservationStatus.CONFIRMED)
+        Reservation(2, 2, 1, LocalDateTime(2025, 5, 21, 16, 0), LocalDateTime(2025, 5, 21, 17, 0), 12.5),
+        Reservation(3, 1, 1, LocalDateTime(2025, 5, 10, 10, 30), LocalDateTime(2025, 5, 10, 13, 0), 23.0, ReservationStatus.CONFIRMED)
 
     )
+
+    private var currentId = 4
 
     fun getAllReservations(): List<Reservation> {
         return reservations
@@ -22,8 +24,9 @@ class ReservationRepoMock {
     }
 
     fun createReservation(reservation: Reservation): Reservation {
-        reservations.add(reservation)
-        return reservation
+        val newReservation = reservation.copy(id = currentId++)
+        reservations.add(newReservation)
+        return newReservation
     }
 
     fun updateReservation(reservation: Reservation): Reservation? {
@@ -35,7 +38,24 @@ class ReservationRepoMock {
     }
 
     fun deleteReservation(id: Int): Boolean {
-        return true //todo fix this
+        val index = reservations.indexOfFirst { it.id == id }
+        return if (index != -1) {
+            val existing = reservations[index]
+            reservations[index] = existing.copy(status = ReservationStatus.CANCELLED)
+            true
+        } else {
+            false
+        }
+    }
 
+    fun setConfirmedReservation(id: Int): Boolean {
+        val index = reservations.indexOfFirst { it.id == id }
+        return if (index != -1) {
+            val existing = reservations[index]
+            reservations[index] = existing.copy(status = ReservationStatus.CONFIRMED)
+            true
+        } else {
+            false
+        }
     }
 }

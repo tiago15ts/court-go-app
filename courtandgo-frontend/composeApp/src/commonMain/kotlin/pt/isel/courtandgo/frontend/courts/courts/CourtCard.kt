@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalTime
+import pt.isel.courtandgo.frontend.dateUtils.formatTimeToHHmm
 
 
 @Composable
@@ -68,8 +69,4 @@ fun CourtCard(
     }
 }
 
-fun formatTimeToHHmm(time: LocalTime): String {
-    val hour = time.hour.toString().padStart(2, '0')
-    val minute = time.minute.toString().padStart(2, '0')
-    return "$hour:$minute"
-}
+

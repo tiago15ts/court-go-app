@@ -1,5 +1,6 @@
 package pt.isel.courtandgo.frontend.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,6 +29,7 @@ fun LastReservationCard(onReservations: () -> Unit) {
         modifier = Modifier
             .padding(16.dp)
             .width(400.dp)
+            .clickable{ onReservations() }
     ) {
         Column(
             modifier = Modifier.padding(16.dp),

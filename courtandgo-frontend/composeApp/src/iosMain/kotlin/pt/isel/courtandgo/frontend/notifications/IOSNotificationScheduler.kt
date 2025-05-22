@@ -22,4 +22,9 @@ class IOSNotificationScheduler : NotificationScheduler {
 
         UNUserNotificationCenter.currentNotificationCenter().addNotificationRequest(request, withCompletionHandler = null)
     }
+
+    override fun cancelReservationReminder(reservationId: String) {
+        UNUserNotificationCenter.currentNotificationCenter()
+            .removePendingNotificationRequestsWithIdentifiers(listOf(reservationId))
+    }
 }

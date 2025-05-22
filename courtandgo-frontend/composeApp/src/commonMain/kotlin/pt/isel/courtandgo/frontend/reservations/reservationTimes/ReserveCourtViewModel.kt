@@ -1,4 +1,4 @@
-package pt.isel.courtandgo.frontend.reservations.reservations
+package pt.isel.courtandgo.frontend.reservations.reservationTimes
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

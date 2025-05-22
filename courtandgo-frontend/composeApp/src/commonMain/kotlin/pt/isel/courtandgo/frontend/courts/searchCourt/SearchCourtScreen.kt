@@ -20,6 +20,9 @@ import pt.isel.courtandgo.frontend.domain.Court
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.dateUtils.currentDate
+import pt.isel.courtandgo.frontend.dateUtils.currentTime
 
 
 @Composable
@@ -88,12 +91,12 @@ fun SearchCourtScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                SportToggleButton("Ténis", selectedSport == "Ténis") {
-                    viewModel.updateSport("Ténis")
+                SportToggleButton(SportType.TENNIS, selectedSport == SportType.TENNIS) {
+                    viewModel.updateSport(SportType.TENNIS)
 
                 }
-                SportToggleButton("Padel", selectedSport == "Padel") {
-                    viewModel.updateSport("Padel")
+                SportToggleButton(SportType.PADEL, selectedSport == SportType.PADEL) {
+                    viewModel.updateSport(SportType.PADEL)
 
                 }
             }
@@ -107,16 +110,23 @@ fun SearchCourtScreen(
 
 
         items(courts) { court ->
-            val hours = courtHours[court.id] ?: emptyList()
+            val hoursForCourt = courtHours[court.id] ?: emptyList()
+
+            val filteredHours = if (today == currentDate) {
+                hoursForCourt.filter { it > currentTime }
+            } else {
+                hoursForCourt
+            }
 
             CourtCard(
                 name = court.name,
                 location = court.district,
                 price = court.price.toString(),
-                hours = hours,
+                hours = filteredHours,
                 onClick = { onCourtClick(court) }
             )
         }
+
 
         if (courts.isEmpty()) {
             item {

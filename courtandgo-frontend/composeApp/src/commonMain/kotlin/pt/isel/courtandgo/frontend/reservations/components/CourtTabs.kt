@@ -18,7 +18,7 @@ fun CourtTabs(
     selectedTab: String,
     onTabSelected: (String) -> Unit = {}
 ) {
-    val tabs = listOf("Detalhes", "Reservar", "Torneios")
+    val tabs = listOf("Detalhes", "Reservar")
 
     Row(
         modifier = Modifier
