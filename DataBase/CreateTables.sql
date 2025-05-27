@@ -5,8 +5,8 @@ CREATE TABLE Country (
 );
 
 
-CREATE TABLE City (
-    cityId SERIAL PRIMARY KEY,
+CREATE TABLE District (
+    DistrictId SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     countryId INT REFERENCES Country(countryId)
 );
@@ -14,8 +14,12 @@ CREATE TABLE City (
 
 CREATE TABLE Location (
     locationId SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    cityId INT REFERENCES City(cityId)
+    address VARCHAR(100) NOT NULL,
+    DistrictId INT REFERENCES District(DistrictId),
+    county VARCHAR(100) NOT NULL,
+    postalCode VARCHAR(20) NOT NULL,
+    latitude DECIMAL(9,6),
+    longitude DECIMAL(9,6),
 );
 
 
@@ -28,15 +32,23 @@ CREATE TABLE Owner (
     numberOfLocations INT
 );
 
+CREATE TABLE Club(
+    clubId SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    sports VARCHAR(100) CHECK (type IN ('Tennis', 'Padel', 'Both')),
+    nrOfCourts INT,
+    locationId INT REFERENCES Location(locationId),
+    ownerId INT REFERENCES Owner(ownerId),
+)
+
 
 CREATE TABLE Court (
     courtId SERIAL PRIMARY KEY,
     name VARCHAR(100),
-    locationId INT REFERENCES Location(locationId),
+    clubId INT REFERENCES Club(clubId),
     type VARCHAR(20) CHECK (type IN ('Tennis', 'Padel')),
     surfaceType VARCHAR(50),
     capacity INT,
-    ownerId INT REFERENCES Owner(ownerId)
 );
 
 CREATE TABLE Court_Price (
