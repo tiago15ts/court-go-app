@@ -11,15 +11,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.domain.SportType
 
 @Composable
-fun CourtDetailsSection(courtInfo: Court) {
+fun CourtDetailsSection(courtInfo: Court, clubInfo: Club) {
     Column(modifier = Modifier.padding(16.dp)) {
         // 🔹 Nome
         Text(
-            text = courtInfo.name,
+            text = clubInfo.name,
             style = MaterialTheme.typography.headlineSmall
         )
 
@@ -29,6 +30,7 @@ fun CourtDetailsSection(courtInfo: Court) {
         val (label, sportColor) = when (courtInfo.sportType) {
             SportType.TENNIS -> "Ténis" to Color(0xFFDAF94D)
             SportType.PADEL -> "Padel" to Color(0xFF0077B6)
+            SportType.BOTH -> TODO()
         }
 
         Box(
@@ -47,6 +49,7 @@ fun CourtDetailsSection(courtInfo: Court) {
 
         Spacer(modifier = Modifier.height(12.dp))
 
+
         if (courtInfo.sportType == SportType.TENNIS) {
             Text(
                 text = "Tipo de piso: ${courtInfo.surfaceType}",
@@ -57,6 +60,18 @@ fun CourtDetailsSection(courtInfo: Court) {
 
         Text(
             text = "Capacidade por campo: ${courtInfo.capacity} pessoas",
+            style = MaterialTheme.typography.bodyMedium
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "O clube tem ${clubInfo.nrOfCourts} campos disponíveis.",
+            style = MaterialTheme.typography.bodyMedium
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "Localização: ${clubInfo.location.address}, ${clubInfo.location.county}, ${clubInfo.location.district}, ${clubInfo.location.postalCode}",
             style = MaterialTheme.typography.bodyMedium
         )
     }

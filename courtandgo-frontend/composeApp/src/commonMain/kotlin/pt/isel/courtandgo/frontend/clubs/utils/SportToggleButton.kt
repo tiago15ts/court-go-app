@@ -1,4 +1,4 @@
-package pt.isel.courtandgo.frontend.courts.utils
+package pt.isel.courtandgo.frontend.clubs.utils
 
 
 import androidx.compose.foundation.BorderStroke
@@ -33,6 +33,7 @@ fun SportToggleButton(label: SportType, selected: Boolean, onClick: () -> Unit) 
         when (label) {
             SportType.TENNIS -> Text("Ténis", color = textColor)
             SportType.PADEL -> Text("Padel", color = textColor)
+            else -> Text(label.name, color = textColor)
         }
     }
 }

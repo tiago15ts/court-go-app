@@ -1,4 +1,4 @@
-package pt.isel.courtandgo.frontend.courts.utils
+package pt.isel.courtandgo.frontend.clubs.utils
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
@@ -39,6 +39,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+
 @Composable
 fun SearchByDistrictField(
     initialValue: String = "",

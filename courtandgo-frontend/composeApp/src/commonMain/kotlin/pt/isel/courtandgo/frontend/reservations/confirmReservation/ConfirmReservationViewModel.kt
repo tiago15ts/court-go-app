@@ -4,12 +4,10 @@ import pt.isel.courtandgo.frontend.domain.ReservationStatus
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.raedghazal.kotlinx_datetime_ext.minus
 import com.raedghazal.kotlinx_datetime_ext.plus
 import kotlinx.coroutines.launch
 import kotlinx.datetime.*
 import pt.isel.courtandgo.frontend.domain.Reservation
-import pt.isel.courtandgo.frontend.notifications.provideNotificationScheduler
 import pt.isel.courtandgo.frontend.notifications.scheduleReservationNotification
 import pt.isel.courtandgo.frontend.service.ReservationService
 import kotlin.time.Duration.Companion.minutes
@@ -60,8 +58,8 @@ class ConfirmReservationViewModel(
 
             // Agendar a notificação 24h antes (ou mais próximo possível)
             scheduleReservationNotification(created)
-        }
 
+        }
     }
 
     private fun calculatePrice(durationMinutes: Int, pricePerHour: Double): Double {

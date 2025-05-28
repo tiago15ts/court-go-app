@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import kotlinx.datetime.LocalDateTime
+import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.reservations.components.CourtHeader
 import pt.isel.courtandgo.frontend.reservations.components.CourtTabs
@@ -15,8 +16,9 @@ import pt.isel.courtandgo.frontend.reservations.reservationTimes.sections.Reserv
 
 
 @Composable
-fun SelectedCourtScreen(
-    courtInfo: Court,
+fun SelectedClubScreen(
+    clubInfo: Club,
+    courtInfo : Court,
     onBack: () -> Unit,
     reserveCourtViewModel: ReserveCourtViewModel,
     onContinueToConfirmation: (Court, LocalDateTime) -> Unit,
@@ -27,8 +29,8 @@ fun SelectedCourtScreen(
 
 
         CourtHeader(
-            courtName = courtInfo.name,
-            location = courtInfo.district,
+            courtName = clubInfo.name,
+            location = clubInfo.location.district,
             onBack = onBack
         )
 
@@ -39,7 +41,7 @@ fun SelectedCourtScreen(
 
         when (selectedTab.value) {
             "Detalhes" -> {
-                CourtDetailsSection(courtInfo = courtInfo)
+                CourtDetailsSection(courtInfo = courtInfo, clubInfo = clubInfo)
             }
 
             "Reservar" -> {

@@ -1,4 +1,4 @@
-package pt.isel.courtandgo.frontend.courts.courts
+package pt.isel.courtandgo.frontend.clubs.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,9 +22,10 @@ import pt.isel.courtandgo.frontend.dateUtils.formatTimeToHHmm
 
 
 @Composable
-fun CourtCard(
+fun ClubCard(
     name: String,
-    location: String,
+    county: String,
+    district: String,
     price: String,
     hours: List<LocalTime>,
     onClick: () -> Unit
@@ -39,14 +40,14 @@ fun CourtCard(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = name, style = MaterialTheme.typography.titleMedium)
-            Text(text = location, style = MaterialTheme.typography.bodySmall)
+            Text(text = "$county, $district", style = MaterialTheme.typography.bodySmall)
 
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
             ) {
                 Text(text = "Distancia Soon", style = MaterialTheme.typography.bodySmall)
-                Text(text = price + "€", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "Desde" + price + "€", style = MaterialTheme.typography.bodyMedium)
             }
 
             Row(

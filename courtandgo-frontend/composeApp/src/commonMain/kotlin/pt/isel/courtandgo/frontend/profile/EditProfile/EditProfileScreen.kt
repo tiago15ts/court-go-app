@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import pt.isel.courtandgo.frontend.authentication.countryPhoneCode
 import pt.isel.courtandgo.frontend.components.datePicker.DatePickerComponent
 import pt.isel.courtandgo.frontend.components.dropdownMenu.DropdownMenuField
-import pt.isel.courtandgo.frontend.courts.utils.distritosPortugal
+import pt.isel.courtandgo.frontend.clubs.utils.distritosPortugal
 import pt.isel.courtandgo.frontend.domain.User
 import pt.isel.courtandgo.frontend.profile.ProfileViewModel
 

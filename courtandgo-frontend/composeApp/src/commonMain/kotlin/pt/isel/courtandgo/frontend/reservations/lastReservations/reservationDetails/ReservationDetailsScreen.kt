@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -15,11 +14,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.raedghazal.kotlinx_datetime_ext.plus
 import com.skydoves.landscapist.coil3.CoilImage
+import kotlinx.datetime.DateTimeUnit
 import pt.isel.courtandgo.frontend.dateUtils.formatToDisplay
 import pt.isel.courtandgo.frontend.dateUtils.nowTime
 import pt.isel.courtandgo.frontend.domain.Reservation
@@ -32,11 +33,13 @@ fun ReservationDetailsScreen(
     onConfirmReservation: (Reservation) -> Unit,
     onCancelReservation: (Reservation) -> Unit
 ) {
-    val now = remember { nowTime }
-    val isFuture = remember(reservation.startTime) {
-        reservation.startTime > now
-    }
+    val now = nowTime
+    val start = reservation.startTime
+
+    val isFuture = start > now
     val canCancel = isFuture && reservation.status != ReservationStatus.CANCELLED
+    val canStillCancel = start > now.plus(1, DateTimeUnit.HOUR)
+    val isConfirmed = reservation.status == ReservationStatus.CONFIRMED
 
     Column(
         modifier = Modifier
@@ -77,27 +80,47 @@ fun ReservationDetailsScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         if (canCancel) {
-            Button(
-                onClick = { onConfirmReservation(reservation) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
+            if (!isConfirmed) {
+                Button(
+                    onClick = { onConfirmReservation(reservation) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF2E7D32) // Verde mais escuro
+                    )
+                ) {
+                    Text("Confirmar Reserva")
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+            } else {
+                Text(
+                    text = "✅ A sua reserva já está confirmada.",
+                    color = Color(0xFF2E7D32),
+                    style = MaterialTheme.typography.bodyMedium
                 )
-            ){
-                Text("Confirmar Reserva", color = MaterialTheme.colorScheme.onPrimary)
+                Spacer(modifier = Modifier.height(8.dp))
             }
-            Text(
-                "Poderá cancelar a reserva até 1 hora antes do início da mesma.",
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Button(
-                onClick = { onCancelReservation(reservation) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.error
+
+            if (canStillCancel) {
+                Text(
+                    "Poderá cancelar a reserva até 1 hora antes do início da mesma.",
+                    style = MaterialTheme.typography.bodyMedium
                 )
-            ) {
-                Text("Cancelar Reserva", color = MaterialTheme.colorScheme.onError)
+
+                Button(
+                    onClick = { onCancelReservation(reservation) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Text("Cancelar Reserva", color = MaterialTheme.colorScheme.onError)
+                }
+            } else {
+                Text(
+                    "⏳ Já não é possível cancelar esta reserva (menos de 1 hora).",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.Gray
+                )
             }
         }
     }

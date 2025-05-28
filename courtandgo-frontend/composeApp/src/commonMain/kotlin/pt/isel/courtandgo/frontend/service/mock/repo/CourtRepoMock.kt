@@ -5,35 +5,46 @@ import pt.isel.courtandgo.frontend.domain.SportType
 
 class CourtRepoMock {
 
-    private val courts = listOf(
-        Court(1, "Beloura Tennis Academy", "Lisboa", SportType.TENNIS, "Terra Batida", 4, 1, 15.0),
-        Court(2, "Lisboa Rackets", "Lisboa", SportType.PADEL, null, 4, 2, 20.0),
-        Court(3, "Porto Club Padel", "Porto", SportType.PADEL, null, 6, 3, 25.0),
-        Court(4, "Estoril Country Club", "Lisboa", SportType.TENNIS, "Relva", 4, 1, 30.0),
-        Court(5, "Braga Tennis Club", "Braga", SportType.TENNIS, "Duro", 4, 3, 13.0),
+    private val courts = mutableListOf<Court>(
+        Court(
+            id = 1,
+            name = "Court 1",
+            clubId = 1,
+            sportType = SportType.TENNIS,
+            surfaceType = "Terra Batida",
+            capacity = 4,
+            price = 15.0,
+        ),
+        Court(
+            id = 2,
+            name = "Court 2",
+            clubId = 1,
+            sportType = SportType.TENNIS,
+            surfaceType = "Terra Batida",
+            capacity = 6,
+            price = 20.0,
+        ),
+        Court(
+            id = 3,
+            name = "Court 3",
+            clubId = 2,
+            sportType = SportType.PADEL,
+            surfaceType = null,
+            capacity = 4,
+            price = 10.0,
+        ),
 
     )
 
-    fun getAllCourts(): List<Court> = courts
-
-    fun getCourtsByDistrict(district: String): List<Court> {
-        return courts.filter { it.district.contains(district, ignoreCase = true) }
+    fun getCourtsByClubId(clubId: Int): List<Court> {
+        return courts.filter { it.clubId == clubId }
     }
 
-    fun getCourtsBySport(sport: SportType): List<Court> {
-        return courts.filter { it.sportType == sport }
+    fun getCourtById(courtId: Int): Court? {
+        return courts.find { it.id == courtId }
     }
 
-    fun getCourtsFiltered(district: String, sport: SportType): List<Court> {
-        return courts.filter { it.district.contains(district, ignoreCase = true)
-                && it.sportType == sport }
+    fun getCourtsBySportType(sportType: String): List<Court> {
+        return courts.filter { it.sportType.toString() == sportType }
     }
-
-    fun getCourtById(id: Int): Court? {
-        return courts.find { it.id == id }
-    }
-    fun getCourtsByOwnerId(ownerId: Int): List<Court> {
-        return courts.filter { it.courtOwnerId == ownerId }
-    }
-
 }

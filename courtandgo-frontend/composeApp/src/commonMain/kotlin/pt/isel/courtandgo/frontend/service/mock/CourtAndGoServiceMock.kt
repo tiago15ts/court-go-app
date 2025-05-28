@@ -1,6 +1,7 @@
 package pt.isel.courtandgo.frontend.service.mock
 
 import pt.isel.courtandgo.frontend.service.CourtAndGoService
+import pt.isel.courtandgo.frontend.service.ClubService
 import pt.isel.courtandgo.frontend.service.CourtService
 import pt.isel.courtandgo.frontend.service.ReservationService
 import pt.isel.courtandgo.frontend.service.UserService
@@ -13,11 +14,15 @@ class CourtAndGoServiceMock : CourtAndGoService {
         MockUserService(repoMock.userRepoMock)
     }
 
-    override val courtService : CourtService by lazy {
-        MockCourtService(repoMock.courtRepoMock)
+    override val clubService : ClubService by lazy {
+        MockClubService(repoMock.clubRepoMock)
     }
 
     override val reservationService : ReservationService by lazy {
         MockReservationService(repoMock.reservationRepoMock)
+    }
+
+    override val courtService : CourtService by lazy {
+        MockCourtService(repoMock.courtRepoMock)
     }
 }

@@ -1,6 +1,4 @@
-package pt.isel.courtandgo.frontend.courts.utils
-
-
+package pt.isel.courtandgo.frontend.clubs.utils
 
 val distritosPortugal = listOf(
     "Aveiro", "Beja", "Braga", "Bragança", "Castelo Branco", "Coimbra",

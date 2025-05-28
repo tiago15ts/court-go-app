@@ -33,6 +33,8 @@ fun ConfirmReservationScreen(
     val isSubmitting = viewModel.isSubmitting.value
     val reservationConfirmed = viewModel.reservationConfirmed.value
 
+    //todo add possibility to choose court like court 1, 2, etc.
+
     LaunchedEffect(reservationConfirmed) {
         if (reservationConfirmed != null) {
             onReservationComplete(reservationConfirmed)

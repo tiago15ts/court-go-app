@@ -2,16 +2,14 @@ package pt.isel.courtandgo.frontend.domain
 
 data class Court(
     val id: Int,
-    val name: String,
-    val district: String,
-    //todo val location: Location,
+    val name: String, //e.g. Court 1, Court 2, etc.
     val sportType: SportType,
     val surfaceType: String?,
     val capacity: Int,
-    val courtOwnerId: Int,
     val price: Double,
+    val clubId: Int,
 )
 
 enum class SportType {
-    TENNIS, PADEL
+    TENNIS, PADEL, BOTH
 }

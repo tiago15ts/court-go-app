@@ -6,6 +6,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import pt.isel.courtandgo.frontend.authentication.AuthViewModel
 import pt.isel.courtandgo.frontend.authentication.login.LoginScreen
@@ -13,10 +15,11 @@ import pt.isel.courtandgo.frontend.authentication.register.RegisterDetailsScreen
 import pt.isel.courtandgo.frontend.authentication.register.RegisterFirstScreen
 import pt.isel.courtandgo.frontend.components.LayoutScreen
 import pt.isel.courtandgo.frontend.components.bottomNavBar.Tab
-import pt.isel.courtandgo.frontend.courts.searchCourt.CourtSearchViewModel
-import pt.isel.courtandgo.frontend.courts.searchCourt.SearchCourtScreen
+import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubViewModel
+import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubScreen
 import pt.isel.courtandgo.frontend.home.HomeScreen
 import pt.isel.courtandgo.frontend.notifications.EditNotificationsScreen
+import pt.isel.courtandgo.frontend.notifications.NotificationSettingsViewModel
 import pt.isel.courtandgo.frontend.profile.ProfileScreen
 import pt.isel.courtandgo.frontend.profile.ProfileViewModel
 import pt.isel.courtandgo.frontend.profile.editProfile.EditProfileScreen
@@ -28,11 +31,13 @@ import pt.isel.courtandgo.frontend.reservations.lastReservations.ReservationView
 import pt.isel.courtandgo.frontend.reservations.lastReservations.ReservationsScreen
 import pt.isel.courtandgo.frontend.reservations.lastReservations.reservationDetails.ReservationDetailsScreen
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.ReserveCourtViewModel
-import pt.isel.courtandgo.frontend.reservations.reservationTimes.SelectedCourtScreen
+import pt.isel.courtandgo.frontend.reservations.reservationTimes.SelectedClubScreen
 import pt.isel.courtandgo.frontend.service.CourtAndGoService
+import pt.isel.courtandgo.frontend.service.mock.MockClubService
 import pt.isel.courtandgo.frontend.service.mock.MockCourtService
 import pt.isel.courtandgo.frontend.service.mock.MockReservationService
 import pt.isel.courtandgo.frontend.service.mock.MockScheduleCourtService
+import pt.isel.courtandgo.frontend.service.mock.repo.ClubRepoMock
 import pt.isel.courtandgo.frontend.service.mock.repo.CourtRepoMock
 import pt.isel.courtandgo.frontend.service.mock.repo.ReservationRepoMock
 import pt.isel.courtandgo.frontend.service.mock.repo.ScheduleCourtRepoMock
@@ -46,12 +51,19 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
     val profileViewModel = remember { ProfileViewModel(AuthRepositoryImpl(courtAndGoService)) }
 
     val sharedScheduleService = remember { MockScheduleCourtService(ScheduleCourtRepoMock()) }
-    val courtSearchViewModel = remember { CourtSearchViewModel(MockCourtService(CourtRepoMock()), sharedScheduleService) }
+    val searchClubViewModel = remember { SearchClubViewModel(
+        MockClubService(ClubRepoMock()),
+        sharedScheduleService,
+        MockCourtService(CourtRepoMock()
+        )) }
     val reserveCourtViewModel = remember { ReserveCourtViewModel(sharedScheduleService) }
 
     val sharedReservationService = remember { MockReservationService(ReservationRepoMock()) }
     val reservationVm = remember {
-        ReservationViewModel(sharedReservationService, MockCourtService(CourtRepoMock()))
+        ReservationViewModel(sharedReservationService, MockClubService(ClubRepoMock()))
+    }
+    val notificationVm = remember {
+        NotificationSettingsViewModel()
     }
     val confirmationVm = remember {
         ConfirmReservationViewModel(sharedReservationService)
@@ -65,6 +77,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
         is Screen.RegisterDetails -> false
         else -> true
     }
+    val scope = rememberCoroutineScope()
 
     MaterialTheme {
 
@@ -108,7 +121,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                     selectedTab.value = tab
                     screen.value = when (tab) {
                         Tab.Home -> Screen.Home
-                        Tab.Search -> Screen.SearchCourt
+                        Tab.Search -> Screen.SearchClub
                         Tab.Calendar -> Screen.LastReservations
                         Tab.Profile -> Screen.Profile
                     }
@@ -117,7 +130,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
             ) {
                 when (screen.value) {
                     is Screen.Home -> HomeScreen(authViewModel,
-                        onStartReservationClick = {screen.value= Screen.SearchCourt},
+                        onStartReservationClick = {screen.value= Screen.SearchClub},
                         onLastReservationsClick = {screen.value= Screen.LastReservations}
                     )
 
@@ -145,14 +158,22 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                         }
                     )
 
-                    Screen.Notifications -> EditNotificationsScreen()
+                    Screen.Notifications -> EditNotificationsScreen(notificationVm, reservationVm.futureReservations.value)
 
-                    is Screen.SearchCourt -> SearchCourtScreen(
-                        viewModel = courtSearchViewModel,
+                    is Screen.SearchClub -> SearchClubScreen(
+                        viewModel = searchClubViewModel,
                         onBackClick = { screen.value = Screen.Home },
                         defaultDistrict = authViewModel.currentUser.value?.location ?: "",
-                        onCourtClick = { court ->
-                            screen.value = Screen.ReserveCourt(court)
+                        onClubClick = { club ->
+                            scope.launch {
+                                val courts = searchClubViewModel.getCourtsForClub(club.id)
+                                if (courts.isNotEmpty()) {
+                                    val court = courts.first() //todo alinhar critério de seleção
+                                    screen.value = Screen.SelectedClub(club, court)
+                                } else {
+                                    // mostra aviso ou lida com ausência de courts
+                                }
+                            }
                         }
                     )
 
@@ -165,10 +186,11 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                         onBack = { screen.value = Screen.Home }
                     )
 
-                    is Screen.ReserveCourt ->
-                        SelectedCourtScreen(
-                            courtInfo = (screen.value as Screen.ReserveCourt).court,
-                            onBack = { screen.value = Screen.SearchCourt },
+                    is Screen.SelectedClub ->
+                        SelectedClubScreen(
+                            clubInfo = (screen.value as Screen.SelectedClub).club,
+                            courtInfo = (screen.value as Screen.SelectedClub).court,
+                            onBack = { screen.value = Screen.SearchClub },
                             reserveCourtViewModel = reserveCourtViewModel,
                             onContinueToConfirmation = { court, dateTime ->
                                 screen.value = Screen.ConfirmReservation(

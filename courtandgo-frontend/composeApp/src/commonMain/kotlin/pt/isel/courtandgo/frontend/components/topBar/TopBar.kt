@@ -36,6 +36,7 @@ fun CourtAndGoTopBar(
                 textAlign = TextAlign.Center
             )
         },
+        /*
         navigationIcon = {
             Box {
                 IconButton(onClick = { showMenu = !showMenu }) {
@@ -60,6 +61,8 @@ fun CourtAndGoTopBar(
                 }
             }
         },
+
+         */
         actions = {},
         modifier = Modifier.fillMaxWidth()
     )

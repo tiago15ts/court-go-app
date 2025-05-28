@@ -1,4 +1,4 @@
-package pt.isel.courtandgo.frontend.courts.searchCourt
+package pt.isel.courtandgo.frontend.clubs.searchClub
 
 
 import androidx.compose.foundation.layout.*
@@ -13,33 +13,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import pt.isel.courtandgo.frontend.courts.courts.CourtCard
-import pt.isel.courtandgo.frontend.courts.utils.SearchByDistrictField
-import pt.isel.courtandgo.frontend.courts.utils.SportToggleButton
-import pt.isel.courtandgo.frontend.domain.Court
+import pt.isel.courtandgo.frontend.clubs.components.ClubCard
+import pt.isel.courtandgo.frontend.clubs.utils.SportToggleButton
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import pt.isel.courtandgo.frontend.clubs.utils.SearchClubField
 import pt.isel.courtandgo.frontend.domain.SportType
 import pt.isel.courtandgo.frontend.dateUtils.currentDate
 import pt.isel.courtandgo.frontend.dateUtils.currentTime
+import pt.isel.courtandgo.frontend.domain.Club
 
 
 @Composable
-fun SearchCourtScreen(
-    viewModel: CourtSearchViewModel,
+fun SearchClubScreen(
+    viewModel: SearchClubViewModel,
     onBackClick: () -> Unit,
     defaultDistrict: String = "",
-    onCourtClick: (Court) -> Unit,
+    onClubClick: (Club) -> Unit,
 ) {
-    val courts by viewModel.courts.collectAsState()
+    val clubs by viewModel.clubs.collectAsState()
     val selectedSport by viewModel.selectedSport.collectAsState()
     var initialized by remember { mutableStateOf(false) }
     val today = remember { Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date }
 
     LaunchedEffect(Unit) {
-        viewModel.fetchCourts()
-        viewModel.loadTimesForAllCourts(today)
+        viewModel.fetchClubs()
+        viewModel.loadTimesForAllClubs(today)
     }
 
     LaunchedEffect(defaultDistrict) {
@@ -49,7 +49,7 @@ fun SearchCourtScreen(
         }
     }
 
-    val courtHours by viewModel.courtHours.collectAsState()
+    val clubHours by viewModel.clubHours.collectAsState()
 
     LazyColumn(
         modifier = Modifier
@@ -81,9 +81,14 @@ fun SearchCourtScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            /*
             SearchByDistrictField(defaultDistrict) { selectedDistrict ->
                 viewModel.updateDistrict(selectedDistrict)
             }
+
+             */
+
+            SearchClubField (viewModel)
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -109,8 +114,8 @@ fun SearchCourtScreen(
         }
 
 
-        items(courts) { court ->
-            val hoursForCourt = courtHours[court.id] ?: emptyList()
+        items(clubs) { club ->
+            val hoursForCourt = clubHours[club.id] ?: emptyList()
 
             val filteredHours = if (today == currentDate) {
                 hoursForCourt.filter { it > currentTime }
@@ -118,20 +123,21 @@ fun SearchCourtScreen(
                 hoursForCourt
             }
 
-            CourtCard(
-                name = court.name,
-                location = court.district,
-                price = court.price.toString(),
+            ClubCard(
+                name = club.name,
+                county = club.location.county,
+                district = club.location.district,
+                price = club.averagePrice.toString(),
                 hours = filteredHours,
-                onClick = { onCourtClick(court) }
+                onClick = { onClubClick(club) }
             )
         }
 
 
-        if (courts.isEmpty()) {
+        if (clubs.isEmpty()) {
             item {
                 Text(
-                    text = "Nenhum campo encontrado.",
+                    text = "Nenhum clube encontrado.",
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(24.dp),
