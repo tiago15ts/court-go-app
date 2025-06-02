@@ -6,7 +6,7 @@ import pt.isel.courtandgo.frontend.domain.SpecialSchedule
 import pt.isel.courtandgo.frontend.domain.WeeklySchedule
 import pt.isel.courtandgo.frontend.service.ScheduleCourtsService
 
-suspend fun getTimeSlotsForCourt(
+suspend fun getDefaultSlotsForCourt(
     service: ScheduleCourtsService,
     courtId: Int,
     date: LocalDate

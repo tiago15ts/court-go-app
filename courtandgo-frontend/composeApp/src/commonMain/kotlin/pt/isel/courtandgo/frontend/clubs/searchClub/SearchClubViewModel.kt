@@ -11,7 +11,7 @@ import kotlinx.datetime.LocalTime
 import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.domain.SportType
-import pt.isel.courtandgo.frontend.reservations.reservationTimes.getTimeSlotsForCourt
+import pt.isel.courtandgo.frontend.reservations.reservationTimes.getDefaultSlotsForCourt
 import pt.isel.courtandgo.frontend.service.ClubService
 import pt.isel.courtandgo.frontend.service.CourtService
 import pt.isel.courtandgo.frontend.service.ScheduleCourtsService
@@ -41,7 +41,8 @@ class SearchClubViewModel(
 
 
     fun updateQuery(query: String?) {
-        _query.value = query?.takeIf { it.isNotBlank() }
+        val cleaned = query?.takeIf { it.isNotBlank() }
+        _query.value = cleaned
         fetchClubs()
     }
 
@@ -89,7 +90,7 @@ class SearchClubViewModel(
         viewModelScope.launch {
             val courtsList = _clubs.value
             val updated = courtsList.associate { club ->
-                val times = getTimeSlotsForCourt(scheduleService, club.id, date)
+                val times = getDefaultSlotsForCourt(scheduleService, club.id, date)
                 club.id to times
             }
             _clubHours.value = updated

@@ -26,11 +26,11 @@ import pt.isel.courtandgo.frontend.profile.editProfile.EditProfileScreen
 import pt.isel.courtandgo.frontend.repository.AuthRepositoryImpl
 import pt.isel.courtandgo.frontend.reservations.confirmReservation.ConfirmReservationScreen
 import pt.isel.courtandgo.frontend.reservations.confirmReservation.ConfirmReservationViewModel
-import pt.isel.courtandgo.frontend.reservations.confirmReservation.ReceiptReservationScreen
+import pt.isel.courtandgo.frontend.reservations.receiptReservation.ReceiptReservationScreen
 import pt.isel.courtandgo.frontend.reservations.lastReservations.ReservationViewModel
 import pt.isel.courtandgo.frontend.reservations.lastReservations.ReservationsScreen
 import pt.isel.courtandgo.frontend.reservations.lastReservations.reservationDetails.ReservationDetailsScreen
-import pt.isel.courtandgo.frontend.reservations.reservationTimes.ReserveCourtViewModel
+import pt.isel.courtandgo.frontend.reservations.reservationTimes.CourtAvailabilityViewModel
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.SelectedClubScreen
 import pt.isel.courtandgo.frontend.service.CourtAndGoService
 import pt.isel.courtandgo.frontend.service.mock.MockClubService
@@ -50,24 +50,28 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
     val authViewModel = remember { AuthViewModel(AuthRepositoryImpl(courtAndGoService)) }
     val profileViewModel = remember { ProfileViewModel(AuthRepositoryImpl(courtAndGoService)) }
 
-    val sharedScheduleService = remember { MockScheduleCourtService(ScheduleCourtRepoMock()) }
+    val scheduleServiceShared = remember { MockScheduleCourtService(ScheduleCourtRepoMock()) }
+    val reservationServiceShared = remember { MockReservationService(ReservationRepoMock()) }
+
     val searchClubViewModel = remember { SearchClubViewModel(
         MockClubService(ClubRepoMock()),
-        sharedScheduleService,
-        MockCourtService(CourtRepoMock()
-        )) }
-    val reserveCourtViewModel = remember { ReserveCourtViewModel(sharedScheduleService) }
-
-    val sharedReservationService = remember { MockReservationService(ReservationRepoMock()) }
+        scheduleServiceShared,
+        MockCourtService(CourtRepoMock())
+    ) }
     val reservationVm = remember {
-        ReservationViewModel(sharedReservationService, MockClubService(ClubRepoMock()))
+        ReservationViewModel(reservationServiceShared, MockClubService(ClubRepoMock()))
     }
     val notificationVm = remember {
         NotificationSettingsViewModel()
     }
     val confirmationVm = remember {
-        ConfirmReservationViewModel(sharedReservationService)
+        ConfirmReservationViewModel(reservationServiceShared, MockCourtService(CourtRepoMock()))
     }
+    val courtAvailabilityViewModel = remember { CourtAvailabilityViewModel(
+        scheduleServiceShared,
+        reservationServiceShared,
+        MockCourtService(CourtRepoMock())
+    ) }
 
     val currentUser by authViewModel.currentUser.collectAsState()
 
@@ -163,12 +167,11 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                     is Screen.SearchClub -> SearchClubScreen(
                         viewModel = searchClubViewModel,
                         onBackClick = { screen.value = Screen.Home },
-                        defaultDistrict = authViewModel.currentUser.value?.location ?: "",
                         onClubClick = { club ->
                             scope.launch {
                                 val courts = searchClubViewModel.getCourtsForClub(club.id)
                                 if (courts.isNotEmpty()) {
-                                    val court = courts.first() //todo alinhar critério de seleção
+                                    val court = courts.first()
                                     screen.value = Screen.SelectedClub(club, court)
                                 } else {
                                     // mostra aviso ou lida com ausência de courts
@@ -191,20 +194,21 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                             clubInfo = (screen.value as Screen.SelectedClub).club,
                             courtInfo = (screen.value as Screen.SelectedClub).court,
                             onBack = { screen.value = Screen.SearchClub },
-                            reserveCourtViewModel = reserveCourtViewModel,
-                            onContinueToConfirmation = { court, dateTime ->
+                            courtAvailabilityViewModel = courtAvailabilityViewModel,
+                            onContinueToConfirmation = { dateTime ->
                                 screen.value = Screen.ConfirmReservation(
-                                    courtId = court.id,
-                                    courtName = court.name,
+                                    clubInfo = (screen.value as Screen.SelectedClub).club,
+                                    courtInfo = (screen.value as Screen.SelectedClub).court,
                                     playerId = currentUser?.id ?: 0, //todo fix this nullablecase
-                                    startDateTime = dateTime,
-                                    pricePerHour = court.price
+                                    startDateTime = dateTime
                                 )
                             }
                         )
 
                     is Screen.ReservationDetails -> ReservationDetailsScreen(
                         reservation = (screen.value as Screen.ReservationDetails).reservation,
+                        //clubInfo = (screen.value as Screen.ReservationDetails).clubInfo,
+                        //courtInfo = (screen.value as Screen.ReservationDetails).courtInfo,
                         onBack = { screen.value = Screen.LastReservations },
                         onConfirmReservation = { reservation ->
                             confirmationVm.confirmReservation(reservation)
@@ -217,19 +221,30 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                     )
 
                     is Screen.ConfirmReservation -> ConfirmReservationScreen(
-                        courtName = (screen.value as Screen.ConfirmReservation).courtName,
+                        clubInfo = (screen.value as Screen.ConfirmReservation).clubInfo,
+                        courtInfo = (screen.value as Screen.ConfirmReservation).courtInfo,
                         playerId = (screen.value as Screen.ConfirmReservation).playerId,
-                        courtId = (screen.value as Screen.ConfirmReservation).courtId,
                         startDateTime = (screen.value as Screen.ConfirmReservation).startDateTime,
-                        pricePerHour = (screen.value as Screen.ConfirmReservation).pricePerHour,
                         viewModel = confirmationVm,
                         onReservationComplete = { reservation ->
-                            screen.value = Screen.ReceiptReservation(reservation)
+                            screen.value = Screen.ReceiptReservation(
+                                reservation,
+                                (screen.value as Screen.ConfirmReservation).clubInfo,
+                                (screen.value as Screen.ConfirmReservation).courtInfo
+                            )
+                        },
+                        onBack = {
+                            screen.value = Screen.SelectedClub(
+                                (screen.value as Screen.ConfirmReservation).clubInfo,
+                                (screen.value as Screen.ConfirmReservation).courtInfo
+                            )
                         }
                     )
 
                     is Screen.ReceiptReservation -> ReceiptReservationScreen(
                         reservation = (screen.value as Screen.ReceiptReservation).reservation,
+                        clubInfo = (screen.value as Screen.ReceiptReservation).clubInfo,
+                        courtInfo = (screen.value as Screen.ReceiptReservation).courtInfo,
                     )
                     else -> {}
                 }

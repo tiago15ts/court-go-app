@@ -18,9 +18,9 @@ class CourtRepoMock {
         Court(
             id = 2,
             name = "Court 2",
-            clubId = 1,
+            clubId = 4,
             sportType = SportType.TENNIS,
-            surfaceType = "Terra Batida",
+            surfaceType = "Relva",
             capacity = 6,
             price = 20.0,
         ),
@@ -32,6 +32,15 @@ class CourtRepoMock {
             surfaceType = null,
             capacity = 4,
             price = 10.0,
+        ),
+        Court(
+            id = 4,
+            name = "Court 2",
+            clubId = 1,
+            sportType = SportType.TENNIS,
+            surfaceType = "Terra Batida",
+            capacity = 4,
+            price = 15.0,
         ),
 
     )

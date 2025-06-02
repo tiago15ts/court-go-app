@@ -6,7 +6,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,40 +19,69 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.raedghazal.kotlinx_datetime_ext.plus
 import kotlinx.datetime.LocalDateTime
+import pt.isel.courtandgo.frontend.domain.Club
+import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.domain.Reservation
 import kotlin.time.Duration.Companion.minutes
 
 
 @Composable
 fun ConfirmReservationScreen(
-    courtName: String,
+    clubInfo: Club,
+    courtInfo: Court,
     playerId: Int,
-    courtId: Int,
     startDateTime: LocalDateTime,
-    pricePerHour: Double,
     viewModel: ConfirmReservationViewModel,
-    onReservationComplete: (Reservation) -> Unit
+    onReservationComplete: (Reservation) -> Unit,
+    onBack: () -> Unit
 ) {
     val duration = viewModel.durationInMinutes.value
     val isSubmitting = viewModel.isSubmitting.value
     val reservationConfirmed = viewModel.reservationConfirmed.value
 
-    //todo add possibility to choose court like court 1, 2, etc.
-
     LaunchedEffect(reservationConfirmed) {
+        viewModel.loadCourts(clubInfo.id)
         if (reservationConfirmed != null) {
             onReservationComplete(reservationConfirmed)
             viewModel.clearReservationConfirmed()
         }
     }
 
+    val courts = viewModel.courts.value
+    val selectedCourtId = viewModel.selectedCourtId.value
     val endDateTime = startDateTime.plus(duration.minutes)
-    val estimatedPrice = (duration / 60.0 * pricePerHour)
+    val estimatedPrice = (duration / 60.0 * courtInfo.price)
+
+
+
+    Spacer(modifier = Modifier.height(16.dp))
 
     Column(modifier = Modifier.padding(16.dp)) {
-        Text("Campo: $courtName", style = MaterialTheme.typography.titleLarge)
+        IconButton(onClick = onBack) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Voltar"
+            )
+        }
+
+        Text("Clube: ${clubInfo.name}", style = MaterialTheme.typography.titleLarge)
         Text("Data: ${startDateTime.date}")
         Text("Hora de início: ${startDateTime.time}")
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text("Selecione o campo pretendido:")
+        Row(modifier = Modifier.padding(vertical = 8.dp)) {
+            courts.forEach { court ->
+                Button(
+                    onClick = { viewModel.setSelectedCourt(court.id) },
+                    enabled = selectedCourtId != court.id,
+                    modifier = Modifier.padding(end = 8.dp)
+                ) {
+                    Text(court.name)
+                }
+            }
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -75,9 +108,9 @@ fun ConfirmReservationScreen(
             onClick = {
                 viewModel.confirmReservation(
                     playerId = playerId,
-                    courtId = courtId,
+                    courtId = selectedCourtId ?: courtInfo.id,
                     startDateTime = startDateTime,
-                    pricePerHour = pricePerHour
+                    pricePerHour = courtInfo.price
                 )
             },
             enabled = !isSubmitting,

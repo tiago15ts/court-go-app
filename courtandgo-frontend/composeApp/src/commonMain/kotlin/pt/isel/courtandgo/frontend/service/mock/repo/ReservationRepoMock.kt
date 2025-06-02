@@ -1,6 +1,8 @@
 package pt.isel.courtandgo.frontend.service.mock.repo
 
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.domain.ReservationStatus
 
@@ -57,5 +59,26 @@ class ReservationRepoMock {
         } else {
             false
         }
+    }
+
+    fun getReservationsForClubOnDate(
+        reservations: List<Reservation>,
+        clubCourtIds: List<Int>,
+        date: LocalDate
+    ): Map<Int, List<LocalTime>> {
+        return reservations
+            .filter { it.courtId in clubCourtIds && it.startTime.date == date }
+            .groupBy { it.courtId }
+            .mapValues { entry -> entry.value.map { it.startTime.time } }
+    }
+
+    fun getAvailableTimeSlotsForClub(
+        timeSlotsByCourt: Map<Int, List<LocalTime>>,
+        occupiedTimesByCourt: Map<Int, List<LocalTime>>
+    ): List<LocalTime> {
+        return timeSlotsByCourt.flatMap { (courtId, timeSlots) ->
+            val occupiedTimes = occupiedTimesByCourt[courtId] ?: emptyList()
+            timeSlots.filterNot { it in occupiedTimes }
+        }.distinct()
     }
 }

@@ -7,13 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.raedghazal.kotlinx_datetime_ext.plus
 import kotlinx.coroutines.launch
 import kotlinx.datetime.*
+import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.notifications.scheduleReservationNotification
+import pt.isel.courtandgo.frontend.service.CourtService
 import pt.isel.courtandgo.frontend.service.ReservationService
 import kotlin.time.Duration.Companion.minutes
 
 class ConfirmReservationViewModel(
-    private val reservationService: ReservationService
+    private val reservationService: ReservationService,
+    private val courtService: CourtService
 ) : ViewModel() {
 
     private val _durationInMinutes = mutableStateOf(60)
@@ -29,11 +32,21 @@ class ConfirmReservationViewModel(
     private val _reservationConfirmed = mutableStateOf<Reservation?>(null)
     val reservationConfirmed: State<Reservation?> = _reservationConfirmed
 
+    private val _courts = mutableStateOf<List<Court>>(emptyList())
+    val courts: State<List<Court>> = _courts
+
+    private val _selectedCourtId = mutableStateOf<Int?>(null)
+    val selectedCourtId: State<Int?> = _selectedCourtId
+
+    fun setSelectedCourt(courtId: Int) {
+        _selectedCourtId.value = courtId
+    }
+
     fun confirmReservation(
         playerId: Int,
         courtId: Int,
         startDateTime: LocalDateTime,
-        pricePerHour : Double
+        pricePerHour: Double
     ) {
         val duration = durationInMinutes.value
         val endDateTime = startDateTime.plus(duration.minutes)
@@ -77,4 +90,15 @@ class ConfirmReservationViewModel(
             _reservationConfirmed.value = reservation
         }
     }
+
+    fun loadCourts(clubId: Int) {
+        viewModelScope.launch {
+            _courts.value = courtService.getCourtsByClubId(clubId)
+            // Por default, seleciona o primeiro court disponível
+            if (_courts.value.isNotEmpty()) {
+                _selectedCourtId.value = _courts.value.first().id
+            }
+        }
+    }
+
 }

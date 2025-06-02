@@ -23,12 +23,16 @@ import com.skydoves.landscapist.coil3.CoilImage
 import kotlinx.datetime.DateTimeUnit
 import pt.isel.courtandgo.frontend.dateUtils.formatToDisplay
 import pt.isel.courtandgo.frontend.dateUtils.nowTime
+import pt.isel.courtandgo.frontend.domain.Club
+import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.domain.ReservationStatus
 
 @Composable
 fun ReservationDetailsScreen(
     reservation: Reservation,
+    //clubInfo : Club,
+    //courtInfo : Court,
     onBack: () -> Unit,
     onConfirmReservation: (Reservation) -> Unit,
     onCancelReservation: (Reservation) -> Unit

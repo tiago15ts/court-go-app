@@ -1,4 +1,4 @@
-package pt.isel.courtandgo.frontend.reservations.confirmReservation
+package pt.isel.courtandgo.frontend.reservations.receiptReservation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,10 +17,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.coil3.CoilImage
 import pt.isel.courtandgo.frontend.dateUtils.formatToDisplay
+import pt.isel.courtandgo.frontend.domain.Club
+import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.domain.Reservation
+import pt.isel.courtandgo.frontend.reservations.components.InfoRow
 
 @Composable
-fun ReceiptReservationScreen(reservation: Reservation) {
+fun ReceiptReservationScreen(reservation: Reservation, clubInfo :Club, courtInfo: Court) {
 
     Column(
         modifier = Modifier
@@ -47,10 +51,21 @@ fun ReceiptReservationScreen(reservation: Reservation) {
         Text("Detalhes da Reserva", style = MaterialTheme.typography.headlineSmall)
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text("ID da Reserva: ${reservation.id}")
-        Text("Início: ${formatToDisplay(reservation.startTime)}")
-        Text("Fim: ${formatToDisplay(reservation.endTime)}")
-        Text("Preço Estimado: ${reservation.estimatedPrice} €")
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                InfoRow(label = "ID da Reserva:", value = reservation.id.toString())
+                InfoRow(label = "Clube:", value = clubInfo.name)
+                InfoRow(label = "Campo:", value = courtInfo.name)
+                InfoRow(label = "Início:", value = formatToDisplay(reservation.startTime))
+                InfoRow(label = "Fim:", value = formatToDisplay(reservation.endTime))
+                InfoRow(label = "Preço Estimado:", value = "${reservation.estimatedPrice} €")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
 
         Text("Pode confirmar a sua reserva a partir de agora, na sua aba de reservas futuras.")
     }

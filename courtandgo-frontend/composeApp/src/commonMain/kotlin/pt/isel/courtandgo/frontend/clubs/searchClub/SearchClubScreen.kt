@@ -29,24 +29,15 @@ import pt.isel.courtandgo.frontend.domain.Club
 fun SearchClubScreen(
     viewModel: SearchClubViewModel,
     onBackClick: () -> Unit,
-    defaultDistrict: String = "",
     onClubClick: (Club) -> Unit,
 ) {
     val clubs by viewModel.clubs.collectAsState()
     val selectedSport by viewModel.selectedSport.collectAsState()
-    var initialized by remember { mutableStateOf(false) }
     val today = remember { Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date }
 
     LaunchedEffect(Unit) {
         viewModel.fetchClubs()
         viewModel.loadTimesForAllClubs(today)
-    }
-
-    LaunchedEffect(defaultDistrict) {
-        if (!initialized && defaultDistrict.isNotBlank()) {
-            viewModel.updateDistrict(defaultDistrict)
-            initialized = true
-        }
     }
 
     val clubHours by viewModel.clubHours.collectAsState()
@@ -80,13 +71,6 @@ fun SearchClubScreen(
             }
 
             Spacer(modifier = Modifier.height(24.dp))
-
-            /*
-            SearchByDistrictField(defaultDistrict) { selectedDistrict ->
-                viewModel.updateDistrict(selectedDistrict)
-            }
-
-             */
 
             SearchClubField (viewModel)
 

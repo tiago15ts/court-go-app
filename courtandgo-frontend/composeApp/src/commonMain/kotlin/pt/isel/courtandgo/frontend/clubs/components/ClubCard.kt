@@ -47,7 +47,7 @@ fun ClubCard(
                 modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
             ) {
                 Text(text = "Distancia Soon", style = MaterialTheme.typography.bodySmall)
-                Text(text = "Desde" + price + "€", style = MaterialTheme.typography.bodyMedium)
+                Text(text = "Desde " + price + "€", style = MaterialTheme.typography.bodyMedium)
             }
 
             Row(

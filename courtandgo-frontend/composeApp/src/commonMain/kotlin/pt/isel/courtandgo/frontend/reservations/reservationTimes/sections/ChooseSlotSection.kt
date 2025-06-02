@@ -23,22 +23,24 @@ import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.dateUtils.DatePickerRow
 import pt.isel.courtandgo.frontend.dateUtils.currentDate
 import pt.isel.courtandgo.frontend.dateUtils.currentTime
+import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.reservations.components.TimeSlotGrid
-import pt.isel.courtandgo.frontend.reservations.reservationTimes.ReserveCourtViewModel
+import pt.isel.courtandgo.frontend.reservations.reservationTimes.CourtAvailabilityViewModel
 
 @Composable
-fun ReserveCourtSection(
+fun ChooseSlotSection(
     courtInfo: Court,
-    viewModel: ReserveCourtViewModel,
-    onContinueToConfirmation: (Court, LocalDateTime) -> Unit,
+    clubInfo: Club,
+    viewModel: CourtAvailabilityViewModel,
+    onContinueToConfirmation: (LocalDateTime) -> Unit,
     ) {
     val selectedDate = remember { mutableStateOf(LocalDate.now()) }
     val selectedTime = remember { mutableStateOf<LocalTime?>(null) }
     val onlyAvailable = remember { mutableStateOf(true) }
-    val availableTimes = viewModel.availableTimes.value
+    val availableTimes = viewModel.availableSlots.value
 
     LaunchedEffect(selectedDate.value) {
-        viewModel.loadTimesForDate(courtInfo.id, selectedDate.value)
+        viewModel.loadAvailableSlots(courtInfo.id, selectedDate.value)
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -73,7 +75,7 @@ fun ReserveCourtSection(
             onClick = {
                 selectedTime.value?.let { time ->
                     val dateTime = LocalDateTime(selectedDate.value, time)
-                    onContinueToConfirmation(courtInfo, dateTime)
+                    onContinueToConfirmation(dateTime)
                     selectedTime.value = null // Limpa a seleção após continuar
                 }
             },

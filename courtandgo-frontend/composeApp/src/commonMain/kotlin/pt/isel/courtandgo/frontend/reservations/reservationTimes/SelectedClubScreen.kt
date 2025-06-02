@@ -12,16 +12,16 @@ import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.reservations.components.CourtHeader
 import pt.isel.courtandgo.frontend.reservations.components.CourtTabs
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.sections.CourtDetailsSection
-import pt.isel.courtandgo.frontend.reservations.reservationTimes.sections.ReserveCourtSection
+import pt.isel.courtandgo.frontend.reservations.reservationTimes.sections.ChooseSlotSection
 
 
 @Composable
 fun SelectedClubScreen(
     clubInfo: Club,
-    courtInfo : Court,
+    courtInfo: Court,
     onBack: () -> Unit,
-    reserveCourtViewModel: ReserveCourtViewModel,
-    onContinueToConfirmation: (Court, LocalDateTime) -> Unit,
+    courtAvailabilityViewModel: CourtAvailabilityViewModel,
+    onContinueToConfirmation: (LocalDateTime) -> Unit,
 ) {
     val selectedTab = remember { mutableStateOf("Reservar") }
 
@@ -45,11 +45,12 @@ fun SelectedClubScreen(
             }
 
             "Reservar" -> {
-                ReserveCourtSection(
+                ChooseSlotSection(
                     courtInfo = courtInfo,
-                    viewModel = reserveCourtViewModel,
-                    onContinueToConfirmation = { court, dateTime ->
-                        onContinueToConfirmation(court, dateTime)
+                    clubInfo = clubInfo,
+                    viewModel = courtAvailabilityViewModel,
+                    onContinueToConfirmation = { dateTime ->
+                        onContinueToConfirmation(dateTime)
                     }
                 )
             }

@@ -20,14 +20,15 @@ sealed class Screen {
     data class SelectedClub(val club: Club, val court: Court) : Screen()
     data class ReservationDetails(val reservation: Reservation) : Screen()
     data class ConfirmReservation(
-        val courtId: Int,
-        val courtName: String,
+        val clubInfo: Club,
+        val courtInfo: Court,
         val playerId: Int,
-        val startDateTime: LocalDateTime,
-        val pricePerHour: Double
+        val startDateTime: LocalDateTime
     ) : Screen()
     data class ReceiptReservation(
-        val reservation: Reservation
+        val reservation: Reservation,
+        val clubInfo: Club,
+        val courtInfo: Court,
     ) : Screen()
 
 }
