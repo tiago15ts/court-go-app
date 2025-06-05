@@ -91,14 +91,15 @@ class ConfirmReservationViewModel(
         }
     }
 
-    fun loadCourts(clubId: Int) {
+    fun loadCourts(clubId: Int, availableCourtsAtTime: Set<Int>) {
         viewModelScope.launch {
             _courts.value = courtService.getCourtsByClubId(clubId)
-            // Por default, seleciona o primeiro court disponível
-            if (_courts.value.isNotEmpty()) {
-                _selectedCourtId.value = _courts.value.first().id
-            }
+            // Selecionar o primeiro court disponível nesse horário
+            _selectedCourtId.value = _courts.value.firstOrNull { it.id in availableCourtsAtTime }?.id
         }
     }
+
+
+
 
 }

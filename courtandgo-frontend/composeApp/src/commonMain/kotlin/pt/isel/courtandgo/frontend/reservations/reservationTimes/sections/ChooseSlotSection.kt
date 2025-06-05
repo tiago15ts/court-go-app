@@ -37,7 +37,6 @@ fun ChooseSlotSection(
     val selectedDate = remember { mutableStateOf(LocalDate.now()) }
     val selectedTime = remember { mutableStateOf<LocalTime?>(null) }
     val onlyAvailable = remember { mutableStateOf(true) }
-    val availableTimes = viewModel.availableSlots.value
 
     LaunchedEffect(selectedDate.value) {
         viewModel.loadAvailableSlots(courtInfo.id, selectedDate.value)
@@ -59,11 +58,14 @@ fun ChooseSlotSection(
             )
         }
 
+        val allAvailableTimes = viewModel.availableSlots.value.values.flatten().distinct().sorted()
+
         val filteredTimes = if (selectedDate.value == currentDate) {
-            availableTimes.filter { it > currentTime }
+            allAvailableTimes.filter { it > currentTime }
         } else {
-            availableTimes
+            allAvailableTimes
         }
+
         // Grid de horas
         TimeSlotGrid(
             availableTimes = filteredTimes,

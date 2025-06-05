@@ -1,6 +1,5 @@
 package pt.isel.courtandgo.frontend.service.mock
 
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.service.ReservationService
@@ -47,7 +46,14 @@ class MockReservationService(private val repoMock: ReservationRepoMock) : Reserv
     override fun getAvailableTimeSlotsForClub(
         timeSlotsByCourt: Map<Int, List<LocalTime>>,
         occupiedTimesByCourt: Map<Int, List<LocalTime>>
-    ): List<LocalTime> {
+    ): Map<Int, List<LocalTime>> {
         return repoMock.getAvailableTimeSlotsForClub(timeSlotsByCourt, occupiedTimesByCourt)
+    }
+
+    override fun getReservationsByCourtIdsAndDate(
+        courtIds: List<Int>,
+        date: kotlinx.datetime.LocalDate
+    ): List<Reservation> {
+        return repoMock.getReservationsByCourtIdsAndDate(courtIds, date)
     }
 }

@@ -1,7 +1,6 @@
 package pt.isel.courtandgo.frontend.service
 
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import pt.isel.courtandgo.frontend.domain.Reservation
 
@@ -18,8 +17,14 @@ interface ReservationService {
         clubCourtIds: List<Int>,
         date: LocalDate
     ): Map<Int, List<LocalTime>>
+
     fun getAvailableTimeSlotsForClub(
         timeSlotsByCourt: Map<Int, List<LocalTime>>,
         occupiedTimesByCourt: Map<Int, List<LocalTime>>
-    ): List<LocalTime>
+    ): Map<Int, List<LocalTime>>
+
+    fun getReservationsByCourtIdsAndDate(
+        courtIds: List<Int>,
+        date: LocalDate
+    ): List<Reservation>
 }

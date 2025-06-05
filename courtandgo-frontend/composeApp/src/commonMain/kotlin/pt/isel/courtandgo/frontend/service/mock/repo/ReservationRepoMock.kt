@@ -75,10 +75,17 @@ class ReservationRepoMock {
     fun getAvailableTimeSlotsForClub(
         timeSlotsByCourt: Map<Int, List<LocalTime>>,
         occupiedTimesByCourt: Map<Int, List<LocalTime>>
-    ): List<LocalTime> {
-        return timeSlotsByCourt.flatMap { (courtId, timeSlots) ->
-            val occupiedTimes = occupiedTimesByCourt[courtId] ?: emptyList()
-            timeSlots.filterNot { it in occupiedTimes }
-        }.distinct()
+    ): Map<Int, List<LocalTime>> {
+        return timeSlotsByCourt.mapValues { (courtId, slots) ->
+            val occupied = occupiedTimesByCourt[courtId] ?: emptyList()
+            slots.filterNot { it in occupied }
+        }
+    }
+
+    fun getReservationsByCourtIdsAndDate(
+        courtIds: List<Int>,
+        date: LocalDate
+    ): List<Reservation> {
+        return reservations.filter { it.courtId in courtIds && it.startTime.date == date }
     }
 }
