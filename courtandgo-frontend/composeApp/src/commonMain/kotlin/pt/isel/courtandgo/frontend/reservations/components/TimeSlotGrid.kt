@@ -20,7 +20,8 @@ import pt.isel.courtandgo.frontend.dateUtils.formatToHourMinute
 fun TimeSlotGrid(
     availableTimes: List<LocalTime>,
     selectedTime: LocalTime?,
-    onSelect: (LocalTime) -> Unit
+    onSelect: (LocalTime) -> Unit,
+    isTimeEnabled: (LocalTime) -> Boolean = { true }
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
@@ -32,17 +33,39 @@ fun TimeSlotGrid(
         items(availableTimes.size) { index ->
             val time = availableTimes[index]
             val isSelected = time == selectedTime
+            val isEnabled = isTimeEnabled(time)
+
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))
-                    .background(if (isSelected) Color.Black else Color.LightGray)
-                    .clickable { onSelect(time) }
+                    .background(
+                        when {
+                            isSelected -> Color.Black
+                            !isEnabled -> Color.Gray.copy(alpha = 0.4f)
+                            else -> Color.LightGray
+                        }
+                    )
+                    .then(
+                        if (isEnabled) Modifier.clickable { onSelect(time) }
+                        else Modifier // desativa clique
+                    )
                     .padding(12.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(time.formatToHourMinute(), color = Color.White)
+                Text(
+                    text = time.formatToHourMinute(),
+                    color = if (isEnabled) Color.White else Color.DarkGray,
+                    modifier = Modifier.fillMaxWidth(),
+                    // aplica riscado se indisponível
+                    style = if (!isEnabled) {
+                        androidx.compose.ui.text.TextStyle(textDecoration = androidx.compose.ui.text.style.TextDecoration.LineThrough)
+                    } else {
+                        androidx.compose.ui.text.TextStyle.Default
+                    }
+                )
             }
         }
+
     }
 }
 

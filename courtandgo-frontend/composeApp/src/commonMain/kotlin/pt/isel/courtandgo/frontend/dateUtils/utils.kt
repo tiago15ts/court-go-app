@@ -5,7 +5,7 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-val nowTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+val nowTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()) //LocalDateTime
 
 fun LocalTime.plusMinutes(minutes: Int): LocalTime {
     val totalMinutes = this.hour * 60 + this.minute + minutes
@@ -14,5 +14,5 @@ fun LocalTime.plusMinutes(minutes: Int): LocalTime {
     return LocalTime(newHour, newMinute)
 }
 
-val currentDate = nowTime.date
-val currentTime = nowTime.time
+val currentDate = nowTime.date //localDate
+val currentTime = nowTime.time //localTime

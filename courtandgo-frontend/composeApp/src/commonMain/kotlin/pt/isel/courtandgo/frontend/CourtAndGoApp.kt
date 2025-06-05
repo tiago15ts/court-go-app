@@ -8,6 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import pt.isel.courtandgo.frontend.authentication.AuthViewModel
 import pt.isel.courtandgo.frontend.authentication.login.LoginScreen
@@ -17,6 +20,8 @@ import pt.isel.courtandgo.frontend.components.LayoutScreen
 import pt.isel.courtandgo.frontend.components.bottomNavBar.Tab
 import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubViewModel
 import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubScreen
+import pt.isel.courtandgo.frontend.dateUtils.currentDate
+import pt.isel.courtandgo.frontend.dateUtils.nowTime
 import pt.isel.courtandgo.frontend.home.HomeScreen
 import pt.isel.courtandgo.frontend.notifications.EditNotificationsScreen
 import pt.isel.courtandgo.frontend.notifications.NotificationSettingsViewModel
@@ -41,6 +46,7 @@ import pt.isel.courtandgo.frontend.service.mock.repo.ClubRepoMock
 import pt.isel.courtandgo.frontend.service.mock.repo.CourtRepoMock
 import pt.isel.courtandgo.frontend.service.mock.repo.ReservationRepoMock
 import pt.isel.courtandgo.frontend.service.mock.repo.ScheduleCourtRepoMock
+
 
 @Composable
 @Preview
@@ -226,6 +232,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                         playerId = (screen.value as Screen.ConfirmReservation).playerId,
                         startDateTime = (screen.value as Screen.ConfirmReservation).startDateTime,
                         viewModel = confirmationVm,
+                        availabilityViewModel = courtAvailabilityViewModel,
                         onReservationComplete = { reservation ->
                             screen.value = Screen.ReceiptReservation(
                                 reservation,

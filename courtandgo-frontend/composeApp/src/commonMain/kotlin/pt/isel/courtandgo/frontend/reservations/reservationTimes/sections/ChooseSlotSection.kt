@@ -46,7 +46,6 @@ fun ChooseSlotSection(
         // Seletor de data horizontal (dias da semana)
         DatePickerRow(selectedDate.value) { selectedDate.value = it }
 
-        // todo mostrar apenas disponíveis toggle
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -58,19 +57,37 @@ fun ChooseSlotSection(
             )
         }
 
-        val allAvailableTimes = viewModel.availableSlots.value.values.flatten().distinct().sorted()
+        val allTimes = viewModel.availableSlots.value.values.flatten().distinct().sorted()
 
         val filteredTimes = if (selectedDate.value == currentDate) {
-            allAvailableTimes.filter { it > currentTime }
+            allTimes.filter { it > currentTime }
         } else {
-            allAvailableTimes
+            allTimes
+        }
+
+        val defaultTimes  = viewModel.defaultTimes.value.sorted()
+
+        val filteredDefaultTimes = if (selectedDate.value == currentDate) {
+            defaultTimes.filter { it > currentTime }
+        } else {
+            defaultTimes
+        }
+
+
+        // todo mostrar apenas disponíveis toggle
+
+        val timesToShow = if (onlyAvailable.value) {
+            filteredTimes
+        } else {
+            filteredDefaultTimes
         }
 
         // Grid de horas
         TimeSlotGrid(
-            availableTimes = filteredTimes,
+            availableTimes = timesToShow,
             selectedTime = selectedTime.value,
-            onSelect = { selectedTime.value = it }
+            onSelect = { selectedTime.value = it },
+            isTimeEnabled = { time -> time in filteredTimes }
         )
 
         Button(
