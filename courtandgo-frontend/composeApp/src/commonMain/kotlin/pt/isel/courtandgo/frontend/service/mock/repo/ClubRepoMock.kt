@@ -10,7 +10,7 @@ class ClubRepoMock {
         Club(1, "Beloura Tennis Academy",
             location = Location(
                 id = 1,
-                address = "Rua do Campo, 123",
+                address = "Rua do Campo 123",
                 county = "Sintra",
                 district = "Lisboa",
                 country = "Portugal",
@@ -23,7 +23,7 @@ class ClubRepoMock {
         Club(2, "Lisboa Rackets",
             location = Location(
                 id = 2,
-                address = "Avenida da Liberdade, 456",
+                address = "Avenida da Liberdade 456",
                 county = "Lisboa",
                 district = "Lisboa",
                 country = "Portugal",
@@ -36,7 +36,7 @@ class ClubRepoMock {
         Club(3, "Porto Club Padel",
             location = Location(
                 id = 3,
-                address = "Rua de Santa Catarina, 789",
+                address = "Rua de Santa Catarina 789",
                 county = "Porto",
                 district = "Porto",
                 country = "Portugal",
@@ -49,7 +49,7 @@ class ClubRepoMock {
         Club(4, "Estoril Country Club",
             location = Location(
                 id = 4,
-                address = "Avenida Marginal, 101",
+                address = "Avenida Marginal 101",
                 county = "Cascais",
                 district = "Lisboa",
                 country = "Portugal",
@@ -62,7 +62,7 @@ class ClubRepoMock {
         Club(5, "Braga Tennis Club",
             location = Location(
                 id = 5,
-                address = "Rua do Comércio, 321",
+                address = "Rua do Comércio 321",
                 county = "Braga",
                 district = "Braga",
                 country = "Portugal",
