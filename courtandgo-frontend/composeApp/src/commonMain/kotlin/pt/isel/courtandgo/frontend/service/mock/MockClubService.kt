@@ -49,6 +49,10 @@ class MockClubService(private val clubRepoMock: ClubRepoMock) : ClubService {
         return clubRepoMock.getClubsByOwnerId(ownerId)
     }
 
+    override suspend fun getClubIdByCourtId(courtId: Int): Int {
+        return clubRepoMock.getClubIdByCourtId(courtId)
+    }
+
     override suspend fun getClubsFiltered(
         query: String?,
         county: String?,

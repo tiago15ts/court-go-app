@@ -18,7 +18,11 @@ sealed class Screen {
     data object LastReservations : Screen()
     data object SearchClub : Screen()
     data class SelectedClub(val club: Club, val court: Court) : Screen()
-    data class ReservationDetails(val reservation: Reservation) : Screen()
+    data class ReservationDetails(
+        val reservation: Reservation,
+        val clubInfo: Club,
+        val courtInfo: Court
+    ) : Screen()
     data class ConfirmReservation(
         val clubInfo: Club,
         val courtInfo: Court,

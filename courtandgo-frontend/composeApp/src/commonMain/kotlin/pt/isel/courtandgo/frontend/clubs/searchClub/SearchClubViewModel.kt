@@ -101,5 +101,10 @@ class SearchClubViewModel(
         return courtService.getCourtsByClubId(clubId)
     }
 
+    suspend fun getClubByCourtId(courtId: Int): Club? {
+        val court = courtService.getCourtById(courtId)
+        return court?.let { clubService.getClubById(it.clubId) }
+    }
+
 
 }

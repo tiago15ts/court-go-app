@@ -102,8 +102,13 @@ dependencies {
     implementation(libs.androidx.foundation.layout.android)
     implementation(libs.identity.jvm)
     implementation(libs.foundation.layout.android)
+    implementation(libs.ui.android)
 
     debugImplementation(compose.uiTooling)
 
+}
+
+compose.resources {
+    generateResClass = always
 }
 

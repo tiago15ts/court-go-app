@@ -29,10 +29,14 @@ import pt.isel.courtandgo.frontend.reservations.components.ReservationCard
 import pt.isel.courtandgo.frontend.reservations.components.TabButton
 
 @Composable
-fun ReservationsScreen(viewModel: ReservationViewModel, userId : Int, onReservationClick: (Reservation) -> Unit, onBack: () -> Unit, ) {
+fun ReservationsScreen(
+    viewModel: ReservationViewModel,
+    userId : Int,
+    onReservationClick: (Reservation) -> Unit,
+    onBack: () -> Unit, ) {
     val futureReservations by viewModel.futureReservations.collectAsState()
     val pastReservations by viewModel.pastReservations.collectAsState()
-    val courtNames by viewModel.courtNames
+    val clubNames by viewModel.clubNames
 
     val selectedTab = remember { mutableStateOf("Futuras") }
     val reservationsToShow = if (selectedTab.value == "Futuras") futureReservations else pastReservations
@@ -80,8 +84,8 @@ fun ReservationsScreen(viewModel: ReservationViewModel, userId : Int, onReservat
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(reservationsToShow) { reservation ->
-                    val courtName = courtNames[reservation.courtId] ?: "Campo desconhecido"
-                    ReservationCard(reservation, courtName,
+                    val clubName = clubNames[reservation.courtId] ?: "Campo desconhecido"
+                    ReservationCard(reservation, clubName,
                         onClick = { onReservationClick(reservation)}
                     )
                 }

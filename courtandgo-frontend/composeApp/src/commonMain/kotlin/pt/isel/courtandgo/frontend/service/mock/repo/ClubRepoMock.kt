@@ -114,6 +114,12 @@ class ClubRepoMock {
         return mockClubs.filter { it.clubOwnerId == ownerId }
     }
 
+    fun getClubIdByCourtId(courtId: Int): Int {
+        // This is a mock implementation, assuming each club has a unique court ID
+        return mockClubs.firstOrNull { it.id == courtId }
+            ?.id ?: throw NoSuchElementException("No club found with court ID $courtId")
+    }
+
     fun getClubsFiltered(
         query: String? = null,
         county: String? = null,

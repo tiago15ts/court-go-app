@@ -11,22 +11,26 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
+import pt.isel.courtandgo.frontend.domain.Club
+import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.domain.ReservationStatus
 import pt.isel.courtandgo.frontend.notifications.provideNotificationScheduler
 import pt.isel.courtandgo.frontend.service.ClubService
+import pt.isel.courtandgo.frontend.service.CourtService
 import pt.isel.courtandgo.frontend.service.ReservationService
 
 class ReservationViewModel(
     private val reservationService: ReservationService,
-    private val clubService: ClubService
+    private val clubService: ClubService,
+    private val courtService: CourtService
 ) : ViewModel() {
 
     private val _futureReservations = MutableStateFlow<List<Reservation>>(emptyList())
     val futureReservations: StateFlow<List<Reservation>> = _futureReservations.asStateFlow()
 
-    private val _courtNames = mutableStateOf<Map<Int, String>>(emptyMap())
-    val courtNames: State<Map<Int, String>> = _courtNames
+    private val _clubNames = mutableStateOf<Map<Int, String>>(emptyMap())
+    val clubNames: State<Map<Int, String>> = _clubNames
 
     private val _pastReservations = MutableStateFlow<List<Reservation>>(emptyList())
     val pastReservations: StateFlow<List<Reservation>> = _pastReservations.asStateFlow()
@@ -51,8 +55,8 @@ class ReservationViewModel(
                 }
                 .sortedByDescending { it.startTime.toInstant(zone) }
 
-            val courts = clubService.getAllClubs()
-            _courtNames.value = courts.associateBy({ it.id }, { it.name })
+            val clubs = clubService.getAllClubs()
+            _clubNames.value = clubs.associateBy({ it.id }, { it.name })
         }
     }
 
@@ -64,5 +68,14 @@ class ReservationViewModel(
             scheduler.cancelReservationReminder(reservation.id.toString())
             loadReservations(reservation.playerId)
         }
+    }
+
+    suspend fun getClubInfoByCourtId(courtId: Int): Club? {
+        val clubId = clubService.getClubIdByCourtId(courtId)
+        return clubService.getClubById(clubId)
+    }
+
+    suspend fun getCourtInfoByCourtId(courtId: Int): Court {
+        return courtService.getCourtById(courtId) ?: throw IllegalArgumentException("Court not found")
     }
 }

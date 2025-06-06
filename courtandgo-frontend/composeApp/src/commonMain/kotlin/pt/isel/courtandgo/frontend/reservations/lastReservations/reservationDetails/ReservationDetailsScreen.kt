@@ -21,16 +21,27 @@ import androidx.compose.ui.unit.dp
 import com.raedghazal.kotlinx_datetime_ext.plus
 import com.skydoves.landscapist.coil3.CoilImage
 import kotlinx.datetime.DateTimeUnit
+import pt.isel.courtandgo.frontend.domain.Club
+import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.utils.dateUtils.formatToDisplay
 import pt.isel.courtandgo.frontend.utils.dateUtils.nowTime
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.domain.ReservationStatus
+import pt.isel.courtandgo.frontend.utils.addEventToCalendar.generateGoogleCalendarUrl
+import pt.isel.courtandgo.frontend.utils.dateUtils.CalendarLinkOpener
+import pt.isel.courtandgo.frontend.utils.dateUtils.timeZone
+import pt.isel.courtandgo.frontend.utils.formatLocationForDisplay
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import pt.isel.courtandgo.frontend.utils.addEventToCalendar.AddToCalendarButton
+
 
 @Composable
 fun ReservationDetailsScreen(
     reservation: Reservation,
-    //clubInfo : Club,
-    //courtInfo : Court,
+    clubInfo : Club,
+    courtInfo : Court,
+    calendarOpener: CalendarLinkOpener,
     onBack: () -> Unit,
     onConfirmReservation: (Reservation) -> Unit,
     onCancelReservation: (Reservation) -> Unit
@@ -43,10 +54,13 @@ fun ReservationDetailsScreen(
     val canStillCancel = start > now.plus(1, DateTimeUnit.HOUR)
     val isConfirmed = reservation.status == ReservationStatus.CONFIRMED
 
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
+            .verticalScroll(scrollState),
     ) {
         TextButton(onClick = onBack) {
             Text("← Voltar", style = MaterialTheme.typography.labelLarge)
@@ -74,6 +88,9 @@ fun ReservationDetailsScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text("ID da Reserva: ${reservation.id}")
+        Text("Clube: ${clubInfo.name}")
+        Text("Campo: ${courtInfo.name}")
+        Text("Desporto: ${courtInfo.sportType.name.lowercase().replaceFirstChar { it.uppercase() }}")
         Text("Início: ${formatToDisplay(reservation.startTime)}")
         Text("Fim: ${formatToDisplay(reservation.endTime)}")
         Text("Preço Estimado: ${reservation.estimatedPrice} €")
@@ -125,5 +142,15 @@ fun ReservationDetailsScreen(
                 )
             }
         }
+
+        AddToCalendarButton(
+            title = "Reserva CourtAndGo - ${courtInfo.name} no ${clubInfo.name}",
+            description = "Reserva feita na app CourtAndGo",
+            location = formatLocationForDisplay(clubInfo.location),
+            startTime = reservation.startTime,
+            endTime = reservation.endTime,
+            calendarOpener = calendarOpener,
+            timeZone = timeZone,
+        )
     }
 }

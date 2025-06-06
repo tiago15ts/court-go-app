@@ -23,6 +23,7 @@ import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.reservations.components.InfoRow
+import pt.isel.courtandgo.frontend.utils.addEventToCalendar.AddToCalendarButton
 import pt.isel.courtandgo.frontend.utils.dateUtils.CalendarLinkOpener
 import pt.isel.courtandgo.frontend.utils.dateUtils.formatToDisplay
 import pt.isel.courtandgo.frontend.utils.addEventToCalendar.generateGoogleCalendarUrl
@@ -30,8 +31,11 @@ import pt.isel.courtandgo.frontend.utils.dateUtils.timeZone
 import pt.isel.courtandgo.frontend.utils.formatLocationForDisplay
 
 @Composable
-fun ReceiptReservationScreen(reservation: Reservation, clubInfo: Club, courtInfo: Court,
-                             calendarOpener: CalendarLinkOpener
+fun ReceiptReservationScreen(
+    reservation: Reservation,
+    clubInfo: Club,
+    courtInfo: Court,
+    calendarOpener: CalendarLinkOpener
 ) {
     val scrollState = rememberScrollState()
 
@@ -82,21 +86,15 @@ fun ReceiptReservationScreen(reservation: Reservation, clubInfo: Club, courtInfo
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
-            onClick = {
-                val calendarUrl = generateGoogleCalendarUrl(
-                    title = "Reserva CourtAndGo - ${courtInfo.name} no ${clubInfo.name}",
-                    description = "Reserva feita na app CourtAndGo",
-                    location = formatLocationForDisplay(clubInfo.location),
-                    startTime = reservation.startTime,
-                    endTime = reservation.endTime,
-                    timeZone = timeZone
-                )
-                calendarOpener.openCalendarLink(calendarUrl)
-            }
-        ) {
-            Text("Adicionar ao Google Calendar")
-        }
+        AddToCalendarButton(
+            title = "Reserva CourtAndGo - ${courtInfo.name} no ${clubInfo.name}",
+            description = "Reserva feita na app CourtAndGo",
+            location = formatLocationForDisplay(clubInfo.location),
+            startTime = reservation.startTime,
+            endTime = reservation.endTime,
+            calendarOpener = calendarOpener,
+            timeZone = timeZone,
+        )
     }
 }
 

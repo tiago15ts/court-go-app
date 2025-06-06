@@ -8,21 +8,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import pt.isel.courtandgo.frontend.authentication.AuthViewModel
 import pt.isel.courtandgo.frontend.authentication.login.LoginScreen
 import pt.isel.courtandgo.frontend.authentication.register.RegisterDetailsScreen
 import pt.isel.courtandgo.frontend.authentication.register.RegisterFirstScreen
+import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubScreen
+import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubViewModel
 import pt.isel.courtandgo.frontend.components.LayoutScreen
 import pt.isel.courtandgo.frontend.components.bottomNavBar.Tab
-import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubViewModel
-import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubScreen
-import pt.isel.courtandgo.frontend.utils.dateUtils.CalendarLinkOpener
-import pt.isel.courtandgo.frontend.utils.dateUtils.currentDate
-import pt.isel.courtandgo.frontend.utils.dateUtils.nowTime
+import pt.isel.courtandgo.frontend.domain.Club
+import pt.isel.courtandgo.frontend.domain.Location
+import pt.isel.courtandgo.frontend.domain.SportType
 import pt.isel.courtandgo.frontend.home.HomeScreen
 import pt.isel.courtandgo.frontend.notifications.EditNotificationsScreen
 import pt.isel.courtandgo.frontend.notifications.NotificationSettingsViewModel
@@ -32,10 +29,10 @@ import pt.isel.courtandgo.frontend.profile.editProfile.EditProfileScreen
 import pt.isel.courtandgo.frontend.repository.AuthRepositoryImpl
 import pt.isel.courtandgo.frontend.reservations.confirmReservation.ConfirmReservationScreen
 import pt.isel.courtandgo.frontend.reservations.confirmReservation.ConfirmReservationViewModel
-import pt.isel.courtandgo.frontend.reservations.receiptReservation.ReceiptReservationScreen
 import pt.isel.courtandgo.frontend.reservations.lastReservations.ReservationViewModel
 import pt.isel.courtandgo.frontend.reservations.lastReservations.ReservationsScreen
 import pt.isel.courtandgo.frontend.reservations.lastReservations.reservationDetails.ReservationDetailsScreen
+import pt.isel.courtandgo.frontend.reservations.receiptReservation.ReceiptReservationScreen
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.CourtAvailabilityViewModel
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.SelectedClubScreen
 import pt.isel.courtandgo.frontend.service.CourtAndGoService
@@ -47,6 +44,7 @@ import pt.isel.courtandgo.frontend.service.mock.repo.ClubRepoMock
 import pt.isel.courtandgo.frontend.service.mock.repo.CourtRepoMock
 import pt.isel.courtandgo.frontend.service.mock.repo.ReservationRepoMock
 import pt.isel.courtandgo.frontend.service.mock.repo.ScheduleCourtRepoMock
+import pt.isel.courtandgo.frontend.utils.dateUtils.CalendarLinkOpener
 
 
 @Composable
@@ -66,7 +64,9 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
         MockCourtService(CourtRepoMock())
     ) }
     val reservationVm = remember {
-        ReservationViewModel(reservationServiceShared, MockClubService(ClubRepoMock()))
+        ReservationViewModel(reservationServiceShared, MockClubService(ClubRepoMock()),
+            MockCourtService(CourtRepoMock())
+        )
     }
     val notificationVm = remember {
         NotificationSettingsViewModel()
@@ -191,7 +191,30 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
                         viewModel = reservationVm,
                         userId = currentUser?.id ?: 0,
                         onReservationClick = { reservation ->
-                            screen.value = Screen.ReservationDetails(reservation)
+                            scope.launch {
+                                screen.value =
+                                    Screen.ReservationDetails(reservation,
+                                        clubInfo = reservationVm.getClubInfoByCourtId(reservation.courtId) ?: Club(
+                                            id = -1,
+                                            name = "Unknown Club",
+                                            location = Location(
+                                                id = -1,
+                                                address = "Unknown Address",
+                                                county = "Unknown County",
+                                                district = "Unknown District",
+                                                country = "Unknown Country",
+                                                postalCode = "0000-000",
+                                                latitude = 0.0,
+                                                longitude = 0.0
+                                            ),
+                                            sportType = SportType.BOTH,
+                                            nrOfCourts = 0,
+                                            clubOwnerId = 0,
+                                            averagePrice = 0.0
+                                        ),
+                                        courtInfo = reservationVm.getCourtInfoByCourtId(reservation.courtId)
+                                    )
+                            }
                         },
                         onBack = { screen.value = Screen.Home }
                     )
@@ -214,8 +237,9 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
 
                     is Screen.ReservationDetails -> ReservationDetailsScreen(
                         reservation = (screen.value as Screen.ReservationDetails).reservation,
-                        //clubInfo = (screen.value as Screen.ReservationDetails).clubInfo,
-                        //courtInfo = (screen.value as Screen.ReservationDetails).courtInfo,
+                        clubInfo = (screen.value as Screen.ReservationDetails).clubInfo,
+                        courtInfo = (screen.value as Screen.ReservationDetails).courtInfo,
+                        calendarOpener = calendarLinkOpener,
                         onBack = { screen.value = Screen.LastReservations },
                         onConfirmReservation = { reservation ->
                             confirmationVm.confirmReservation(reservation)

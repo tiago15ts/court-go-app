@@ -14,6 +14,7 @@ interface ClubService {
     //suspend fun getClubsFiltered(district: String, sport: SportType): List<Club>
     suspend fun getClubById(id: Int): Club?
     suspend fun getClubsByOwnerId(ownerId: Int): List<Club>
+    suspend fun getClubIdByCourtId(courtId: Int): Int
 
     suspend fun getClubsFiltered(
         query: String? = null,
