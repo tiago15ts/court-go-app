@@ -1,4 +1,4 @@
-package pt.isel.courtandgo.frontend.dateUtils
+package pt.isel.courtandgo.frontend.utils.dateUtils
 
 import kotlinx.datetime.LocalTime
 

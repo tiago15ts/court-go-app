@@ -1,4 +1,4 @@
-package pt.isel.courtandgo.frontend.dateUtils
+package pt.isel.courtandgo.frontend.utils.dateUtils
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalTime
@@ -16,3 +16,5 @@ fun LocalTime.plusMinutes(minutes: Int): LocalTime {
 
 val currentDate = nowTime.date //localDate
 val currentTime = nowTime.time //localTime
+
+val timeZone = TimeZone.currentSystemDefault() //TimeZone

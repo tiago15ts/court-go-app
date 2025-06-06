@@ -20,6 +20,11 @@ class CourtAvailabilityViewModel(
     private val _availableSlots = mutableStateOf<Map<Int, List<LocalTime>>>(emptyMap())
     val availableSlots: State<Map<Int, List<LocalTime>>> = _availableSlots
 
+    private val _defaultTimes = mutableStateOf<List<LocalTime>>(emptyList())
+    val defaultTimes: State<List<LocalTime>> = _defaultTimes
+
+
+
     fun loadAvailableSlots(clubId: Int, date: LocalDate) {
         viewModelScope.launch {
 
@@ -29,6 +34,8 @@ class CourtAvailabilityViewModel(
             val timeSlotsByCourt = courtIds.associateWith {
                 getDefaultSlotsForCourt(scheduleService, it, date)
             }
+
+            _defaultTimes.value = timeSlotsByCourt.values.flatten().distinct()
 
             val reservations = reservationService.getReservationsByCourtIdsAndDate(courtIds, date)
             val occupiedTimesByCourt = reservations.groupBy { it.courtId }.mapValues { entry ->

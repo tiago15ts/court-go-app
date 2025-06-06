@@ -20,9 +20,9 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import pt.isel.courtandgo.frontend.domain.Court
-import pt.isel.courtandgo.frontend.dateUtils.DatePickerRow
-import pt.isel.courtandgo.frontend.dateUtils.currentDate
-import pt.isel.courtandgo.frontend.dateUtils.currentTime
+import pt.isel.courtandgo.frontend.utils.dateUtils.DatePickerRow
+import pt.isel.courtandgo.frontend.utils.dateUtils.currentDate
+import pt.isel.courtandgo.frontend.utils.dateUtils.currentTime
 import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.reservations.components.TimeSlotGrid
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.CourtAvailabilityViewModel

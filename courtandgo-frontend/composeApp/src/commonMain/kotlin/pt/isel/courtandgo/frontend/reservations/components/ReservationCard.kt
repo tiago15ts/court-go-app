@@ -28,7 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.coil3.CoilImage
-import pt.isel.courtandgo.frontend.dateUtils.formatToDisplay
+import pt.isel.courtandgo.frontend.utils.dateUtils.formatToDisplay
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.domain.ReservationStatus
 import kotlinx.datetime.*

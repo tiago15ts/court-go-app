@@ -20,8 +20,8 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import pt.isel.courtandgo.frontend.clubs.utils.SearchClubField
 import pt.isel.courtandgo.frontend.domain.SportType
-import pt.isel.courtandgo.frontend.dateUtils.currentDate
-import pt.isel.courtandgo.frontend.dateUtils.currentTime
+import pt.isel.courtandgo.frontend.utils.dateUtils.currentDate
+import pt.isel.courtandgo.frontend.utils.dateUtils.currentTime
 import pt.isel.courtandgo.frontend.domain.Club
 
 

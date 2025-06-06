@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 import com.raedghazal.kotlinx_datetime_ext.plus
 import com.skydoves.landscapist.coil3.CoilImage
 import kotlinx.datetime.DateTimeUnit
-import pt.isel.courtandgo.frontend.dateUtils.formatToDisplay
-import pt.isel.courtandgo.frontend.dateUtils.nowTime
+import pt.isel.courtandgo.frontend.utils.dateUtils.formatToDisplay
+import pt.isel.courtandgo.frontend.utils.dateUtils.nowTime
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.domain.ReservationStatus
 

@@ -20,8 +20,9 @@ import pt.isel.courtandgo.frontend.components.LayoutScreen
 import pt.isel.courtandgo.frontend.components.bottomNavBar.Tab
 import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubViewModel
 import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubScreen
-import pt.isel.courtandgo.frontend.dateUtils.currentDate
-import pt.isel.courtandgo.frontend.dateUtils.nowTime
+import pt.isel.courtandgo.frontend.utils.dateUtils.CalendarLinkOpener
+import pt.isel.courtandgo.frontend.utils.dateUtils.currentDate
+import pt.isel.courtandgo.frontend.utils.dateUtils.nowTime
 import pt.isel.courtandgo.frontend.home.HomeScreen
 import pt.isel.courtandgo.frontend.notifications.EditNotificationsScreen
 import pt.isel.courtandgo.frontend.notifications.NotificationSettingsViewModel
@@ -50,7 +51,7 @@ import pt.isel.courtandgo.frontend.service.mock.repo.ScheduleCourtRepoMock
 
 @Composable
 @Preview
-fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
+fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: CalendarLinkOpener) {
     val screen = remember { mutableStateOf<Screen>(Screen.RegisterFirst) }
     val selectedTab = remember { mutableStateOf(Tab.Home) }
     val authViewModel = remember { AuthViewModel(AuthRepositoryImpl(courtAndGoService)) }
@@ -252,6 +253,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService) {
                         reservation = (screen.value as Screen.ReceiptReservation).reservation,
                         clubInfo = (screen.value as Screen.ReceiptReservation).clubInfo,
                         courtInfo = (screen.value as Screen.ReceiptReservation).courtInfo,
+                        calendarOpener = calendarLinkOpener,
                     )
                     else -> {}
                 }
