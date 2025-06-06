@@ -25,7 +25,7 @@ import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.reservations.components.InfoRow
 import pt.isel.courtandgo.frontend.utils.dateUtils.CalendarLinkOpener
 import pt.isel.courtandgo.frontend.utils.dateUtils.formatToDisplay
-import pt.isel.courtandgo.frontend.utils.dateUtils.generateGoogleCalendarUrl
+import pt.isel.courtandgo.frontend.utils.addEventToCalendar.generateGoogleCalendarUrl
 import pt.isel.courtandgo.frontend.utils.dateUtils.timeZone
 import pt.isel.courtandgo.frontend.utils.formatLocationForDisplay
 
