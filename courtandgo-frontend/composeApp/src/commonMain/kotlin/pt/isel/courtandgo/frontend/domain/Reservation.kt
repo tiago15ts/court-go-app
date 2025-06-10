@@ -1,6 +1,7 @@
 package pt.isel.courtandgo.frontend.domain
 
 import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.Serializable
 
 data class Reservation(
     val id: Int,
@@ -12,6 +13,7 @@ data class Reservation(
     val status: ReservationStatus = ReservationStatus.PENDING
 )
 
+@Serializable
 enum class ReservationStatus {
     PENDING, CONFIRMED, CANCELLED
 }

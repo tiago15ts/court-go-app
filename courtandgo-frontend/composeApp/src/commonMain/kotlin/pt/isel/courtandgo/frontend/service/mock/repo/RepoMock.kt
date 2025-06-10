@@ -5,4 +5,5 @@ class RepoMock {
     val clubRepoMock = ClubRepoMock()
     val reservationRepoMock = ReservationRepoMock()
     val courtRepoMock = CourtRepoMock()
+    val scheduleCourtRepoMock = ScheduleCourtRepoMock()
 }

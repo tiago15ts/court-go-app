@@ -12,18 +12,23 @@ interface ReservationService {
     suspend fun updateReservation(reservation: Reservation): Reservation?
     suspend fun deleteReservation(id: Int): Boolean
     suspend fun setConfirmedReservation(id: Int): Boolean
-    suspend fun getReservationsForClubOnDate(
+
+    /*suspend fun getReservationsForClubOnDate(
         reservations: List<Reservation>,
         clubCourtIds: List<Int>,
         date: LocalDate
     ): Map<Int, List<LocalTime>>
+
+
 
     fun getAvailableTimeSlotsForClub(
         timeSlotsByCourt: Map<Int, List<LocalTime>>,
         occupiedTimesByCourt: Map<Int, List<LocalTime>>
     ): Map<Int, List<LocalTime>>
 
-    fun getReservationsByCourtIdsAndDate(
+     */
+
+    suspend fun getReservationsByCourtIdsAndDate(
         courtIds: List<Int>,
         date: LocalDate
     ): List<Reservation>

@@ -5,4 +5,5 @@ interface CourtAndGoService {
     val clubService: ClubService
     val reservationService: ReservationService
     val courtService: CourtService
+    val scheduleCourtsService : ScheduleCourtsService
 }

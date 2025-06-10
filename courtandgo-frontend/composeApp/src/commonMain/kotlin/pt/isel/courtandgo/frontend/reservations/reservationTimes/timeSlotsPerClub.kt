@@ -58,3 +58,13 @@ fun getMockedTimeSlots(): List<LocalTime> {
         }
     }.toList()
 }
+
+fun getAvailableTimeSlotsForClub(
+    timeSlotsByCourt: Map<Int, List<LocalTime>>,
+    occupiedTimesByCourt: Map<Int, List<LocalTime>>
+): Map<Int, List<LocalTime>> {
+    return timeSlotsByCourt.mapValues { (courtId, slots) ->
+        val occupied = occupiedTimesByCourt[courtId] ?: emptyList()
+        slots.filterNot { it in occupied }
+    }
+}

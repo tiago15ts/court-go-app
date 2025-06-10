@@ -2,20 +2,19 @@ package pt.isel.courtandgo.frontend
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.net.toUri
 import pt.isel.courtandgo.frontend.authentication.AndroidAuthManager
-import pt.isel.courtandgo.frontend.utils.dateUtils.CalendarLinkOpener
 import pt.isel.courtandgo.frontend.dateUtils.initCalendarContext
 import pt.isel.courtandgo.frontend.notifications.initNotificationScheduler
+import pt.isel.courtandgo.frontend.service.http.CourtAndGoServiceHttp
 import pt.isel.courtandgo.frontend.service.mock.CourtAndGoServiceMock
-import pt.isel.courtandgo.frontend.service.mock.MockUserService
-import pt.isel.courtandgo.frontend.ui.CourtAndGoTheme
-import androidx.core.net.toUri
+import pt.isel.courtandgo.frontend.utils.dateUtils.CalendarLinkOpener
+
 
 class MainActivity : ComponentActivity() {
 
@@ -36,8 +35,13 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             //CourtAndGoTheme {
+
+            val httpClient = createHttpClient()
+            val serviceMock = CourtAndGoServiceMock()
+            val serviceHTTP = CourtAndGoServiceHttp(httpClient)
+
             val calendarOpener = AndroidCalendarLinkOpener(this)
-                CourtAndGoApp(courtAndGoService = CourtAndGoServiceMock(),
+                CourtAndGoApp(courtAndGoService = serviceMock,
                     calendarLinkOpener = calendarOpener)
             //}
         }

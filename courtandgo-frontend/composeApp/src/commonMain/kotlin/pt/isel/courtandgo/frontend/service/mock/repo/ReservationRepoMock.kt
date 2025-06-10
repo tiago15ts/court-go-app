@@ -60,7 +60,7 @@ class ReservationRepoMock {
             false
         }
     }
-
+/*
     fun getReservationsForClubOnDate(
         reservations: List<Reservation>,
         clubCourtIds: List<Int>,
@@ -72,6 +72,8 @@ class ReservationRepoMock {
             .mapValues { entry -> entry.value.map { it.startTime.time } }
     }
 
+
+
     fun getAvailableTimeSlotsForClub(
         timeSlotsByCourt: Map<Int, List<LocalTime>>,
         occupiedTimesByCourt: Map<Int, List<LocalTime>>
@@ -81,6 +83,8 @@ class ReservationRepoMock {
             slots.filterNot { it in occupied }
         }
     }
+
+ */
 
     fun getReservationsByCourtIdsAndDate(
         courtIds: List<Int>,

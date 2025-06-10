@@ -42,15 +42,8 @@ class CourtAvailabilityViewModel(
                 entry.value.map { it.startTime.time }
             }
 
-            val available = reservationService.getAvailableTimeSlotsForClub(timeSlotsByCourt, occupiedTimesByCourt)
+            val available = getAvailableTimeSlotsForClub(timeSlotsByCourt, occupiedTimesByCourt)
             _availableSlots.value = available
-        }
-    }
-
-    fun loadTimesForDate(courtId: Int, date: LocalDate) {
-        viewModelScope.launch {
-            val times = getDefaultSlotsForCourt(scheduleService, courtId, date)
-            //_availableSlots.value = times
         }
     }
 }

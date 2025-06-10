@@ -73,9 +73,6 @@ fun ChooseSlotSection(
             defaultTimes
         }
 
-
-        // todo mostrar apenas disponíveis toggle
-
         val timesToShow = if (onlyAvailable.value) {
             filteredTimes
         } else {
