@@ -18,3 +18,13 @@ val currentDate = nowTime.date //localDate
 val currentTime = nowTime.time //localTime
 
 val timeZone = TimeZone.currentSystemDefault() //TimeZone
+
+val diasSemanaPT = mapOf(
+    "MONDAY" to "Seg.",
+    "TUESDAY" to "Ter.",
+    "WEDNESDAY" to "Qua.",
+    "THURSDAY" to "Qui.",
+    "FRIDAY" to "Sex.",
+    "SATURDAY" to "Sáb.",
+    "SUNDAY" to "Dom."
+)

@@ -7,6 +7,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import pt.isel.courtandgo.frontend.domain.User
 import pt.isel.courtandgo.frontend.repository.AuthRepository
+import pt.isel.courtandgo.frontend.service.http.utils.CourtAndGoException
+
+
+sealed class AuthUiState {
+    object Idle : AuthUiState()
+    object Loading : AuthUiState()
+    data class Success(val user: User?) : AuthUiState()
+    data class Error(val message: String) : AuthUiState()
+}
+
 
 /**
  * ViewModel for managing authentication (register and login) state and actions.
@@ -15,6 +25,7 @@ class AuthViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
+    /*
     private val _currentUser = MutableStateFlow<User?>(null)
     val currentUser = _currentUser.asStateFlow()
 
@@ -24,38 +35,53 @@ class AuthViewModel(
     private val _error = MutableStateFlow<String?>(null)
     val error = _error.asStateFlow()
 
+     */
+
+    private val _uiState = MutableStateFlow<AuthUiState>(AuthUiState.Idle)
+    val uiState = _uiState.asStateFlow()
+
     fun setCurrentUser(user: User?) {
-        _currentUser.value = user
+        _uiState.value = AuthUiState.Success(user)
     }
+
+    fun clearError() {
+        _uiState.value = AuthUiState.Idle
+    }
+
+    fun setError(message: String) {
+        _uiState.value = AuthUiState.Error(message)
+    }
+
 
 
     fun loginWithEmail(email: String, password: String, onSuccess: () -> Unit) {
         viewModelScope.launch {
-            _isLoading.value = true
+            _uiState.value = AuthUiState.Loading
             try {
                 val user = authRepository.loginWithEmail(email, password)
                 authRepository.setToken(user.toString()) //todo fix this
-                _currentUser.value = user
+                _uiState.value = AuthUiState.Success(user)
                 onSuccess()
-            } catch (e: Exception) {
-                _error.value = e.message ?: "Erro ao iniciar sessão"
-            } finally {
-                _isLoading.value = false
+            } catch (e: CourtAndGoException) {
+                _uiState.value = AuthUiState.Error(e.message ?: "Erro ao iniciar sessão")
+            }
+            catch (e: Exception) {
+                _uiState.value = AuthUiState.Error(e.message ?: "Erro inesperado ao iniciar sessão")
             }
         }
     }
 
     fun authenticateWithGoogle(tokenId: String, name: String, email: String, onSuccess: () -> Unit) {
         viewModelScope.launch {
-            _isLoading.value = true
+            _uiState.value = AuthUiState.Loading
             try {
                 val user = authRepository.authenticateGoogle(tokenId, name, email)
-                _currentUser.value = user
+                _uiState.value = AuthUiState.Success(user)
                 onSuccess()
+            } catch (e: CourtAndGoException) {
+                _uiState.value = AuthUiState.Error(e.message ?: "Erro ao autenticar com Google")
             } catch (e: Exception) {
-                _error.value = e.message ?: "Erro com Google"
-            } finally {
-                _isLoading.value = false
+                _uiState.value = AuthUiState.Error(e.message ?: "Erro inesperado ao autenticar com Google")
             }
         }
     }
@@ -69,7 +95,7 @@ class AuthViewModel(
         onSuccess: () -> Unit
     ) {
         viewModelScope.launch {
-            _isLoading.value = true
+            _uiState.value = AuthUiState.Loading
             try {
                 val user = authRepository.registerWithEmail(
                     email,
@@ -78,12 +104,12 @@ class AuthViewModel(
                     phone,
                     password
                 )
-                _currentUser.value = user
+                _uiState.value = AuthUiState.Success(user)
                 onSuccess()
+            } catch (e: CourtAndGoException) {
+                _uiState.value = AuthUiState.Error(e.message ?: "Erro ao registar")
             } catch (e: Exception) {
-                _error.value = e.message ?: "Erro ao registar"
-            } finally {
-                _isLoading.value = false
+                _uiState.value = AuthUiState.Error(e.message ?: "Erro inesperado ao registar")
             }
         }
     }
@@ -91,7 +117,7 @@ class AuthViewModel(
     fun logout(onLoggedOut: () -> Unit) {
         viewModelScope.launch {
             authRepository.logout()
-            _currentUser.value = null
+            _uiState.value = AuthUiState.Success(null)
             onLoggedOut()
         }
     }

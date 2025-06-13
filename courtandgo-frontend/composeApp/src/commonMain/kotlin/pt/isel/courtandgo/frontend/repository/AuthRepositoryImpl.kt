@@ -10,7 +10,7 @@ class AuthRepositoryImpl(
 
     override suspend fun loginWithEmail(email: String, password: String): User {
         val user = courtAndGoService.userService.login(email, password)
-        return user ?: throw Exception("Login failed")
+        return user ?: throw Exception("Erro ao iniciar sessão")
     }
 
     override suspend fun authenticateGoogle(

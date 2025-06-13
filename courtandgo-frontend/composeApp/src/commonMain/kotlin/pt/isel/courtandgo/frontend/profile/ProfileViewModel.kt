@@ -1,20 +1,28 @@
 package pt.isel.courtandgo.frontend.profile
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
-import pt.isel.courtandgo.frontend.domain.User
-import androidx.compose.runtime.State
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import pt.isel.courtandgo.frontend.domain.User
 import pt.isel.courtandgo.frontend.repository.AuthRepository
+
+sealed class ProfileUiState {
+    object Idle : ProfileUiState()
+    object Loading : ProfileUiState()
+    object Success : ProfileUiState()
+    data class Error(val message: String) : ProfileUiState()
+}
 
 
 class ProfileViewModel(
-    private val authRepository: AuthRepository // ou repository, se tiveres
+    private val authRepository: AuthRepository
 ) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Idle)
+    val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
 
     private val _user = MutableStateFlow<User?>(null)
     val user: StateFlow<User?> = _user.asStateFlow()
@@ -27,18 +35,23 @@ class ProfileViewModel(
         _user.value = _user.value?.let(modify)
     }
 
-    fun updateUser(onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
+    fun updateUser() {
+        val current = _user.value ?: return
+        _uiState.value = ProfileUiState.Loading
         viewModelScope.launch {
             try {
-                val current = _user.value ?: return@launch
                 val updatedUser = authRepository.updateUser(current)
                 _user.value = updatedUser
-                onSuccess()
+                _uiState.value = ProfileUiState.Success
 
             } catch (e: Exception) {
-                onError(e)
+                _uiState.value = ProfileUiState.Error(e.message ?: "Erro ao atualizar perfil")
             }
         }
+    }
+
+    fun resetUiState() {
+        _uiState.value = ProfileUiState.Idle
     }
 }
 

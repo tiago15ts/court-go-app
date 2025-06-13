@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,12 +20,24 @@ import pt.isel.courtandgo.frontend.notifications.provideNotificationScheduler
 import pt.isel.courtandgo.frontend.service.ClubService
 import pt.isel.courtandgo.frontend.service.CourtService
 import pt.isel.courtandgo.frontend.service.ReservationService
+import pt.isel.courtandgo.frontend.service.http.utils.CourtAndGoException
+
+sealed class ReservationUiState {
+    object Idle : ReservationUiState()
+    object Loading : ReservationUiState()
+    object Success : ReservationUiState()
+    data class Error(val message: String) : ReservationUiState()
+}
+
 
 class ReservationViewModel(
     private val reservationService: ReservationService,
     private val clubService: ClubService,
     private val courtService: CourtService
 ) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<ReservationUiState>(ReservationUiState.Idle)
+    val uiState: StateFlow<ReservationUiState> = _uiState.asStateFlow()
 
     private val _futureReservations = MutableStateFlow<List<Reservation>>(emptyList())
     val futureReservations: StateFlow<List<Reservation>> = _futureReservations.asStateFlow()
@@ -37,26 +50,45 @@ class ReservationViewModel(
 
     fun loadReservations(playerId: Int) {
         viewModelScope.launch {
-            val all = reservationService.getReservationsForPlayer(playerId)
-            val now = Clock.System.now()
-            val zone = TimeZone.currentSystemDefault()
+            _uiState.value = ReservationUiState.Loading
+            delay(500)
+            try {
+                val all = reservationService.getReservationsForPlayer(playerId)
+                val now = Clock.System.now()
+                val zone = TimeZone.currentSystemDefault()
 
-            _futureReservations.value = all
-                .filter {
-                    it.status != ReservationStatus.CANCELLED &&
-                            it.startTime.toInstant(zone) > now
+                _futureReservations.value = all
+                    .filter {
+                        it.status != ReservationStatus.CANCELLED &&
+                                it.startTime.toInstant(zone) > now
+                    }
+                    .sortedBy { it.startTime.toInstant(zone) }
+
+                _pastReservations.value = all
+                    .filter {
+                        it.status == ReservationStatus.CANCELLED ||
+                                it.startTime.toInstant(zone) <= now
+                    }
+                    .sortedByDescending { it.startTime.toInstant(zone) }
+
+                val clubs = clubService.getAllClubs()
+                val courtIdToClubName = mutableMapOf<Int, String>()
+
+                clubs.forEach { club ->
+                    val courts = courtService.getCourtsByClubId(club.id)
+                    courts.forEach { court ->
+                        courtIdToClubName[court.id] = club.name
+                    }
                 }
-                .sortedBy { it.startTime.toInstant(zone) }
+                _clubNames.value = courtIdToClubName
 
-            _pastReservations.value = all
-                .filter {
-                    it.status == ReservationStatus.CANCELLED ||
-                            it.startTime.toInstant(zone) <= now
-                }
-                .sortedByDescending { it.startTime.toInstant(zone) }
-
-            val clubs = clubService.getAllClubs()
-            _clubNames.value = clubs.associateBy({ it.id }, { it.name })
+                _uiState.value = ReservationUiState.Success
+            } catch (e: CourtAndGoException) {
+                _uiState.value = ReservationUiState.Error("Erro ao carregar reservas: ${e.message}")
+            }
+            catch (e: Exception) {
+                _uiState.value = ReservationUiState.Error("Erro inesperado ao carregar as reservas: ${e.message}")
+            }
         }
     }
 
@@ -64,9 +96,17 @@ class ReservationViewModel(
     fun cancelReservation(reservation: Reservation) {
         val scheduler = provideNotificationScheduler()
         viewModelScope.launch {
-            reservationService.deleteReservation(reservation.id)
-            scheduler.cancelReservationReminder(reservation.id.toString())
-            loadReservations(reservation.playerId)
+            _uiState.value = ReservationUiState.Loading
+            try {
+                reservationService.deleteReservation(reservation.id)
+                scheduler.cancelReservationReminder(reservation.id.toString())
+                loadReservations(reservation.playerId)
+                _uiState.value = ReservationUiState.Success
+            } catch (e: CourtAndGoException) {
+                _uiState.value = ReservationUiState.Error("Erro ao cancelar reserva: ${e.message}")
+            } catch (e: Exception) {
+                _uiState.value = ReservationUiState.Error("Erro inesperado ao cancelar a reserva: ${e.message}")
+            }
         }
     }
 

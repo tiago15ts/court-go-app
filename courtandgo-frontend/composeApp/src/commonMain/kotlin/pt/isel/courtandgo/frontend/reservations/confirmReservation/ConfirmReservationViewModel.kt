@@ -5,6 +5,7 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raedghazal.kotlinx_datetime_ext.plus
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.*
 import pt.isel.courtandgo.frontend.domain.Court
@@ -12,25 +13,28 @@ import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.notifications.scheduleReservationNotification
 import pt.isel.courtandgo.frontend.service.CourtService
 import pt.isel.courtandgo.frontend.service.ReservationService
+import pt.isel.courtandgo.frontend.service.http.utils.CourtAndGoException
 import kotlin.time.Duration.Companion.minutes
+
+
+sealed class ConfirmReservationUiState {
+    object Idle : ConfirmReservationUiState()
+    object Loading : ConfirmReservationUiState()
+    data class Success(val reservation: Reservation) : ConfirmReservationUiState()
+    data class Error(val message: String) : ConfirmReservationUiState()
+}
+
 
 class ConfirmReservationViewModel(
     private val reservationService: ReservationService,
     private val courtService: CourtService
 ) : ViewModel() {
 
+    private val _uiState = mutableStateOf<ConfirmReservationUiState>(ConfirmReservationUiState.Idle)
+    val uiState: State<ConfirmReservationUiState> = _uiState
+
     private val _durationInMinutes = mutableStateOf(60)
     val durationInMinutes: State<Int> = _durationInMinutes
-
-    fun setDuration(minutes: Int) {
-        _durationInMinutes.value = minutes
-    }
-
-    private val _isSubmitting = mutableStateOf(false)
-    val isSubmitting: State<Boolean> = _isSubmitting
-
-    private val _reservationConfirmed = mutableStateOf<Reservation?>(null)
-    val reservationConfirmed: State<Reservation?> = _reservationConfirmed
 
     private val _courts = mutableStateOf<List<Court>>(emptyList())
     val courts: State<List<Court>> = _courts
@@ -38,11 +42,15 @@ class ConfirmReservationViewModel(
     private val _selectedCourtId = mutableStateOf<Int?>(null)
     val selectedCourtId: State<Int?> = _selectedCourtId
 
+    fun setDuration(minutes: Int) {
+        _durationInMinutes.value = minutes
+    }
+
     fun setSelectedCourt(courtId: Int) {
         _selectedCourtId.value = courtId
     }
 
-    fun confirmReservation(
+    fun placeReservation(
         playerId: Int,
         courtId: Int,
         startDateTime: LocalDateTime,
@@ -64,14 +72,18 @@ class ConfirmReservationViewModel(
         )
 
         viewModelScope.launch {
-            _isSubmitting.value = true
-            val created = reservationService.createReservation(reservation)
-            _reservationConfirmed.value = created
-            _isSubmitting.value = false
+            _uiState.value = ConfirmReservationUiState.Loading
+            try {
+                val created = reservationService.createReservation(reservation)
+                _uiState.value = ConfirmReservationUiState.Success(created)
 
-            // Agendar a notificação 24h antes (ou mais próximo possível)
-            scheduleReservationNotification(created)
-
+                // Agendar a notificação 24h antes (ou mais próximo possível)
+                scheduleReservationNotification(created)
+            } catch (e: CourtAndGoException) {
+                _uiState.value = ConfirmReservationUiState.Error(e.message ?: "Erro ao confirmar reserva.")
+            } catch ( e: Exception) {
+                _uiState.value = ConfirmReservationUiState.Error("Erro inesperado: ${e.message}")
+            }
         }
     }
 
@@ -80,26 +92,37 @@ class ConfirmReservationViewModel(
         return pricePerHour * hours
     }
 
-    fun clearReservationConfirmed() {
-        _reservationConfirmed.value = null
-    }
-
-    fun confirmReservation(reservation: Reservation) {
+    fun confirmAfterReservation(reservation: Reservation) {
         viewModelScope.launch {
-            reservationService.setConfirmedReservation(reservation.id)
-            _reservationConfirmed.value = reservation
+            _uiState.value = ConfirmReservationUiState.Loading
+            try {
+                reservationService.setConfirmedReservation(reservation.id)
+                //_reservationConfirmed.value = reservation
+                _uiState.value = ConfirmReservationUiState.Success(reservation)
+            } catch (e: CourtAndGoException) {
+                _uiState.value =
+                    ConfirmReservationUiState.Error(e.message ?: "Erro ao confirmar reserva.")
+            } catch (e: Exception) {
+                _uiState.value = ConfirmReservationUiState.Error("Erro inesperado: ${e.message}")
+            }
         }
     }
 
     fun loadCourts(clubId: Int, availableCourtsAtTime: Set<Int>) {
         viewModelScope.launch {
+            try{
             _courts.value = courtService.getCourtsByClubId(clubId)
             // Selecionar o primeiro court disponível nesse horário
             _selectedCourtId.value = _courts.value.firstOrNull { it.id in availableCourtsAtTime }?.id
+        } catch (e: CourtAndGoException) {
+                _uiState.value = ConfirmReservationUiState.Error(e.message ?: "Erro ao carregar courts.")
+            } catch (e: Exception) {
+                _uiState.value = ConfirmReservationUiState.Error("Erro inesperado: ${e.message}")
+            }
         }
     }
 
-
-
-
+    fun resetUiState() {
+        _uiState.value = ConfirmReservationUiState.Idle
+    }
 }

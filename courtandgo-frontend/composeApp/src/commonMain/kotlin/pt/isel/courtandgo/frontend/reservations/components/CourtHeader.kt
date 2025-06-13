@@ -1,12 +1,12 @@
 package pt.isel.courtandgo.frontend.reservations.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -17,37 +17,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.skydoves.landscapist.coil3.CoilImage
+import courtandgo_frontend.composeapp.generated.resources.Res
+import courtandgo_frontend.composeapp.generated.resources.courts
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun CourtHeader(courtName: String, location: String, onBack: () -> Unit) {
-    Box {
-        CoilImage(
-            imageModel = {"https://americanpadelsystems.com/images/portfolio/projects-1.jpg"},
+    Box (
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(180.dp)
+    ){
+        Image(
+            painter = painterResource(Res.drawable.courts),
+            contentDescription = "Courts image",
+            contentScale = ContentScale.Crop,
             modifier = Modifier
-                .height(200.dp)
-                .fillMaxWidth(),
-            loading = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            },
-            failure = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    androidx.compose.material.Text("Ups! Não conseguimos carregar a imagem")
-                }
-            },
+                .fillMaxSize()
         )
         IconButton(onClick = onBack, modifier = Modifier.padding(16.dp)) {
             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar", tint = Color.White)

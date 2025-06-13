@@ -20,7 +20,7 @@ const val ERROR_MEDIA_TYPE = "application/problem+json"
 const val SCHEME = "bearer"
 const val NAME_WWW_AUTHENTICATE_HEADER = "WWW-Authenticate"
 
-class CourtAndGoException(message: String?, cause: Throwable? = null) : Exception(message, cause)
+open class CourtAndGoException(message: String?, cause: Throwable? = null) : Exception(message, cause)
 
 // -------- GET --------
 suspend inline fun <reified T : Any> HttpClient.get(

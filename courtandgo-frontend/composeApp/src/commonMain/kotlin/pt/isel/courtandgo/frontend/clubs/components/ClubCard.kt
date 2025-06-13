@@ -19,6 +19,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalTime
 import pt.isel.courtandgo.frontend.utils.dateUtils.formatTimeToHHmm
+import androidx.compose.foundation.Image
+import org.jetbrains.compose.resources.painterResource
+import courtandgo_frontend.composeapp.generated.resources.Res
+import courtandgo_frontend.composeapp.generated.resources.courts
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.height
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.draw.clip
 
 
 @Composable
@@ -30,28 +38,48 @@ fun ClubCard(
     hours: List<LocalTime>,
     onClick: () -> Unit
 ) {
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
             .clickable { onClick() },
-
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = name, style = MaterialTheme.typography.titleMedium)
-            Text(text = "$county, $district", style = MaterialTheme.typography.bodySmall)
 
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
-            ) {
-                Text(text = "Distancia Soon", style = MaterialTheme.typography.bodySmall)
-                Text(text = "Desde " + price + "€", style = MaterialTheme.typography.bodyMedium)
+            Row {
+                Image(
+                    painter = painterResource(Res.drawable.courts),
+                    contentDescription = "Court image",
+                    modifier = Modifier
+                        .width(80.dp)
+                        .height(80.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.Crop
+                )
+
+                Column(
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .weight(1f)
+                ) {
+                    Text(text = name, style = MaterialTheme.typography.titleMedium)
+                    Text(text = "$county, $district", style = MaterialTheme.typography.bodySmall)
+
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp)
+                    ) {
+                        Text(text = "Distância Soon", style = MaterialTheme.typography.bodySmall)
+                        Text(text = "Desde $price€", style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
             }
 
             Row(
                 modifier = Modifier
+                    .padding(top = 12.dp)
                     .horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -69,5 +97,6 @@ fun ClubCard(
         }
     }
 }
+
 
 

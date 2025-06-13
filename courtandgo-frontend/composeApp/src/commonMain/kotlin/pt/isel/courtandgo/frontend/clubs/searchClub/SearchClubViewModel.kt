@@ -2,6 +2,7 @@ package pt.isel.courtandgo.frontend.clubs.searchClub
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +16,15 @@ import pt.isel.courtandgo.frontend.reservations.reservationTimes.getDefaultSlots
 import pt.isel.courtandgo.frontend.service.ClubService
 import pt.isel.courtandgo.frontend.service.CourtService
 import pt.isel.courtandgo.frontend.service.ScheduleCourtsService
+import pt.isel.courtandgo.frontend.service.http.utils.CourtAndGoException
+
+sealed class ClubSearchUiState {
+    object Idle : ClubSearchUiState()
+    object Loading : ClubSearchUiState()
+    data class Success(val clubs: List<Club>) : ClubSearchUiState()
+    data class Error(val message: String) : ClubSearchUiState()
+}
+
 
 class SearchClubViewModel(
     private val clubService: ClubService,
@@ -25,10 +35,15 @@ class SearchClubViewModel(
     private val _clubs = MutableStateFlow<List<Club>>(emptyList())
     val clubs: StateFlow<List<Club>> = _clubs.asStateFlow()
 
+    private val _uiState = MutableStateFlow<ClubSearchUiState>(ClubSearchUiState.Idle)
+    val uiState: StateFlow<ClubSearchUiState> = _uiState.asStateFlow()
+
     private val _query = MutableStateFlow<String?>(null)
     val query: StateFlow<String?> = _query.asStateFlow()
+
     private val _selectedDistrict = MutableStateFlow<String?>(null)
     val selectedDistrict: StateFlow<String?> = _selectedDistrict.asStateFlow()
+
     private val _selectedCounty = MutableStateFlow<String?>(null)
     private val _selectedPostalCode = MutableStateFlow<String?>(null)
     private val _selectedCountry = MutableStateFlow<String?>(null)
@@ -74,15 +89,26 @@ class SearchClubViewModel(
 
     fun fetchClubs() {
         viewModelScope.launch {
-            val result = clubService.getClubsFiltered(
-                query = _query.value,
-                county = _selectedCounty.value,
-                district = _selectedDistrict.value,
-                country = _selectedCountry.value,
-                postalCode = _selectedPostalCode.value,
-                sport = _selectedSport.value
-            )
-            _clubs.value = result
+            _uiState.value = ClubSearchUiState.Loading
+            delay(700)
+            try {
+                val result = clubService.getClubsFiltered(
+                    query = _query.value,
+                    county = _selectedCounty.value,
+                    district = _selectedDistrict.value,
+                    country = _selectedCountry.value,
+                    postalCode = _selectedPostalCode.value,
+                    sport = _selectedSport.value
+                )
+                _clubs.value = result
+                _uiState.value = ClubSearchUiState.Success(result)
+
+            } catch (e: CourtAndGoException) {
+                _uiState.value = ClubSearchUiState.Error(e.message ?: "Erro ao pesquisar os clubes.")
+            }
+            catch (e: Exception) {
+                _uiState.value = ClubSearchUiState.Error(e.message ?: "Erro inesperado na pesquisa de clubes.")
+            }
         }
     }
 

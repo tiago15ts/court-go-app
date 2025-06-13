@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import pt.isel.courtandgo.frontend.authentication.AuthUiState
 import pt.isel.courtandgo.frontend.authentication.AuthViewModel
 import pt.isel.courtandgo.frontend.authentication.login.LoginScreen
 import pt.isel.courtandgo.frontend.authentication.register.RegisterDetailsScreen
@@ -80,7 +81,8 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
         MockCourtService(CourtRepoMock())
     ) }
 
-    val currentUser by authViewModel.currentUser.collectAsState()
+    val authState by authViewModel.uiState.collectAsState()
+    val currentUser = (authState as? AuthUiState.Success)?.user
 
     val isAuthenticated = when (screen.value) {
         is Screen.Login,
@@ -165,11 +167,11 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
                             profileViewModel.user.value?.let {
                                 authViewModel.setCurrentUser(it)
                             }
-                            screen.value = Screen.Profile
+                            screen.value = Screen.EditProfile
                         }
                     )
 
-                    Screen.Notifications -> EditNotificationsScreen(notificationVm, reservationVm.futureReservations.value)
+                    Screen.Notifications -> EditNotificationsScreen(notificationVm)
 
                     is Screen.SearchClub -> SearchClubScreen(
                         viewModel = searchClubViewModel,
@@ -242,7 +244,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
                         calendarOpener = calendarLinkOpener,
                         onBack = { screen.value = Screen.LastReservations },
                         onConfirmReservation = { reservation ->
-                            confirmationVm.confirmReservation(reservation)
+                            confirmationVm.confirmAfterReservation(reservation)
                             screen.value = Screen.LastReservations
                         },
                         onCancelReservation = { reservation ->

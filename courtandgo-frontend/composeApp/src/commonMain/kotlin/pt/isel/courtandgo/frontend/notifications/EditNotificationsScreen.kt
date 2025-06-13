@@ -7,14 +7,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import pt.isel.courtandgo.frontend.domain.Reservation
 
 @Composable
 fun EditNotificationsScreen(
-    viewModel: NotificationSettingsViewModel,
-    reservations: List<Reservation>
+    viewModel: NotificationSettingsViewModel
 ) {
-    val notificationsEnabled by viewModel.notificationsEnabled
+    val pushNotificationsEnabled by viewModel.notificationsEnabled
+    //val emailNotificationsEnabled by viewModel.emailNotificationsEnabled
+    //val smsNotificationsEnabled by viewModel.smsNotificationsEnabled
 
     Column(
         modifier = Modifier
@@ -27,36 +27,59 @@ fun EditNotificationsScreen(
             modifier = Modifier.padding(bottom = 24.dp)
         )
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    viewModel.setNotificationsEnabled(!notificationsEnabled, reservations)
-                }
-                .padding(vertical = 12.dp)
-        ) {
-            Text(
-                text = if (notificationsEnabled) "Ativadas" else "Desativadas",
-                modifier = Modifier.weight(1f),
-                style = MaterialTheme.typography.bodyLarge
-            )
-            Switch(
-                checked = notificationsEnabled,
-                onCheckedChange = {
-                    viewModel.setNotificationsEnabled(it, reservations)
-                }
-            )
-        }
+
+        Text(
+            text = "As notificações por push devem ser ativadas nas configurações do dispositivo.",
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        // Switch de notificações por Email
+        NotificationSettingItem(
+            label = "Notificações por Email",
+            checked = false,
+            onToggle = { /*viewModel.setEmailNotificationsEnabled(it)*/ },
+
+        )
+
+        // Switch de notificações por SMS
+        NotificationSettingItem(
+            label = "Notificações por SMS",
+            checked = false,
+            onToggle = { /*viewModel.setSmsNotificationsEnabled(it)*/ },
+
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        Text("As notificações são enviadas 24 horas antes do início da reserva.")
+    }
+}
+
+@Composable
+private fun NotificationSettingItem(
+    label: String,
+    checked: Boolean,
+    onToggle: (Boolean) -> Unit,
+    enabled: Boolean = true
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(enabled = enabled) { onToggle(!checked) }
+            .padding(vertical = 12.dp)
+    ) {
         Text(
-            text = if (notificationsEnabled)
-                "Receberá lembretes 24h antes das suas reservas."
-            else
-                "As notificações foram desativadas. Não receberá lembretes.",
-            style = MaterialTheme.typography.bodySmall
+            text = label,
+            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.bodyLarge
+        )
+        Switch(
+            checked = checked,
+            onCheckedChange = { onToggle(it) },
+            enabled = enabled
         )
     }
 }
+

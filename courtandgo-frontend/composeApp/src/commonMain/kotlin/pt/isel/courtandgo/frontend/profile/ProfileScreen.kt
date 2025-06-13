@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ProfileScreen(
     //viewModel: ProfileViewModel,
-    name : String, //todo fix this param
+    name : String,
     onEditProfile: () -> Unit,
     onNotifications: () -> Unit,
     onLogout: () -> Unit,

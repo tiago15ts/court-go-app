@@ -1,5 +1,6 @@
 package pt.isel.courtandgo.frontend.reservations.receiptReservation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,16 +10,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.skydoves.landscapist.coil3.CoilImage
+import courtandgo_frontend.composeapp.generated.resources.Res
+import courtandgo_frontend.composeapp.generated.resources.courts
+import org.jetbrains.compose.resources.painterResource
 import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.domain.Reservation
@@ -26,7 +27,6 @@ import pt.isel.courtandgo.frontend.reservations.components.InfoRow
 import pt.isel.courtandgo.frontend.utils.addEventToCalendar.AddToCalendarButton
 import pt.isel.courtandgo.frontend.utils.dateUtils.CalendarLinkOpener
 import pt.isel.courtandgo.frontend.utils.dateUtils.formatToDisplay
-import pt.isel.courtandgo.frontend.utils.addEventToCalendar.generateGoogleCalendarUrl
 import pt.isel.courtandgo.frontend.utils.dateUtils.timeZone
 import pt.isel.courtandgo.frontend.utils.formatLocationForDisplay
 
@@ -47,18 +47,13 @@ fun ReceiptReservationScreen(
     ) {
         Spacer(modifier = Modifier.height(16.dp))
 
-        CoilImage(
-            imageModel = { "https://americanpadelsystems.com/images/portfolio/projects-1.jpg" },
+        Image(
+            painter = painterResource(Res.drawable.courts),
+            contentDescription = "Courts image",
             modifier = Modifier
                 .fillMaxWidth()
-                .height(140.dp) // Altura reduzida
-                .clip(RoundedCornerShape(16.dp)),
-            loading = {
-                CircularProgressIndicator()
-            },
-            failure = {
-                Text("Erro ao carregar imagem")
-            },
+                .height(140.dp)
+                .clip(RoundedCornerShape(16.dp))
         )
 
         Spacer(modifier = Modifier.height(16.dp))

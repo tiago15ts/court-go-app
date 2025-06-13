@@ -14,6 +14,8 @@ import androidx.compose.ui.unit.dp
 import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.ui.padelColor
+import pt.isel.courtandgo.frontend.ui.tennisColor
 
 @Composable
 fun CourtDetailsSection(courtInfo: Court, clubInfo: Club) {
@@ -28,8 +30,8 @@ fun CourtDetailsSection(courtInfo: Court, clubInfo: Club) {
 
         // 🔹 Cor por tipo de desporto
         val (label, sportColor) = when (courtInfo.sportType) {
-            SportType.TENNIS -> "Ténis" to Color(0xFFDAF94D)
-            SportType.PADEL -> "Padel" to Color(0xFF0077B6)
+            SportType.TENNIS -> "Ténis" to tennisColor
+            SportType.PADEL -> "Padel" to padelColor
             SportType.BOTH -> TODO()
         }
 

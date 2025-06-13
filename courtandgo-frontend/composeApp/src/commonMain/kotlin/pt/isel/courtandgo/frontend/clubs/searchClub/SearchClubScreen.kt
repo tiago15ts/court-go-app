@@ -35,6 +35,9 @@ fun SearchClubScreen(
     val selectedSport by viewModel.selectedSport.collectAsState()
     val today = remember { Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date }
 
+    val uiState by viewModel.uiState.collectAsState()
+
+
     LaunchedEffect(Unit) {
         viewModel.fetchClubs()
         viewModel.loadTimesForAllClubs(today)
@@ -72,7 +75,7 @@ fun SearchClubScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            SearchClubField (viewModel)
+            SearchClubField(viewModel)
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -98,37 +101,72 @@ fun SearchClubScreen(
         }
 
 
-        items(clubs) { club ->
-            val hoursForCourt = clubHours[club.id] ?: emptyList()
 
-            val filteredHours = if (today == currentDate) {
-                hoursForCourt.filter { it > currentTime }
-            } else {
-                hoursForCourt
+        when (uiState) {
+            is ClubSearchUiState.Loading -> {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(24.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
             }
 
-            ClubCard(
-                name = club.name,
-                county = club.location.county,
-                district = club.location.district,
-                price = club.averagePrice.toString(),
-                hours = filteredHours,
-                onClick = { onClubClick(club) }
-            )
-        }
+            is ClubSearchUiState.Error -> {
+                item {
+                    Text(
+                        text = (uiState as ClubSearchUiState.Error).message,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(24.dp),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Red
+                    )
+                }
+            }
+
+            is ClubSearchUiState.Success -> {
+                items(clubs) { club ->
+                    val hoursForCourt = clubHours[club.id] ?: emptyList()
+
+                    val filteredHours = if (today == currentDate) {
+                        hoursForCourt.filter { it > currentTime }
+                    } else {
+                        hoursForCourt
+                    }
+
+                    ClubCard(
+                        name = club.name,
+                        county = club.location.county,
+                        district = club.location.district,
+                        price = club.averagePrice.toString(),
+                        hours = filteredHours,
+                        onClick = { onClubClick(club) }
+                    )
+                }
 
 
-        if (clubs.isEmpty()) {
-            item {
-                Text(
-                    text = "Nenhum clube encontrado.",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
-                )
+                if (clubs.isEmpty()) {
+                    item {
+                        Text(
+                            text = "Nenhum clube encontrado.",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp),
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color.Gray
+                        )
+                    }
+                }
+            }
+            ClubSearchUiState.Idle -> {
+
             }
         }
     }

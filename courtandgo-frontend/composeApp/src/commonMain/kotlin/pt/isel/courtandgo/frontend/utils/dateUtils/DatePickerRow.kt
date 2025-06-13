@@ -35,7 +35,7 @@ fun DatePickerRow(selectedDate: LocalDate, onDateSelected: (LocalDate) -> Unit) 
                     .clickable { onDateSelected(date) },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(date.dayOfWeek.name.take(3).lowercase().replaceFirstChar { it.uppercase() })
+                Text(diasSemanaPT[date.dayOfWeek.name] ?: "")
                 Box(
                     modifier = Modifier
                         .size(40.dp)

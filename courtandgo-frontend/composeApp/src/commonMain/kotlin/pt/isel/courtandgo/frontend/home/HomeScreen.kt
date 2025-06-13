@@ -9,19 +9,23 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import pt.isel.courtandgo.frontend.authentication.AuthUiState
 import pt.isel.courtandgo.frontend.authentication.AuthViewModel
 
 @Composable
-fun HomeScreen(vm :AuthViewModel, //todo fix this param
+fun HomeScreen(vm :AuthViewModel,
                onStartReservationClick: () -> Unit,
                onLastReservationsClick: () -> Unit,
                ) {
     val scrollState = rememberScrollState()
-    val userName = vm.currentUser.value?.name
+    val authState by vm.uiState.collectAsState()
 
+    val userName = (authState as? AuthUiState.Success)?.user?.name
 
     Column(
         modifier = Modifier

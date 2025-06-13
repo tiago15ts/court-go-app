@@ -119,15 +119,17 @@ fun RegisterFirstScreen(
         if (authReady) {
             GoogleButtonUiContainer(
                 onGoogleSignInResult = { googleUser ->
-                    googleUser?.let {
+                    if (googleUser != null) {
                         viewModel.authenticateWithGoogle(
-                            tokenId = it.idToken,
-                            name = it.displayName,
-                            email = it.email ?: "Atualize o seu email"
+                            tokenId = googleUser.idToken,
+                            name = googleUser.displayName,
+                            email = googleUser.email ?: "Atualize o seu email"
                         ) {
-                            onGoogleRegister(it.idToken)
+                            onGoogleRegister(googleUser.idToken)
                         }
-                    } ?: println("Register com Google falhou.")  //todo handle error
+                    } else {
+                        viewModel.setError("Falha ao registar-se com a conta Google.")
+                    }
                 }
             ) {
                 GoogleSignInButton(

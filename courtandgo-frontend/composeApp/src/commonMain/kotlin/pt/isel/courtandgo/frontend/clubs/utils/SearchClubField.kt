@@ -35,17 +35,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import pt.isel.courtandgo.frontend.clubs.searchClub.ClubSearchUiState
 import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubViewModel
 
 
 @Composable
 fun SearchClubField(viewModel: SearchClubViewModel) {
     var expanded by remember { mutableStateOf(false) }
-    //val query by viewModel.query.collectAsState()
+
     val allClubs by viewModel.clubs.collectAsState()
     var localQuery by remember { mutableStateOf("") }
 
     var textFieldSize by remember { mutableStateOf(Zero) }
+
+    val uiState by viewModel.uiState.collectAsState()
 
     val suggestions = run {
         val lowercaseQuery = localQuery.lowercase()
@@ -120,6 +123,14 @@ fun SearchClubField(viewModel: SearchClubViewModel) {
                 unfocusedIndicatorColor = Color.Transparent
             )
         )
+
+        if (uiState is ClubSearchUiState.Error) {
+            Text(
+                text = (uiState as ClubSearchUiState.Error).message,
+                color = Color.Red,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
 
         AnimatedVisibility(
             visible = expanded &&
