@@ -40,7 +40,6 @@ fun SearchClubScreen(
 
     LaunchedEffect(Unit) {
         viewModel.fetchClubs()
-        viewModel.loadTimesForAllClubs(today)
     }
 
     val clubHours by viewModel.clubHours.collectAsState()

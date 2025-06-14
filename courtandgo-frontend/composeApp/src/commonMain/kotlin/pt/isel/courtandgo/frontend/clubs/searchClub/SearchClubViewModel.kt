@@ -17,6 +17,7 @@ import pt.isel.courtandgo.frontend.service.ClubService
 import pt.isel.courtandgo.frontend.service.CourtService
 import pt.isel.courtandgo.frontend.service.ScheduleCourtsService
 import pt.isel.courtandgo.frontend.service.http.utils.CourtAndGoException
+import pt.isel.courtandgo.frontend.utils.dateUtils.currentDate
 
 sealed class ClubSearchUiState {
     object Idle : ClubSearchUiState()
@@ -90,7 +91,7 @@ class SearchClubViewModel(
     fun fetchClubs() {
         viewModelScope.launch {
             _uiState.value = ClubSearchUiState.Loading
-            delay(700)
+            delay(500)
             try {
                 val result = clubService.getClubsFiltered(
                     query = _query.value,
@@ -101,6 +102,8 @@ class SearchClubViewModel(
                     sport = _selectedSport.value
                 )
                 _clubs.value = result
+
+                loadTimesForAllClubs(currentDate)
                 _uiState.value = ClubSearchUiState.Success(result)
 
             } catch (e: CourtAndGoException) {
