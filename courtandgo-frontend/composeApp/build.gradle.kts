@@ -67,6 +67,12 @@ kotlin {
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
+
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+            implementation(kotlin("test-annotations-common"))
+            implementation(libs.kotlinx.coroutines.test.v1101)
+        }
     }
 }
 
@@ -80,6 +86,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     packaging {
         resources {
@@ -115,7 +122,12 @@ dependencies {
     implementation(libs.foundation.layout.android)
     implementation(libs.ui.android)
 
+
+    androidTestImplementation(libs.androidx.ui.test.junit4.android) // For Android UI tests
+    androidTestImplementation(libs.androidx.espresso.core)
+
     debugImplementation(compose.uiTooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 
 }
 

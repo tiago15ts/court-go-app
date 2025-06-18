@@ -6,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
 
@@ -22,6 +23,8 @@ fun CustomTextField(
         onValueChange = onValueChange,
         label = { Text(label) },
         singleLine = singleLine,
-        modifier = modifier.padding(vertical = 4.dp)
+        modifier = modifier
+            .padding(vertical = 4.dp)
+            .testTag(label)
     )
 }

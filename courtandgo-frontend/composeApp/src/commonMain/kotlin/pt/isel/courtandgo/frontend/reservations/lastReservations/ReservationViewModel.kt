@@ -116,6 +116,6 @@ class ReservationViewModel(
     }
 
     suspend fun getCourtInfoByCourtId(courtId: Int): Court {
-        return courtService.getCourtById(courtId) ?: throw IllegalArgumentException("Court not found")
+        return courtService.getCourtById(courtId) ?: throw IllegalArgumentException("Court não encontrado com ID: $courtId")
     }
 }

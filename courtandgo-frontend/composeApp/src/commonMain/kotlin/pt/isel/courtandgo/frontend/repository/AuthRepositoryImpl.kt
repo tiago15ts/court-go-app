@@ -46,7 +46,7 @@ class AuthRepositoryImpl(
             contact = phone,
             password = password
         )
-        return user ?: throw Exception("Registration failed")
+        return user
     }
 
     override suspend fun updateUser(user: User): User {

@@ -44,6 +44,7 @@ import pt.isel.courtandgo.frontend.utils.dateUtils.formatToDisplay
 import pt.isel.courtandgo.frontend.utils.dateUtils.nowTime
 import pt.isel.courtandgo.frontend.utils.dateUtils.timeZone
 import pt.isel.courtandgo.frontend.utils.formatLocationForDisplay
+import pt.isel.courtandgo.frontend.utils.toPortugueseName
 
 
 @Composable
@@ -99,7 +100,7 @@ fun ReservationDetailsScreen(
         Text("ID da Reserva: ${reservation.id}")
         Text("Clube: ${clubInfo.name}")
         Text("Campo: ${courtInfo.name}")
-        Text("Desporto: ${courtInfo.sportType.name.lowercase().replaceFirstChar { it.uppercase() }}")
+        Text("Desporto: ${courtInfo.sportType.toPortugueseName()}")
         Text("Início: ${formatToDisplay(reservation.startTime)}")
         Text("Fim: ${formatToDisplay(reservation.endTime)}")
         Text("Preço Estimado: ${reservation.estimatedPrice} €")

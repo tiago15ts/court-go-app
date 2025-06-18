@@ -31,6 +31,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Size.Companion.Zero
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,6 +54,7 @@ fun SearchClubField(viewModel: SearchClubViewModel) {
     val suggestions = run {
         val lowercaseQuery = localQuery.lowercase()
         val locations = mutableListOf<String>()
+        val locationSuggestions = mutableListOf<Pair<String, String>>()
         val clubNames = mutableListOf<String>()
 
         allClubs.forEach { club ->
@@ -60,17 +62,20 @@ fun SearchClubField(viewModel: SearchClubViewModel) {
                 clubNames.add(club.name)
             }
             if (club.location.district.contains(lowercaseQuery, ignoreCase = true)) {
-                locations.add(club.location.district)
+                locationSuggestions.add("district" to club.location.district)
             }
             if (club.location.county.contains(lowercaseQuery, ignoreCase = true)) {
-                locations.add(club.location.county)
+                locationSuggestions.add("county" to club.location.county)
             }
             if (club.location.postalCode.contains(lowercaseQuery, ignoreCase = true)) {
-                locations.add(club.location.postalCode)
+                locationSuggestions.add("postalCode" to club.location.postalCode)
+            }
+            if (club.location.country.contains(lowercaseQuery, ignoreCase = true)) {
+                locationSuggestions.add("country" to club.location.country)
             }
         }
 
-        locations.distinct() to clubNames.distinct()
+        locationSuggestions.distinct() to clubNames.distinct()
     }
 
     Column(
@@ -84,14 +89,15 @@ fun SearchClubField(viewModel: SearchClubViewModel) {
                 localQuery = it
                 expanded = it.isNotBlank()
 
-                if (it.isNotBlank()) {
+                if (it.isNotBlank() && viewModel.selectedDistrict.value == null
+                    && viewModel.selectedCounty.value == null && viewModel.selectedPostalCode.value == null
+                    && viewModel.selectedCountry.value == null) {
                     viewModel.updateDistrict(null)
                     viewModel.updateCounty(null)
                     viewModel.updatePostalCode(null)
                     viewModel.updateCountry(null)
+                    viewModel.updateQuery(it)
                 }
-
-                viewModel.updateQuery(it)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -103,6 +109,7 @@ fun SearchClubField(viewModel: SearchClubViewModel) {
                         expanded = true
                     }
                 }
+                .testTag("searchField")
                 .border(
                     width = 1.dp,
                     color = Color.Gray,
@@ -141,7 +148,8 @@ fun SearchClubField(viewModel: SearchClubViewModel) {
             Card(
                 modifier = Modifier
                     .width(textFieldSize.width.dp)
-                    .padding(horizontal = 5.dp),
+                    .padding(horizontal = 5.dp)
+                    .testTag("suggestionsCard"),
                 elevation = CardDefaults.cardElevation(15.dp),
             ) {
                 LazyColumn(
@@ -150,14 +158,27 @@ fun SearchClubField(viewModel: SearchClubViewModel) {
                     val (locations, clubNames) = suggestions
 
                     if (locations.isNotEmpty()) {
-                        item { Text("Localizações", modifier = Modifier.padding(8.dp), fontSize = 14.sp, fontWeight = FontWeight.Bold) }
-                        items(locations) { loc ->
-                            SuggestionItem(text = loc) {
-                                viewModel.updateDistrict(loc)
-                                viewModel.updateQuery(null)
-                                viewModel.updatePostalCode(null)
+                        item { Text("Localizações",
+                            modifier = Modifier.padding(8.dp), fontSize = 14.sp, fontWeight = FontWeight.Bold) }
+
+                        items(locations) { (type, value) ->
+                            SuggestionItem(text = value) {
+                                // Limpar tudo antes
+                                viewModel.updateDistrict(null)
                                 viewModel.updateCounty(null)
-                                localQuery = loc
+                                viewModel.updatePostalCode(null)
+                                viewModel.updateCountry(null)
+                                viewModel.updateQuery(null)
+
+                                // Atualizar apenas o campo correto
+                                when (type) {
+                                    "district" -> viewModel.updateDistrict(value)
+                                    "county" -> viewModel.updateCounty(value)
+                                    "postalCode" -> viewModel.updatePostalCode(value)
+                                    "country" -> viewModel.updateCountry(value)
+                                }
+
+                                localQuery = value
                                 expanded = false
                             }
                         }

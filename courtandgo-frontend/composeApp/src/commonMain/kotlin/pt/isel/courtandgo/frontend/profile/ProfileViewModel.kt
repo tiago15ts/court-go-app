@@ -17,25 +17,25 @@ sealed class ProfileUiState {
 }
 
 
-class ProfileViewModel(
+open class ProfileViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Idle)
-    val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
+    val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Idle)
+    open val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
 
     private val _user = MutableStateFlow<User?>(null)
-    val user: StateFlow<User?> = _user.asStateFlow()
+    open val user: StateFlow<User?> = _user.asStateFlow()
 
-    fun loadUser(user: User) {
+    open fun loadUser(user: User) {
         _user.value = user
     }
 
-    fun updateField(modify: (User) -> User) {
+    open fun updateField(modify: (User) -> User) {
         _user.value = _user.value?.let(modify)
     }
 
-    fun updateUser() {
+    open fun updateUser() {
         val current = _user.value ?: return
         _uiState.value = ProfileUiState.Loading
         viewModelScope.launch {
@@ -50,7 +50,7 @@ class ProfileViewModel(
         }
     }
 
-    fun resetUiState() {
+    open fun resetUiState() {
         _uiState.value = ProfileUiState.Idle
     }
 }

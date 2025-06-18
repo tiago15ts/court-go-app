@@ -63,9 +63,7 @@ fun ConfirmReservationScreen(
     val availableCourts = allCourts.filter { it.id in availableCourtsAtTime }
 
     LaunchedEffect(uiState, startDateTime) {
-
         viewModel.loadCourts(clubInfo.id, availableCourtsAtTime)
-
         when (val state = uiState) {
             is ConfirmReservationUiState.Success -> {
                 onReservationComplete(state.reservation)
@@ -87,6 +85,7 @@ fun ConfirmReservationScreen(
 
         Text("Clube: ${clubInfo.name}", style = MaterialTheme.typography.titleLarge)
         Text("Data: ${startDateTime.date}")
+        Text("Campo: ${courtInfo.name} (${courtInfo.surfaceType})")
         Text("Hora de início: ${startDateTime.time}")
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -95,7 +94,6 @@ fun ConfirmReservationScreen(
             is CourtAvailabilityUiState.Loading -> {
                 Text("A carregar disponibilidade...")
             }
-
             is CourtAvailabilityUiState.Error -> {
                 Text(
                     text = (availabilityUiState as CourtAvailabilityUiState.Error).message,

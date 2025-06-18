@@ -29,7 +29,7 @@ class CourtAvailabilityViewModel(
     private val courtService: CourtService
 ) : ViewModel() {
 
-    private val _uiState = mutableStateOf<CourtAvailabilityUiState>(CourtAvailabilityUiState.Loading)
+    val _uiState = mutableStateOf<CourtAvailabilityUiState>(CourtAvailabilityUiState.Loading)
     val uiState: State<CourtAvailabilityUiState> = _uiState
 
     private val _availableSlots = mutableStateOf<Map<Int, List<LocalTime>>>(emptyMap())

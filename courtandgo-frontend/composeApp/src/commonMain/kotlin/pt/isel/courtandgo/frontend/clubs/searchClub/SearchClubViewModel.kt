@@ -36,7 +36,7 @@ class SearchClubViewModel(
     private val _clubs = MutableStateFlow<List<Club>>(emptyList())
     val clubs: StateFlow<List<Club>> = _clubs.asStateFlow()
 
-    private val _uiState = MutableStateFlow<ClubSearchUiState>(ClubSearchUiState.Idle)
+    val _uiState = MutableStateFlow<ClubSearchUiState>(ClubSearchUiState.Idle)
     val uiState: StateFlow<ClubSearchUiState> = _uiState.asStateFlow()
 
     private val _query = MutableStateFlow<String?>(null)
@@ -46,8 +46,11 @@ class SearchClubViewModel(
     val selectedDistrict: StateFlow<String?> = _selectedDistrict.asStateFlow()
 
     private val _selectedCounty = MutableStateFlow<String?>(null)
+    val selectedCounty: StateFlow<String?> = _selectedCounty.asStateFlow()
     private val _selectedPostalCode = MutableStateFlow<String?>(null)
+    val selectedPostalCode: StateFlow<String?> = _selectedPostalCode.asStateFlow()
     private val _selectedCountry = MutableStateFlow<String?>(null)
+    val selectedCountry: StateFlow<String?> = _selectedCountry.asStateFlow()
 
     private val _selectedSport = MutableStateFlow(SportType.TENNIS)
     val selectedSport: StateFlow<SportType> = _selectedSport.asStateFlow()
@@ -115,7 +118,7 @@ class SearchClubViewModel(
         }
     }
 
-    fun loadTimesForAllClubs(date: LocalDate) {
+    private fun loadTimesForAllClubs(date: LocalDate) {
         viewModelScope.launch {
             val courtsList = _clubs.value
             val updated = courtsList.associate { club ->
