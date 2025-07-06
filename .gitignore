@@ -39,3 +39,8 @@ credentials.json
 # OS-specific files
 .DS_Store
 Thumbs.db
+*.jks
+*.apk
+CourtAndGo-Frontend/composeApp/release/output-metadata.json
+CourtAndGo-Frontend/composeApp/release/baselineProfiles/1/composeApp-release.dm
+CourtAndGo-Frontend/composeApp/release/baselineProfiles/0/composeApp-release.dm
