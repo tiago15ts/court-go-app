@@ -1,14 +1,16 @@
-import { SSTConfig } from "sst";
-import { API } from "./stacks/MyStack";
 
-export default {
-  config(_input) {
+
+export default $config({
+  app(input) {
     return {
-      name: "courtandgo",
-      region: "us-east-1",
+      name: "CourtAndGo",
+      removal: input?.stage === "production" ? "retain" : "remove",
+      protect: ["production"].includes(input?.stage),
+      home: "aws",
     };
   },
-  stacks(app) {
-    app.stack(API);
-  }
-} satisfies SSTConfig;
+  async run() {
+    await import("./infra/storage");
+    await import("./infra/api");
+  },
+});
