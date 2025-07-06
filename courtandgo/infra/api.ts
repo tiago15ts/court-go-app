@@ -26,7 +26,7 @@ api.route("POST /reservations", { handler: "functions/reservation/create.handler
 api.route("PUT /reservations/{id}", { handler: "functions/reservation/update.handler" }); // Update reservation by ID
 api.route("DELETE /reservations/cancel/{id}", { handler: "functions/reservation/delete.handler" }); // Cancel reservation by ID
 api.route("POST /reservations/confirm/{id}", { handler: "functions/reservation/confirm.handler" }); // Confirm reservation by ID
-api.route("POST /reservations/by-court-ids-and-date", { //confirmar se esta de acordo
+api.route("GET /reservations/filter", { //confirmar se esta de acordo
   handler: "functions/reservation/getByCourtIdsAndDate.handler",
 }); 
 

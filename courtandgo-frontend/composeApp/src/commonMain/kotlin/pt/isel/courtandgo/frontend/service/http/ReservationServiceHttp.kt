@@ -123,7 +123,7 @@ class ReservationServiceHttp(private val client : HttpClient) : ReservationServi
 
         return try {
             val response = client.get<List<ReservationDTO>>(
-                "/reservations?courtIds=$courtIdsParam&date=$dateParam"
+                "/reservations/filter?courtIds=$courtIdsParam&date=$dateParam"
             )
             response.map { it.toDomain() }
         } catch (e: CourtAndGoException) {

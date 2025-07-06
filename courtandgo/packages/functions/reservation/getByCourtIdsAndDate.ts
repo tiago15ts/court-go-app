@@ -1,9 +1,24 @@
 import { getReservationsByCourtIdsAndDate } from "../../core/queries/reservation";
 
 export async function handler(event) {
-  const body = JSON.parse(event.body || "{}");
+  const qs = event.queryStringParameters || {};
 
-  const { courtIds, date } = body;
+  // courtIds chega como string "1,2,3"
+  const courtIds = (qs.courtIds || "")
+    .split(",")
+    .map(id => parseInt(id))
+    .filter(id => !isNaN(id));
+
+  const date = qs.date;
+
+  // Validação opcional
+  if (!courtIds.length || !date) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: "Missing or invalid courtIds or date" }),
+    };
+  }
+
   const reservations = await getReservationsByCourtIdsAndDate(courtIds, date);
 
   return {
