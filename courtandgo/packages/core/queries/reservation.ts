@@ -46,7 +46,7 @@ export async function deleteReservation(id: number) {
   return true;
 }
 
-export async function confirmReservation(id: number) {
+export async function confirmReservation(id: number) { //confirmar o que entra na tabela
   await db.query(
     `UPDATE Reservation SET status = 'Confirmed' WHERE reservationId = $1`,
     [id]

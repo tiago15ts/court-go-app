@@ -9,8 +9,8 @@ export async function getClubsByDistrict(district: string) {
   const res = await db.query(
     `SELECT c.* FROM Club c
      JOIN Location l ON c.locationId = l.locationId
-     JOIN City ci ON l.cityId = ci.cityId
-     WHERE ci.name ILIKE $1`,
+     JOIN District di ON l.districtId = di.districtId
+     WHERE di.name ILIKE $1`,
     [district]
   );
   return res.rows;
@@ -30,8 +30,8 @@ export async function getClubsByCountry(country: string) {
   const res = await db.query(
     `SELECT c.* FROM Club c
      JOIN Location l ON c.locationId = l.locationId
-     JOIN City ci ON l.cityId = ci.cityId
-     JOIN Country co ON ci.countryId = co.countryId
+     JOIN District di ON l.districtId = di.districtId
+     JOIN Country co ON di.countryId = co.countryId
      WHERE co.name ILIKE $1`,
     [country]
   );
@@ -56,7 +56,7 @@ export async function getClubsByName(name: string) {
 
 export async function getClubsBySport(sport: string) {
   const res = await db.query(
-    `SELECT * FROM Club WHERE sportType = $1`,
+    `SELECT * FROM Club WHERE sports = $1`,
     [sport]
   );
   return res.rows;
@@ -106,7 +106,7 @@ export async function getClubsFiltered(params: {
   }
 
   if (params.county) {
-    conditions.push(`l.name ILIKE $${i++}`);
+    conditions.push(`l.county ILIKE $${i++}`);
     values.push(params.county);
   }
 
@@ -126,15 +126,15 @@ export async function getClubsFiltered(params: {
   }
 
   if (params.sport) {
-    conditions.push(`cl.sportType = $${i++}`);
+    conditions.push(`cl.sports = $${i++}`);
     values.push(params.sport);
   }
 
   const query = `
     SELECT cl.* FROM Club cl
     JOIN Location l ON cl.locationId = l.locationId
-    JOIN City ci ON l.cityId = ci.cityId
-    JOIN Country co ON ci.countryId = co.countryId
+    JOIN District di ON l.districtId = di.districtId
+    JOIN Country co ON di.countryId = co.countryId
     WHERE ${conditions.join(" AND ")}
   `;
 

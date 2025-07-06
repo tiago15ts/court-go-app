@@ -1,8 +1,8 @@
-import { getCourtsBySport } from "../../core/queries/court";
+import { getCourtsBySport as getCourtsBySportType } from "../../core/queries/court";
 
 export async function handler(event) {
   const { sport } = event.pathParameters || {};
-  const courts = await getCourtsBySport(sport);
+  const courts = await getCourtsBySportType(sport);
   return {
     statusCode: 200,
     body: JSON.stringify(courts),

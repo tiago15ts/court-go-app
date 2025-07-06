@@ -28,9 +28,9 @@ export async function registerUser(user: {
 
 export async function updateUser(user: any) {
   const res = await db.query(
-    `UPDATE Player SET name = $1, phone = $2, countryId = $3
+    `UPDATE Player SET name = $1, phone = $2, countryId = $3, birthdate = $5, weight = $6, height = $7, gender = $8
      WHERE playerId = $4 RETURNING *`,
-    [user.name, user.phone, user.countryId, user.playerId]
+    [user.name, user.phone, user.countryId, user.playerId, user.birthdate, user.weight, user.height, user.gender]
   );
   return res.rows[0];
 }

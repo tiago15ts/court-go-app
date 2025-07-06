@@ -34,7 +34,7 @@ export async function getSpecialScheduleById(scheduleId: number) {
 
 export async function createWeeklySchedule(data: {
   courtId: number;
-  dayOfWeek: number;
+  dayOfWeek: string; // 'Monday', 'Tuesday', etc.
   startTime: string;
   endTime: string;
 }) {
@@ -49,15 +49,16 @@ export async function createWeeklySchedule(data: {
 
 export async function createSpecialSchedule(data: {
   courtId: number;
-  date: string;
+  date: string; // yyyy-mm-dd format
   startTime: string;
   endTime: string;
+  working: boolean; // true = aberto nesse dia, false = fechado (feriado)
 }) {
   const res = await db.query(
-    `INSERT INTO SpecialSchedule (courtId, date, startTime, endTime)
-     VALUES ($1, $2, $3, $4)
+    `INSERT INTO SpecialSchedule (courtId, date, startTime, endTime, working)
+     VALUES ($1, $2, $3, $4, $5)
      RETURNING *`,
-    [data.courtId, data.date, data.startTime, data.endTime]
+    [data.courtId, data.date, data.startTime, data.endTime, data.working]
   );
   return res.rows[0];
 }

@@ -6,7 +6,7 @@ CREATE TABLE Country (
 
 
 CREATE TABLE District (
-    DistrictId SERIAL PRIMARY KEY,
+    districtId SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     countryId INT REFERENCES Country(countryId)
 );
@@ -15,7 +15,7 @@ CREATE TABLE District (
 CREATE TABLE Location (
     locationId SERIAL PRIMARY KEY,
     address VARCHAR(100) NOT NULL,
-    DistrictId INT REFERENCES District(DistrictId),
+    districtId INT REFERENCES District(districtId),
     county VARCHAR(100) NOT NULL,
     postalCode VARCHAR(20) NOT NULL,
     latitude DECIMAL(9,6),

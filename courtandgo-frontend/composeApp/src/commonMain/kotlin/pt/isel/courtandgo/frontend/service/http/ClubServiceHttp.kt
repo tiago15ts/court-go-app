@@ -50,7 +50,7 @@ class ClubServiceHttp(private val client: HttpClient) : ClubService {
 
     override suspend fun getClubsByPostalCode(postalCode: String): List<Club> {
         return try {
-            val response = client.get<List<ClubDTO>>("/clubs/postalCode/$postalCode")
+            val response = client.get<List<ClubDTO>>("/clubs/postal/$postalCode")
             response.map { it.toDomain() }
         } catch (e: CourtAndGoException) {
             throw InternalServerErrorException("Failed to fetch clubs by postal code: ${e.message}", e)

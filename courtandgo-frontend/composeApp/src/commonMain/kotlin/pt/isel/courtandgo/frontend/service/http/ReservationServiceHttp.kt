@@ -89,7 +89,7 @@ class ReservationServiceHttp(private val client : HttpClient) : ReservationServi
 
     override suspend fun deleteReservation(id: Int): Boolean {
         return try {
-            client.put<Unit>("/reservations/$id/cancel")
+            client.put<Unit>("/reservations/cancel/$id")
             true
         } catch (e: CourtAndGoException) {
             throw BadRequestException(
@@ -103,7 +103,7 @@ class ReservationServiceHttp(private val client : HttpClient) : ReservationServi
             val body = UpdateReservationStatusInput(status = ReservationStatus.CONFIRMED)
 
             client.put<Unit>(
-                url = "/reservations/$id/confirm",
+                url = "/reservations/confirm/$id",
                 body = body
             )
             true
