@@ -28,7 +28,7 @@ api.route("DELETE /reservations/cancel/{id}", { handler: "functions/reservation/
 api.route("POST /reservations/confirm/{id}", { handler: "functions/reservation/confirm.handler" }); // Confirm reservation by ID
 api.route("GET /reservations/filter", { //confirmar se esta de acordo
   handler: "functions/reservation/getByCourtIdsAndDate.handler",
-}); 
+});
 
 
 // === CourtService ===

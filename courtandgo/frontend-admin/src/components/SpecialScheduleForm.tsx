@@ -1,4 +1,13 @@
 import { useState } from "react";
+import {
+  Box,
+  TextField,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Typography,
+  Alert,
+} from "@mui/material";
 import { createSpecialSchedule } from "../api/schedule";
 
 export function SpecialScheduleForm({ courtId }: { courtId: number }) {
@@ -9,20 +18,73 @@ export function SpecialScheduleForm({ courtId }: { courtId: number }) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    await createSpecialSchedule({ courtId, date, startTime, endTime, working });
-    alert("Special schedule added");
+
+    // Se estiver fechado, não exigir startTime e endTime
+    if (!working) {
+      await createSpecialSchedule({ courtId, date, startTime: null, endTime: null, working });
+    } else {
+      await createSpecialSchedule({ courtId, date, startTime, endTime, working });
+    }
+
+    alert("Horário especial adicionado");
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input value={date} onChange={(e) => setDate(e.target.value)} placeholder="Date (YYYY-MM-DD)" />
-      <input value={startTime} onChange={(e) => setStartTime(e.target.value)} placeholder="Start time (HH:mm)" />
-      <input value={endTime} onChange={(e) => setEndTime(e.target.value)} placeholder="End time (HH:mm)" />
-      <label>
-        Working:
-        <input type="checkbox" checked={working} onChange={() => setWorking(!working)} />
-      </label>
-      <button type="submit">Add</button>
-    </form>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{ display: "flex", flexDirection: "column", gap: 2, maxWidth: 400 }}
+    >
+      <Typography variant="h6">Adicionar Horário Especial</Typography>
+
+      <TextField
+        label="Data"
+        type="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+        InputLabelProps={{ shrink: true }}
+        required
+      />
+
+      <TextField
+        label="Hora de Início"
+        type="time"
+        value={startTime}
+        onChange={(e) => setStartTime(e.target.value)}
+        InputLabelProps={{ shrink: true }}
+        required={working}
+        disabled={!working}
+      />
+
+      <TextField
+        label="Hora de Fim"
+        type="time"
+        value={endTime}
+        onChange={(e) => setEndTime(e.target.value)}
+        InputLabelProps={{ shrink: true }}
+        required={working}
+        disabled={!working}
+      />
+
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={working}
+            onChange={(e) => setWorking(e.target.checked)}
+          />
+        }
+        label="Está aberto o clube?"
+      />
+
+      {!working && (
+        <Alert severity="info" variant="outlined">
+          Como o clube está marcado como fechado, só precisa de preencher a data.
+        </Alert>
+      )}
+
+      <Button variant="contained" type="submit">
+        Adicionar
+      </Button>
+    </Box>
   );
 }

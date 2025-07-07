@@ -1,13 +1,13 @@
 // frontend/src/api/clubs.ts
-import { VITE_API_URL } from '../config';
+const API_URL = process.env.REACT_APP_API_URL;
 
 export async function getClubsByOwnerId(ownerId: number) {
-  const res = await fetch(`${VITE_API_URL}/clubs/owner/${ownerId}`);
+  const res = await fetch(`${API_URL}/clubs/owner/${ownerId}`);
   return await res.json();
 }
 
 export async function updateClub(club: any) {
-  const res = await fetch(`${VITE_API_URL}/clubs`, {
+  const res = await fetch(`${API_URL}/clubs`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(club),
@@ -16,7 +16,7 @@ export async function updateClub(club: any) {
 }
 
 export async function createClub(club: any) {
-  const res = await fetch(`${VITE_API_URL}/clubs`, {
+  const res = await fetch(`${API_URL}/clubs`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(club),

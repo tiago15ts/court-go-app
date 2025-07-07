@@ -8,7 +8,6 @@ export default function ClubEditor() {
   
   return (
     <div>
-      <h2>Your Clubs</h2>
       <ClubList ownerId={ownerId} />
       {selectedClub && <ClubForm club={selectedClub} />}
     </div>
