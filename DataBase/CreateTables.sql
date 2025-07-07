@@ -98,8 +98,8 @@ CREATE TABLE WeeklySchedule (
     scheduleId SERIAL PRIMARY KEY,
     courtId INT REFERENCES Court(courtId),
     dayOfWeek VARCHAR(50) NOT NULL,
-    startTime TIMESTAMP NOT NULL,
-    endTime TIMESTAMP NOT NULL
+    startTime TIMESTAMP,
+    endTime TIMESTAMP
 );
 
 CREATE TABLE SpecialSchedule (
