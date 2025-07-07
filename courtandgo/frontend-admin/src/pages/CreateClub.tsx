@@ -5,7 +5,6 @@ export default function CreateClub() {
 
   return (
     <div>
-      <h2>Criar Novo Clube</h2>
       <CreateClubForm />
     </div>
   );

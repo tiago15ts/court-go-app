@@ -101,7 +101,7 @@ export function CreateClubForm() {
       sx={{ maxWidth: 500, mx: "auto", p: 3, display: "flex", flexDirection: "column", gap: 2 }}
     >
       <Typography variant="h5" mb={2}>
-        Criar Clube
+        Adicionar novo clube à plataforma Court&Go
       </Typography>
 
       {error && <Alert severity="error">{error}</Alert>}

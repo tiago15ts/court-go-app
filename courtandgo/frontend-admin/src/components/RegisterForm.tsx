@@ -41,6 +41,10 @@ export function RegisterForm() {
   }
 
   return (
+    <>
+    <Typography variant="h5">
+    Bem vindo ao painel de donos de clubes da plataforma Court&Go
+  </Typography>
     <Box
       component="form"
       onSubmit={handleSubmit}
@@ -53,6 +57,8 @@ export function RegisterForm() {
         gap: 2,
       }}
     >
+
+
       <Typography variant="h5">Criar Conta</Typography>
 
       {error && <Alert severity="error">{error}</Alert>}
@@ -115,5 +121,6 @@ export function RegisterForm() {
         </Button>
       )}
     </Box>
+    </>
   );
 }
