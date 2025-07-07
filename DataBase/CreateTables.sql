@@ -49,15 +49,16 @@ CREATE TABLE Court (
     type VARCHAR(20) CHECK (type IN ('Tennis', 'Padel')),
     surfaceType VARCHAR(50),
     capacity INT,
+    pricePerHour DECIMAL(6,2),
 );
 
-CREATE TABLE Court_Price (
-    courtId INT REFERENCES Court(courtId),
-    startTime TIME,
-    endTime TIME,
-    pricePerHour DECIMAL(6,2),
-    PRIMARY KEY (courtId, startTime, endTime)
-);
+--CREATE TABLE Court_Price (
+--    courtId INT REFERENCES Court(courtId),
+--    startTime TIME,
+--    endTime TIME,
+--    pricePerHour DECIMAL(6,2),
+--    PRIMARY KEY (courtId, startTime, endTime)
+--);
 
 
 CREATE TABLE Player (
