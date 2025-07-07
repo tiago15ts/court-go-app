@@ -35,7 +35,7 @@ CREATE TABLE Owner (
 CREATE TABLE Club(
     clubId SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    sports VARCHAR(100) CHECK (type IN ('Tennis', 'Padel', 'Both')),
+    sports VARCHAR(100) CHECK (sports IN ('Tennis', 'Padel', 'Both')),
     nrOfCourts INT,
     locationId INT REFERENCES Location(locationId),
     ownerId INT REFERENCES Owner(ownerId),
