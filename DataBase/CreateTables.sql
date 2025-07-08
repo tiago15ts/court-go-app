@@ -84,7 +84,7 @@ CREATE TABLE Reservation (
     createdByPlayerId INT REFERENCES Player(playerId), -- jogador que fez a reserva
     startTime TIMESTAMP NOT NULL,
     endTime TIMESTAMP NOT NULL,
-    estimatePrice DECIMAL(8,2),
+    estimatedPrice DECIMAL(8,2),
     status VARCHAR(20)
 );
 
