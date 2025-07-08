@@ -85,7 +85,7 @@ CREATE TABLE Reservation (
     startTime TIMESTAMP NOT NULL,
     endTime TIMESTAMP NOT NULL,
     estimatedPrice DECIMAL(8,2),
-    status VARCHAR(20)
+    status VARCHAR(20) CHECK (status IN ('Pending', 'Confirmed', 'Cancelled'))
 );
 
 CREATE TABLE Player_Reservation (
