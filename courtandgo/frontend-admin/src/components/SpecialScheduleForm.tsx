@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { createSpecialSchedule } from "../api/schedule";
 
-export function SpecialScheduleForm({ courtId }: { courtId: number }) {
+export function SpecialScheduleForm({ clubId }: { clubId: number }) {
   const [date, setDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
@@ -21,9 +21,9 @@ export function SpecialScheduleForm({ courtId }: { courtId: number }) {
 
     // Se estiver fechado, não exigir startTime e endTime
     if (!working) {
-      await createSpecialSchedule({ courtId, date, startTime: null, endTime: null, working });
+      await createSpecialSchedule({ clubId, date, startTime: null, endTime: null, working });
     } else {
-      await createSpecialSchedule({ courtId, date, startTime, endTime, working });
+      await createSpecialSchedule({ clubId, date, startTime, endTime, working });
     }
 
     alert("Horário especial adicionado");

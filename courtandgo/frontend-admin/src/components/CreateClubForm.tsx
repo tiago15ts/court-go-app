@@ -5,177 +5,125 @@ import {
   Button,
   Typography,
   Alert,
+  MenuItem,
   FormControl,
   InputLabel,
   Select,
-  MenuItem,
 } from "@mui/material";
-import { createClub } from "../api/clubs";
+import { createClub, createLocation } from "../api";
 
-type SportType = "TENIS" | "PADEL" | "AMBOS";
+const sportOptions = [
+  { value: "TENNIS", label: "Ténis" },
+  { value: "PADEL", label: "Padel" },
+  { value: "BOTH", label: "Ambos" },
+];
 
-export function CreateClubForm() {
+export function CreateClubForm({ onClubCreated }: { onClubCreated: (clubId: number) => void }) {
   const [name, setName] = useState("");
-  const [sport, setSport] = useState<SportType>("TENIS");
-  const [numCourts, setNumCourts] = useState<number | "">("");
+  const [sport, setSport] = useState("TENNIS");
+  const [numCourts, setNumCourts] = useState(1);
+
+  // Campos de localização
   const [address, setAddress] = useState("");
   const [county, setCounty] = useState("");
   const [district, setDistrict] = useState("");
   const [postalCode, setPostalCode] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
 
-  function isValidNumber(value: number | ""): value is number {
-    return typeof value === "number" && !isNaN(value) && value > 0;
-  }
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setSuccess(false);
 
-    if (!name.trim()) {
-      setError("O nome do clube é obrigatório.");
-      return;
-    }
-
-    if (!isValidNumber(numCourts)) {
-      setError("Número de courts deve ser um número positivo.");
-      return;
-    }
-
-    if (!address.trim()) {
-      setError("A morada é obrigatória.");
-      return;
-    }
-
-    if (!county.trim()) {
-      setError("O concelho é obrigatório.");
-      return;
-    }
-
-    if (!district.trim()) {
-      setError("O distrito é obrigatório.");
-      return;
-    }
-
-    if (!postalCode.trim()) {
-      setError("O código postal é obrigatório.");
-      return;
-    }
-
     try {
-      const newClub = {
-        name,
-        sport,
-        numCourts,
+  
+      const location = await createLocation({
         address,
         county,
         district,
         postalCode,
-      };
+      });
 
-      const res = await createClub(newClub);
+      const club = await createClub({
+        name,
+        sports: sport,
+        nrOfCourts: numCourts,
+        ownerId: 1, // hardcoded
+        locationId: location.locationId,
+      });
 
-      if (res && res.clubId) {
-        setSuccess(true);
-        setName("");
-        setSport("TENIS");
-        setNumCourts("");
-        setAddress("");
-        setCounty("");
-        setDistrict("");
-        setPostalCode("");
-      } else {
-        setError("Erro ao criar o clube.");
-      }
+      setSuccess(true);
+      onClubCreated(club.clubId);
     } catch (err) {
-      setError("Erro ao comunicar com o servidor.");
+      setError("Erro ao criar clube ou localização.");
     }
   }
 
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{ maxWidth: 500, mx: "auto", p: 3, display: "flex", flexDirection: "column", gap: 2 }}
-    >
-      <Typography variant="h5" mb={2}>
-        Adicionar novo clube à plataforma Court&Go
-      </Typography>
-
-      {error && <Alert severity="error">{error}</Alert>}
+    <Box component="form" onSubmit={handleSubmit} sx={{ mb: 4 }}>
+      <Typography variant="h6" gutterBottom>Criar Clube</Typography>
       {success && <Alert severity="success">Clube criado com sucesso!</Alert>}
+      {error && <Alert severity="error">{error}</Alert>}
 
       <TextField
-        label="Nome do Clube"
+        label="Nome"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        required
-        fullWidth
+        fullWidth required sx={{ mb: 2 }}
       />
 
-      <FormControl fullWidth required>
+      <FormControl fullWidth required sx={{ mb: 2 }}>
         <InputLabel>Desporto</InputLabel>
         <Select
           value={sport}
           label="Desporto"
-          onChange={(e) => setSport(e.target.value as SportType)}
+          onChange={(e) => setSport(e.target.value)}
         >
-          <MenuItem value="TENNIS">Ténis</MenuItem>
-          <MenuItem value="PADEL">Padel</MenuItem>
-          <MenuItem value="BOTH">Ambos</MenuItem>
+          {sportOptions.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
 
       <TextField
         label="Número de Courts"
         type="number"
-        inputProps={{ min: 1 }}
         value={numCourts}
-        onChange={(e) => {
-          const val = e.target.value;
-          setNumCourts(val === "" ? "" : Number(val));
-        }}
-        required
-        fullWidth
+        onChange={(e) => setNumCourts(Number(e.target.value))}
+        fullWidth required sx={{ mb: 2 }}
       />
 
+      {/* Campos da localização */}
       <TextField
         label="Morada"
         value={address}
         onChange={(e) => setAddress(e.target.value)}
-        required
-        fullWidth
+        fullWidth required sx={{ mb: 2 }}
       />
-
       <TextField
         label="Concelho"
         value={county}
         onChange={(e) => setCounty(e.target.value)}
-        required
-        fullWidth
+        fullWidth required sx={{ mb: 2 }}
       />
-
       <TextField
         label="Distrito"
         value={district}
         onChange={(e) => setDistrict(e.target.value)}
-        required
-        fullWidth
+        fullWidth required sx={{ mb: 2 }}
       />
-
       <TextField
         label="Código Postal"
         value={postalCode}
         onChange={(e) => setPostalCode(e.target.value)}
-        required
-        fullWidth
+        fullWidth required sx={{ mb: 2 }}
       />
 
-      <Button type="submit" variant="contained" size="large">
-        Criar
-      </Button>
+      <Button type="submit" variant="contained">Criar Clube</Button>
     </Box>
   );
 }

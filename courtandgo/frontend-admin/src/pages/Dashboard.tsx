@@ -36,15 +36,6 @@ export default function Dashboard() {
         </Button>
 
         <Button
-          variant="contained"
-          component={RouterLink}
-          to="/schedules"
-          fullWidth
-        >
-          Editar Horários de Clube
-        </Button>
-
-        <Button
           variant="outlined"
           color="error"
           onClick={handleLogout}

@@ -20,7 +20,7 @@ const daysOfWeek = [
   { value: "SUNDAY", label: "Domingo" },
 ];
 
-export function WeeklyScheduleForm({ courtId }: { courtId: number }) {
+export function WeeklyScheduleForm({ clubId }: { clubId: number }) {
   const [schedules, setSchedules] = useState(
     daysOfWeek.map((day) => ({
       dayOfWeek: day.value,
@@ -56,7 +56,7 @@ export function WeeklyScheduleForm({ courtId }: { courtId: number }) {
 
     for (const schedule of schedules) {
       await createWeeklySchedule({
-        courtId,
+        clubId,
         dayOfWeek: schedule.dayOfWeek,
         startTime: schedule.open ? schedule.startTime : null,
         endTime: schedule.open ? schedule.endTime : null,

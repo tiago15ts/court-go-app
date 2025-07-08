@@ -141,3 +141,61 @@ export async function getClubsFiltered(params: {
   const res = await db.query(query, values);
   return res.rows;
 }
+
+export async function createClub(club: {
+  name: string;
+  sports: string;
+  nrOfCourts: number;
+  locationId: number;
+  ownerId: number;
+}) {
+  const res = await db.query(
+    `INSERT INTO Club (name, sports, nrOfCourts, locationId, ownerId)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING *`,
+    [club.name, club.sports, club.nrOfCourts, club.locationId, club.ownerId]
+  );
+  return res.rows[0];
+}
+
+export async function updateClub(club: {
+  clubId: number;
+  name?: string;
+  sports?: string;
+  nrOfCourts?: number;
+  locationId?: number;
+}) {
+  const fields: string[] = [];
+  const values: any[] = [];
+  let i = 1;
+
+  if (club.name !== undefined) {
+    fields.push(`name = $${i++}`);
+    values.push(club.name);
+  }
+  if (club.sports !== undefined) {
+    fields.push(`sports = $${i++}`);
+    values.push(club.sports);
+  }
+  if (club.nrOfCourts !== undefined) {
+    fields.push(`nrOfCourts = $${i++}`);
+    values.push(club.nrOfCourts);
+  }
+  if (club.locationId !== undefined) {
+    fields.push(`locationId = $${i++}`);
+    values.push(club.locationId);
+  }
+
+  if (fields.length === 0) {
+    throw new Error("Nenhum campo fornecido para atualizar.");
+  }
+
+
+  values.push(club.clubId);
+  const query = `UPDATE Club SET ${fields.join(", ")} WHERE clubId = $${values.length} RETURNING *`;
+
+  const res = await db.query(query, values);
+  return res.rows[0];
+}
+
+

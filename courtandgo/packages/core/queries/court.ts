@@ -21,9 +21,6 @@ export async function getCourtsByType(type: string) {
 }
 
 
-
-
-
 export async function getAllCourts() {
   const res = await db.query("SELECT * FROM Court");
   return res.rows;
@@ -127,4 +124,73 @@ export async function getCourtsByAddress(address: string) {
   );
   return res.rows;
 }
+
+export async function createCourt(court: {
+  name: string;
+  clubId: number;
+  type: string;
+  surfaceType: string;
+  capacity: number;
+  pricePerHour: number;
+}) {
+  const res = await db.query(
+    `INSERT INTO Court (name, clubId, type, surfaceType, capacity, pricePerHour)
+     VALUES ($1, $2, $3, $4, $5, $6)
+     RETURNING *`,
+    [court.name, court.clubId, court.type, court.surfaceType, court.capacity]
+  );
+  return res.rows[0];
+}
+
+export async function updateCourt(court: {
+  courtId: number;
+  name?: string;
+  clubId?: number;
+  type?: string;
+  surfaceType?: string;
+  capacity?: number;
+  pricePerHour?: number;
+}) {
+  const fields: string[] = [];
+  const values: any[] = [];
+  let i = 1;
+
+  if (court.name !== undefined) {
+    fields.push(`name = $${i++}`);
+    values.push(court.name);
+  }
+  if (court.clubId !== undefined) {
+    fields.push(`clubId = $${i++}`);
+    values.push(court.clubId);
+  }
+  if (court.type !== undefined) {
+    fields.push(`type = $${i++}`);
+    values.push(court.type);
+  }
+  if (court.surfaceType !== undefined) {
+    fields.push(`surfaceType = $${i++}`);
+    values.push(court.surfaceType);
+  }
+  if (court.capacity !== undefined) {
+    fields.push(`capacity = $${i++}`);
+    values.push(court.capacity);
+  }
+  if (court.pricePerHour !== undefined) {
+    fields.push(`pricePerHour = $${i++}`);
+    values.push(court.pricePerHour);
+  }
+
+  if (fields.length === 0) {
+    throw new Error("Nenhum campo para atualizar");
+  }
+
+  values.push(court.courtId);
+
+  const res = await db.query(
+    `UPDATE Court SET ${fields.join(", ")} WHERE courtId = $${i} RETURNING *`,
+    values
+  );
+  return res.rows[0];
+}
+
 
