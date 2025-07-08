@@ -9,7 +9,7 @@ import pt.isel.courtandgo.frontend.domain.ReservationStatus
 data class ReservationDTO(
     val reservationId: Int,
     val courtId: Int,
-    val userId: Int,
+    val createdByPlayerId: Int,
     val startTime: String,
     val endTime: String,
     val estimatedPrice: Double,
@@ -18,7 +18,7 @@ data class ReservationDTO(
     fun toDomain(): Reservation = Reservation(
         id = reservationId,
         courtId = courtId,
-        playerId = userId,
+        playerId = createdByPlayerId,
         startTime = LocalDateTime.parse(startTime),
         endTime = LocalDateTime.parse(endTime),
         estimatedPrice = estimatedPrice,
@@ -29,7 +29,7 @@ data class ReservationDTO(
         fun fromDomain(res: Reservation): ReservationDTO = ReservationDTO(
             reservationId = res.id,
             courtId = res.courtId,
-            userId = res.playerId,
+            createdByPlayerId = res.playerId,
             startTime = res.startTime.toString(),
             endTime = res.endTime.toString(),
             estimatedPrice = res.estimatedPrice,

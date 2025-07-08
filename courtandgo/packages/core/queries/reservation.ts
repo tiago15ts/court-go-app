@@ -1,70 +1,159 @@
 import { db } from "../db";
+import { mapRowToReservationDTO } from "../mappers/reservationMapper";
 
 export async function getAllReservations() {
-  const res = await db.query("SELECT * FROM Reservation");
-  return res.rows;
+  const query = `
+    SELECT
+      reservationId,
+      courtId,
+      createdByPlayerId,
+      startTime,
+      endTime,
+      estimatedPrice,
+      status
+    FROM Reservation
+  `;
+  const res = await db.query(query);
+  return res.rows.map(mapRowToReservationDTO);
 }
 
 export async function getReservationById(id: number) {
-  const res = await db.query("SELECT * FROM Reservation WHERE reservationId = $1", [id]);
-  return res.rows[0] || null;
+  const query = `
+    SELECT
+      reservationId,
+      courtId,
+      createdByPlayerId,
+      startTime,
+      endTime,
+      estimatedPrice,
+      status
+    FROM Reservation
+    WHERE reservationId = $1
+  `;
+  const res = await db.query(query, [id]);
+  if (res.rows.length === 0) return null;
+  return mapRowToReservationDTO(res.rows[0]);
 }
 
 export async function getReservationsForPlayer(playerId: number) {
-  const res = await db.query(
-    `SELECT r.* FROM Reservation r
-     JOIN Player_Reservation pr ON r.reservationId = pr.reservationId
-     WHERE pr.playerId = $1`,
-    [playerId]
-  );
-  return res.rows;
+  const query = `
+    SELECT
+      r.reservationId,
+      r.courtId,
+      r.createdByPlayerId,
+      r.startTime,
+      r.endTime,
+      r.estimatedPrice,
+      r.status
+    FROM Reservation r
+    JOIN Player_Reservation pr ON r.reservationId = pr.reservationId
+    WHERE pr.playerId = $1
+  `;
+  const res = await db.query(query, [playerId]);
+  return res.rows.map(mapRowToReservationDTO);
 }
 
-export async function createReservation(data: any) {
-  const res = await db.query(
-    `INSERT INTO Reservation (courtId, createdByPlayerId, startTime, endTime, estimatePrice, status)
+export async function createReservation(data: {
+  courtId: number;
+  userId: number;
+  startTime: string;      // ISO string
+  endTime: string;        // ISO string
+  estimatedPrice: number;
+  status: string;
+}) {
+  const res1 = await db.query(
+    `INSERT INTO Reservation (courtId, createdByPlayerId, startTime, endTime, estimatedPrice, status)
      VALUES ($1, $2, $3, $4, $5, $6)
      RETURNING *`,
-    [data.courtId, data.createdByPlayerId, data.startTime, data.endTime, data.estimatePrice, data.status]
+    [data.courtId, data.userId, data.startTime, data.endTime, data.estimatedPrice, data.status]
   );
-  return res.rows[0];
+  const reservation = mapRowToReservationDTO(res1.rows[0]);
+
+  await db.query(
+    `INSERT INTO Player_Reservation (reservationId, playerId, status)
+     VALUES ($1, $2, 'Pending')`,
+    [reservation.reservationId, data.userId]
+  );
+
+  return reservation;
 }
 
-export async function updateReservation(data: any) {
+export async function updateReservation(data: {
+  reservationId: number;
+  startTime: string;      // ISO string
+  endTime: string;        // ISO string
+  estimatedPrice: number;
+  status: string;
+}) {
   const res = await db.query(
     `UPDATE Reservation
-     SET startTime = $1, endTime = $2, estimatePrice = $3, status = $4
+     SET startTime = $1, endTime = $2, estimatedPrice = $3, status = $4
      WHERE reservationId = $5
      RETURNING *`,
-    [data.startTime, data.endTime, data.estimatePrice, data.status, data.reservationId]
+    [data.startTime, data.endTime, data.estimatedPrice, data.status, data.reservationId]
   );
-  return res.rows[0];
+
+  if (res.rows.length === 0) {
+    throw new Error(`Reservation with id ${data.reservationId} not found`);
+  }
+
+  return mapRowToReservationDTO(res.rows[0]);
 }
 
 export async function deleteReservation(id: number) {
-  await db.query("DELETE FROM Reservation WHERE reservationId = $1", [id]);
+  await db.query(
+    `DELETE FROM Player_Reservation WHERE reservationId = $1`,
+    [id]
+  );
+  const res = await db.query(
+    `DELETE FROM Reservation WHERE reservationId = $1 RETURNING *`,
+    [id]
+  );
+
+  if (res.rowCount === 0) {
+    throw new Error(`Reservation with id ${id} not found`);
+  }
   return true;
 }
 
-export async function confirmReservation(id: number) { //confirmar o que entra na tabela
-  await db.query(
-    `UPDATE Reservation SET status = 'Confirmed' WHERE reservationId = $1`,
+export async function confirmReservation(id: number) {
+  const res = await db.query(
+    `UPDATE Reservation SET status = 'Confirmed' WHERE reservationId = $1 RETURNING *`,
     [id]
   );
-  return true;
+  if (res.rowCount === 0) {
+    throw new Error(`Reservation with id ${id} not found`);
+  }
+  await db.query(
+    `UPDATE Player_Reservation SET status = 'CONFIRMED' WHERE reservationId = $1`,
+    [id]
+  );
+  return mapRowToReservationDTO(res.rows[0]);
 }
 
 export async function cancelReservation(id: number) {
-  await db.query(
-    `UPDATE Reservation SET status = 'Cancelled' WHERE reservationId = $1`,
+  const res = await db.query(
+    `UPDATE Reservation SET status = 'Cancelled' WHERE reservationId = $1 RETURNING *`,
     [id]
   );
-  return true;
+  if (res.rowCount === 0) {
+    throw new Error(`Reservation with id ${id} not found`);
+  }
+  await db.query(
+    `UPDATE Player_Reservation SET status = 'CANCELLED' WHERE reservationId = $1`,
+    [id]
+  );
+  return mapRowToReservationDTO(res.rows[0]);
 }
 
+
 export async function getReservationsByCourtId(courtId: number) {
-  const res = await db.query("SELECT * FROM Reservation WHERE courtId = $1", [courtId]);
-  return res.rows;
+  const res = await db.query(
+    `SELECT * FROM Reservation WHERE courtId = $1`,
+    [courtId]
+  );
+
+  return res.rows.map(mapRowToReservationDTO);
 }
 
 export async function getReservationsByDateRange(startDate: string, endDate: string) {
@@ -73,8 +162,10 @@ export async function getReservationsByDateRange(startDate: string, endDate: str
      WHERE startTime >= $1 AND endTime <= $2`,
     [startDate, endDate]
   );
-  return res.rows;
+
+  return res.rows.map(mapRowToReservationDTO);
 }
+
 
 export async function getReservationsByCourtIdsAndDate(
   courtIds: number[],
@@ -86,6 +177,6 @@ export async function getReservationsByCourtIdsAndDate(
      AND DATE(startTime) = $2`,
     [courtIds, date]
   );
-  return res.rows;
+  return res.rows.map(mapRowToReservationDTO);
 }
 

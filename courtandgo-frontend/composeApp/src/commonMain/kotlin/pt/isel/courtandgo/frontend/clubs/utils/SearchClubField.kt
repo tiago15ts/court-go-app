@@ -61,8 +61,8 @@ fun SearchClubField(viewModel: SearchClubViewModel) {
             if (club.name.contains(lowercaseQuery, ignoreCase = true)) {
                 clubNames.add(club.name)
             }
-            if (club.location.district.contains(lowercaseQuery, ignoreCase = true)) {
-                locationSuggestions.add("district" to club.location.district)
+            if (club.location.district.name.contains(lowercaseQuery, ignoreCase = true)) {
+                locationSuggestions.add("district" to club.location.district.name)
             }
             if (club.location.county.contains(lowercaseQuery, ignoreCase = true)) {
                 locationSuggestions.add("county" to club.location.county)
@@ -70,8 +70,8 @@ fun SearchClubField(viewModel: SearchClubViewModel) {
             if (club.location.postalCode.contains(lowercaseQuery, ignoreCase = true)) {
                 locationSuggestions.add("postalCode" to club.location.postalCode)
             }
-            if (club.location.country.contains(lowercaseQuery, ignoreCase = true)) {
-                locationSuggestions.add("country" to club.location.country)
+            if (club.location.country.name.contains(lowercaseQuery, ignoreCase = true)) {
+                locationSuggestions.add("country" to club.location.country.name)
             }
         }
 

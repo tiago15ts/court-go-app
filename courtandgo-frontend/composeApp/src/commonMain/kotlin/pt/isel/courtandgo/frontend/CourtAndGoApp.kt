@@ -19,6 +19,8 @@ import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubViewModel
 import pt.isel.courtandgo.frontend.components.LayoutScreen
 import pt.isel.courtandgo.frontend.components.bottomNavBar.Tab
 import pt.isel.courtandgo.frontend.domain.Club
+import pt.isel.courtandgo.frontend.domain.Country
+import pt.isel.courtandgo.frontend.domain.District
 import pt.isel.courtandgo.frontend.domain.Location
 import pt.isel.courtandgo.frontend.domain.SportType
 import pt.isel.courtandgo.frontend.home.HomeScreen
@@ -203,8 +205,8 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
                                                 id = -1,
                                                 address = "Unknown Address",
                                                 county = "Unknown County",
-                                                district = "Unknown District",
-                                                country = "Unknown Country",
+                                                district = District(-1,"Unknown District", -1),
+                                                country = Country(-1,"Unknown Country"),
                                                 postalCode = "0000-000",
                                                 latitude = 0.0,
                                                 longitude = 0.0

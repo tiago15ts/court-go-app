@@ -17,6 +17,8 @@ import pt.isel.courtandgo.frontend.domain.SportType
 import pt.isel.courtandgo.frontend.reservations.lastReservations.reservationDetails.ReservationDetailsScreen
 import pt.isel.courtandgo.frontend.utils.dateUtils.CalendarLinkOpener
 import org.junit.Assert.assertEquals
+import pt.isel.courtandgo.frontend.domain.Country
+import pt.isel.courtandgo.frontend.domain.District
 
 
 class ReservationDetailsScreenTest {
@@ -43,12 +45,15 @@ class ReservationDetailsScreenTest {
         status = ReservationStatus.PENDING
     )
 
+    private val countryPortugal = Country(1, "Portugal")
+    private val districtLisboa = District(1,"Lisboa", 1)
+
     private val fakeLocation = Location(
         id = 123,
         address = "Rua Teste",
         county = "Sintra",
-        district = "Lisboa",
-        country = "Portugal",
+        district = districtLisboa,
+        country = countryPortugal,
         postalCode = "2710-123",
         latitude = 38.8029,
         longitude = -9.3886

@@ -1,81 +1,117 @@
 import { db } from "../db";
+import { mapRowToClubDTO } from "../mappers/clubMapper";
+
+const BASE_CLUB_SELECT = `
+  SELECT 
+    c.clubId, c.name AS club_name, c.sports, c.nrOfCourts,
+    l.locationId AS location_id, l.address, l.county, l.postalCode,
+    l.latitude, l.longitude,
+    d.districtId AS district_id, d.name AS district_name, d.countryId AS district_country_id,
+    co.countryId AS country_id, co.name AS country_name
+  FROM Club c
+  JOIN Location l ON c.locationId = l.locationId
+  JOIN District d ON l.districtId = d.districtId
+  JOIN Country co ON d.countryId = co.countryId
+`;
 
 export async function getAllClubs() {
-  const res = await db.query("SELECT * FROM Club");
-  return res.rows;
+  const query = `
+    SELECT
+      cl.clubId,
+      cl.name AS club_name,
+      cl.sports,
+      cl.nrOfCourts,
+
+      l.locationId AS location_id,
+      l.address,
+      l.county,
+      l.postalCode,
+      l.latitude,
+      l.longitude,
+
+      d.districtId AS district_id,
+      d.name AS district_name,
+      d.countryId AS district_country_id,
+
+      c.countryId AS country_id,
+      c.name AS country_name
+
+    FROM Club cl
+    JOIN Location l ON cl.locationId = l.locationId
+    JOIN District d ON l.districtId = d.districtId
+    JOIN Country c ON d.countryId = c.countryId
+  `;
+
+  const res = await db.query(query);
+  return res.rows.map(mapRowToClubDTO);
 }
 
 export async function getClubsByDistrict(district: string) {
   const res = await db.query(
-    `SELECT c.* FROM Club c
-     JOIN Location l ON c.locationId = l.locationId
-     JOIN District di ON l.districtId = di.districtId
-     WHERE di.name ILIKE $1`,
+    `${BASE_CLUB_SELECT}
+    WHERE d.name ILIKE $1
+    `,
     [district]
   );
-  return res.rows;
+
+  return res.rows.map(mapRowToClubDTO);
 }
+
 
 export async function getClubsByCounty(county: string) {
   const res = await db.query(
-    `SELECT c.* FROM Club c
-     JOIN Location l ON c.locationId = l.locationId
-     WHERE l.name ILIKE $1`,
+    `${BASE_CLUB_SELECT} WHERE l.county ILIKE $1`,
     [county]
   );
-  return res.rows;
+  return res.rows.map(mapRowToClubDTO);
 }
 
 export async function getClubsByCountry(country: string) {
   const res = await db.query(
-    `SELECT c.* FROM Club c
-     JOIN Location l ON c.locationId = l.locationId
-     JOIN District di ON l.districtId = di.districtId
-     JOIN Country co ON di.countryId = co.countryId
-     WHERE co.name ILIKE $1`,
+    `${BASE_CLUB_SELECT} WHERE co.name ILIKE $1`,
     [country]
   );
-  return res.rows;
+  return res.rows.map(mapRowToClubDTO);
 }
 
 export async function getClubsByPostalCode(postalCode: string) {
   const res = await db.query(
-    `SELECT * FROM Club WHERE postalCode ILIKE $1`,
+    `${BASE_CLUB_SELECT} WHERE l.postalCode ILIKE $1`,
     [postalCode]
   );
-  return res.rows;
+  return res.rows.map(mapRowToClubDTO);
 }
 
 export async function getClubsByName(name: string) {
   const res = await db.query(
-    `SELECT * FROM Club WHERE name ILIKE $1`,
+    `${BASE_CLUB_SELECT} WHERE c.name ILIKE $1`,
     [`%${name}%`]
   );
-  return res.rows;
+  return res.rows.map(mapRowToClubDTO);
 }
 
 export async function getClubsBySport(sport: string) {
   const res = await db.query(
-    `SELECT * FROM Club WHERE sports = $1`,
+    `${BASE_CLUB_SELECT} WHERE c.sports = $1`,
     [sport]
   );
-  return res.rows;
+  return res.rows.map(mapRowToClubDTO);
 }
 
 export async function getClubById(id: number) {
   const res = await db.query(
-    `SELECT * FROM Club WHERE clubId = $1`,
+    `${BASE_CLUB_SELECT} WHERE c.clubId = $1`,
     [id]
   );
-  return res.rows[0] || null;
+  return res.rows.length > 0 ? mapRowToClubDTO(res.rows[0]) : null;
 }
 
 export async function getClubsByOwnerId(ownerId: number) {
   const res = await db.query(
-    `SELECT * FROM Club WHERE ownerId = $1`,
+    `${BASE_CLUB_SELECT} WHERE c.ownerId = $1`,
     [ownerId]
   );
-  return res.rows;
+  return res.rows.map(mapRowToClubDTO);
 }
 
 export async function getClubIdByCourtId(courtId: number) {
@@ -111,7 +147,7 @@ export async function getClubsFiltered(params: {
   }
 
   if (params.district) {
-    conditions.push(`ci.name ILIKE $${i++}`);
+    conditions.push(`di.name ILIKE $${i++}`);
     values.push(params.district);
   }
 
@@ -121,7 +157,7 @@ export async function getClubsFiltered(params: {
   }
 
   if (params.postalCode) {
-    conditions.push(`cl.postalCode ILIKE $${i++}`);
+    conditions.push(`l.postalCode ILIKE $${i++}`);
     values.push(params.postalCode);
   }
 
@@ -131,17 +167,15 @@ export async function getClubsFiltered(params: {
   }
 
   const query = `
-    SELECT cl.* FROM Club cl
-    JOIN Location l ON cl.locationId = l.locationId
-    JOIN District di ON l.districtId = di.districtId
-    JOIN Country co ON di.countryId = co.countryId
+    ${BASE_CLUB_SELECT}
     WHERE ${conditions.join(" AND ")}
   `;
 
   const res = await db.query(query, values);
-  return res.rows;
+  return res.rows.map(mapRowToClubDTO);
 }
 
+//queries exclusivas para admins.
 export async function createClub(club: {
   name: string;
   sports: string;

@@ -142,7 +142,7 @@ fun SearchClubScreen(
                     ClubCard(
                         name = club.name,
                         county = club.location.county,
-                        district = club.location.district,
+                        district = club.location.district.name,
                         price = club.averagePrice.toString(),
                         hours = filteredHours,
                         onClick = { onClubClick(club) }

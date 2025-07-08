@@ -90,12 +90,12 @@ export async function getLocationsByClubId(clubId: number) {
   return new Promise<any>((resolve, reject) => {
     setTimeout(() => {
       const club = fakeClubs.find(c => c.clubId === clubId);
-      if (club) {
-        const location = fakeLocations.find(l => l.locationId === club.locationId);
-        resolve(location);
-      } else {
-        reject(new Error("Clube não encontrado"));
-      }
+      if (!club) return reject(new Error("Clube não encontrado"));
+
+      const location = fakeLocations.find(l => l.locationId === club.locationId);
+      if (!location) return reject(new Error("Localização não encontrada"));
+
+      resolve(location);
     }, 300);
   });
 }

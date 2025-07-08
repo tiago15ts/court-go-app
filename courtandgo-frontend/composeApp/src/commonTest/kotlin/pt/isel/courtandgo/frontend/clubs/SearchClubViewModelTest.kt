@@ -40,7 +40,7 @@ class SearchClubViewModelTest {
         val state = viewModel.uiState.first { it is ClubSearchUiState.Success }
         assertTrue(state is ClubSearchUiState.Success)
         val clubs = (state as ClubSearchUiState.Success).clubs
-        assertTrue(clubs.all { it.sportType == SportType.TENNIS && it.location.district == "Lisboa" })
+        assertTrue(clubs.all { it.sportType == SportType.TENNIS && it.location.district.name == "Lisboa" })
     }
 
     @Test
@@ -68,7 +68,7 @@ class SearchClubViewModelTest {
         val clubs = (state as ClubSearchUiState.Success).clubs
 
         assertTrue(clubs.all {
-            it.location.district == "Porto" &&
+            it.location.district.name == "Porto" &&
                     it.location.county == "Matosinhos" &&
                     it.location.postalCode.startsWith("4450")
         })
@@ -82,7 +82,7 @@ class SearchClubViewModelTest {
         val state = viewModel.uiState.first { it is ClubSearchUiState.Success }
         val clubs = (state as ClubSearchUiState.Success).clubs
 
-        assertTrue(clubs.all { it.location.country == "Portugal" })
+        assertTrue(clubs.all { it.location.country.name == "Portugal" })
     }
 
     @Test

@@ -4,7 +4,7 @@ package pt.isel.courtandgo.frontend.service.http.models.club
 import kotlinx.serialization.Serializable
 import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.domain.SportType
-import pt.isel.courtandgo.frontend.service.http.models.LocationDTO
+import pt.isel.courtandgo.frontend.service.http.models.location.LocationDTO
 
 @Serializable
 data class ClubDTO(

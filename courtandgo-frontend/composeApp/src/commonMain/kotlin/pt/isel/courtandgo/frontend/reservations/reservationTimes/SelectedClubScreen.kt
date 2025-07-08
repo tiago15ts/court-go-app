@@ -30,7 +30,7 @@ fun SelectedClubScreen(
 
         CourtHeader(
             courtName = clubInfo.name,
-            location = clubInfo.location.district,
+            location = clubInfo.location.district.name,
             onBack = onBack
         )
 

@@ -9,7 +9,9 @@ import kotlinx.datetime.LocalTime
 import org.junit.Rule
 import org.junit.Test
 import pt.isel.courtandgo.frontend.domain.Club
+import pt.isel.courtandgo.frontend.domain.Country
 import pt.isel.courtandgo.frontend.domain.Court
+import pt.isel.courtandgo.frontend.domain.District
 import pt.isel.courtandgo.frontend.domain.Location
 import pt.isel.courtandgo.frontend.domain.SportType
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.CourtAvailabilityViewModel
@@ -37,12 +39,15 @@ class SelectedClubScreenTest {
         time = LocalTime(11, 0)
     )
 
+    private val countryPortugal = Country(1, "Portugal")
+    private val districtLisboa = District(1,"Lisboa", 1)
+
     private val fakeLocation = Location(
         id = 123,
         address = "Rua Teste",
         county = "Sintra",
-        district = "Lisboa",
-        country = "Portugal",
+        district = districtLisboa,
+        country = countryPortugal,
         postalCode = "2710-123",
         latitude = 38.8029,
         longitude = -9.3886
@@ -93,7 +98,7 @@ class SelectedClubScreenTest {
         }
 
         composeTestRule.onNodeWithText(fakeClub.name).assertExists()
-        composeTestRule.onNodeWithText(fakeClub.location.district).assertExists()
+        composeTestRule.onNodeWithText(fakeClub.location.district.name).assertExists()
         composeTestRule.onNodeWithText("Detalhes").assertExists()
         composeTestRule.onNodeWithText("Reservar").assertExists()
         composeTestRule.onNodeWithText("Mostrar apenas as horas disponíveis").assertExists()

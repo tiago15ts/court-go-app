@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getClubById } from "../api";
+import { getClubById, getLocationsByClubId } from "../api";
 import { UpdateClubForm } from "../components/UpdateClubForm";
 import { CircularProgress, Typography, Box } from "@mui/material";
 
@@ -10,18 +10,26 @@ export default function UpdateClubPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchClub() {
+    async function fetchClubAndLocation() {
       try {
-        const data = await getClubById(Number(clubId));
-        setClub(data);
+        const clubData = await getClubById(Number(clubId));
+
+        // carrega a localização correta com base no locationId
+        const locationData = await getLocationsByClubId(clubData.locationId);
+
+        // junta a localização ao clube antes de passar ao form
+        setClub({
+          ...clubData,
+          location: locationData,
+        });
       } catch (err) {
-        console.error("Erro ao obter clube:", err);
+        console.error("Erro ao obter clube ou localização:", err);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchClub();
+    fetchClubAndLocation();
   }, [clubId]);
 
   if (loading) {

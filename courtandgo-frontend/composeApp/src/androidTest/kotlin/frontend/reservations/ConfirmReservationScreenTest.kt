@@ -8,7 +8,9 @@ import kotlinx.datetime.LocalTime
 import org.junit.Rule
 import org.junit.Test
 import pt.isel.courtandgo.frontend.domain.Club
+import pt.isel.courtandgo.frontend.domain.Country
 import pt.isel.courtandgo.frontend.domain.Court
+import pt.isel.courtandgo.frontend.domain.District
 import pt.isel.courtandgo.frontend.domain.Location
 import pt.isel.courtandgo.frontend.domain.SportType
 import pt.isel.courtandgo.frontend.reservations.confirmReservation.ConfirmReservationScreen
@@ -45,12 +47,15 @@ class ConfirmReservationScreenTest {
         )
     }
 
+    private val countryPortugal = Country(1, "Portugal")
+    private val districtLisboa = District(1,"Lisboa", 1)
+
     private val fakeLocation = Location(
         id = 123,
         address = "Rua Teste",
         county = "Sintra",
-        district = "Lisboa",
-        country = "Portugal",
+        district = districtLisboa,
+        country = countryPortugal,
         postalCode = "2710-123",
         latitude = 38.8029,
         longitude = -9.3886
