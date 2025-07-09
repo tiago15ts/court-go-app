@@ -1,11 +1,13 @@
 import { db } from "../db";
+import { mapRowToSpecialScheduleDTO } from "../mappers/specialScheduleMapper";
+import { mapRowToWeeklyScheduleDTO } from "../mappers/weeklyScheduleMapper";
 
 export async function getWeeklySchedulesForCourt(courtId: number) {
   const res = await db.query(
     "SELECT * FROM WeeklySchedule WHERE courtId = $1",
     [courtId]
   );
-  return res.rows;
+  return res.rows.map(mapRowToWeeklyScheduleDTO);
 }
 
 export async function getSpecialSchedulesForCourt(courtId: number) {
@@ -13,7 +15,7 @@ export async function getSpecialSchedulesForCourt(courtId: number) {
     "SELECT * FROM SpecialSchedule WHERE courtId = $1",
     [courtId]
   );
-  return res.rows;
+  return res.rows.map(mapRowToSpecialScheduleDTO);
 }
 
 export async function getWeeklyScheduleById(scheduleId: number) {
@@ -21,7 +23,7 @@ export async function getWeeklyScheduleById(scheduleId: number) {
     "SELECT * FROM WeeklySchedule WHERE scheduleId = $1",
     [scheduleId]
   );
-  return res.rows[0] || null;
+  return res.rows.length > 0 ? mapRowToWeeklyScheduleDTO(res.rows[0]) : null;
 }
 
 export async function getSpecialScheduleById(scheduleId: number) {
@@ -29,9 +31,10 @@ export async function getSpecialScheduleById(scheduleId: number) {
     "SELECT * FROM SpecialSchedule WHERE scheduleId = $1",
     [scheduleId]
   );
-  return res.rows[0] || null;
+    return res.rows.length > 0 ? mapRowToSpecialScheduleDTO(res.rows[0]) : null;
 }
 
+//funcoes exclusivas de admin
 export async function createWeeklySchedule(data: {
   courtId: number;
   dayOfWeek: string; // 'Monday', 'Tuesday', etc.

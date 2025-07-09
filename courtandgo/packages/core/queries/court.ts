@@ -1,4 +1,5 @@
 import { db } from "../db";
+import { mapRowToCourtDTO } from '../mappers/courtMapper';
 
 export async function getCourtsByClub(clubId: number) {
   const res = await db.query(
@@ -7,23 +8,23 @@ export async function getCourtsByClub(clubId: number) {
      WHERE cl.clubId = $1`,
     [clubId]
   );
-  return res.rows;
+  return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtById(id: number) {
   const res = await db.query("SELECT * FROM Court WHERE courtId = $1", [id]);
-  return res.rows[0] || null;
+  return res.rows.length > 0 ? mapRowToCourtDTO(res.rows[0]) : null;
 }
 
 export async function getCourtsByType(type: string) {
   const res = await db.query("SELECT * FROM Court WHERE type = $1", [type]);
-  return res.rows;
+  return res.rows.map(mapRowToCourtDTO);
 }
 
 
 export async function getAllCourts() {
   const res = await db.query("SELECT * FROM Court");
-  return res.rows;
+  return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByDistrict(district: string) {
@@ -35,12 +36,12 @@ export async function getCourtsByDistrict(district: string) {
      WHERE di.name ILIKE $1`,
     [district]
   );
-  return res.rows;
+  return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsBySport(sport: string) {
   const res = await db.query("SELECT * FROM Court WHERE type = $1", [sport]);
-  return res.rows;
+  return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsFiltered(district: string, sport: string) {
@@ -52,22 +53,22 @@ export async function getCourtsFiltered(district: string, sport: string) {
      WHERE di.name ILIKE $1 AND c.type = $2`,
     [district, sport]
   );
-  return res.rows;
+  return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByOwnerId(ownerId: number) {
   const res = await db.query("SELECT * FROM Court WHERE ownerId = $1", [ownerId]);
-  return res.rows;
+  return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByLocationId(locationId: number) {
   const res = await db.query("SELECT * FROM Court WHERE locationId = $1", [locationId]);
-  return res.rows;
+  return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByName(name: string) {
   const res = await db.query("SELECT * FROM Court WHERE name ILIKE $1", [`%${name}%`]);
-  return res.rows;
+  return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByCity(city: string) {
@@ -78,7 +79,7 @@ export async function getCourtsByCity(city: string) {
      WHERE ci.name ILIKE $1`,
     [city]
   );
-  return res.rows;
+  return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByCountry(country: string) {
@@ -90,7 +91,7 @@ export async function getCourtsByCountry(country: string) {
      WHERE co.name ILIKE $1`,
     [country]
   );
-  return res.rows;
+  return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByRegion(region: string) {
@@ -102,7 +103,7 @@ export async function getCourtsByRegion(region: string) {
      WHERE r.name ILIKE $1`,
     [region]
   );
-  return res.rows;
+  return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByPostalCode(postalCode: string) {
@@ -112,7 +113,7 @@ export async function getCourtsByPostalCode(postalCode: string) {
      WHERE l.postalCode ILIKE $1`,
     [postalCode]
   );
-  return res.rows;
+  return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByAddress(address: string) {
@@ -122,9 +123,11 @@ export async function getCourtsByAddress(address: string) {
      WHERE l.address ILIKE $1`,
     [`%${address}%`]
   );
-  return res.rows;
+  return res.rows.map(mapRowToCourtDTO);
 }
 
+
+//funcoes exclusivas para admin
 export async function createCourt(court: {
   name: string;
   clubId: number;

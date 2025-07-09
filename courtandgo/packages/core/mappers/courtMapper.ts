@@ -1,3 +1,4 @@
+
 export function mapRowToCourtDTO(row: any) {
   return {
     id: row.courtid,
