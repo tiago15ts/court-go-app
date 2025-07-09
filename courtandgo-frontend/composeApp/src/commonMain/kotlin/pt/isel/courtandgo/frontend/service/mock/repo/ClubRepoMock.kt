@@ -4,7 +4,8 @@ import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.domain.Country
 import pt.isel.courtandgo.frontend.domain.District
 import pt.isel.courtandgo.frontend.domain.Location
-import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.domain.SportTypeCourt
+import pt.isel.courtandgo.frontend.domain.SportsClub
 
 class ClubRepoMock {
     private val countryPortugal = Country(1, "Portugal")
@@ -25,7 +26,7 @@ class ClubRepoMock {
                 latitude = 38.8000,
                 longitude = -9.4000
             ),
-            sportType = SportType.TENNIS, nrOfCourts = 4, clubOwnerId = 1, 15.0
+            sportsClub = SportsClub.Tennis, nrOfCourts = 4, clubOwnerId = 1, 15.0
         ),
         Club(2, "Lisboa Rackets",
             location = Location(
@@ -38,7 +39,7 @@ class ClubRepoMock {
                 latitude = 38.7200,
                 longitude = -9.1500
             ),
-            sportType = SportType.PADEL, nrOfCourts = 4, clubOwnerId = 2, 10.0
+            sportsClub = SportsClub.Padel, nrOfCourts = 4, clubOwnerId = 2, 10.0
         ),
         Club(3, "Porto Club Padel",
             location = Location(
@@ -51,7 +52,7 @@ class ClubRepoMock {
                 latitude = 41.1500,
                 longitude = -8.6100
             ),
-            sportType = SportType.PADEL, nrOfCourts = 6, clubOwnerId = 3, 12.0
+            sportsClub = SportsClub.Padel, nrOfCourts = 6, clubOwnerId = 3, 12.0
         ),
         Club(4, "Estoril Country Club",
             location = Location(
@@ -64,7 +65,7 @@ class ClubRepoMock {
                 latitude = 38.7000,
                 longitude = -9.4000
             ),
-            sportType = SportType.TENNIS, nrOfCourts = 4, clubOwnerId = 4, 20.0
+            sportsClub = SportsClub.Tennis, nrOfCourts = 4, clubOwnerId = 4, 20.0
         ),
         Club(5, "Braga Tennis Club",
             location = Location(
@@ -77,7 +78,7 @@ class ClubRepoMock {
                 latitude = 41.5500,
                 longitude = -8.4200
             ),
-            sportType = SportType.TENNIS, nrOfCourts = 4, clubOwnerId = 5, 13.5
+            sportsClub = SportsClub.Tennis, nrOfCourts = 4, clubOwnerId = 5, 13.5
         )
     )
 
@@ -103,8 +104,8 @@ class ClubRepoMock {
         return mockClubs.filter { it.name.contains(name, ignoreCase = true) }
     }
 
-    fun getClubsBySport(sport: SportType): List<Club> {
-        return mockClubs.filter { it.sportType == sport }
+    fun getClubsBySport(sport: SportsClub): List<Club> {
+        return mockClubs.filter { it.sportsClub == sport }
     }
 
     /*
@@ -133,16 +134,22 @@ class ClubRepoMock {
         district: String? = null,
         country: String? = null,
         postalCode: String? = null,
-        sport: SportType
+        sport: SportsClub
     ): List<Club> {
-        return mockClubs.filter { club ->
-            (query == null || listOf(club.name, club.location.district.name, club.location.county, club.location.postalCode)
-                .any { it.contains(query, ignoreCase = true) }) &&
-                    (district == null || club.location.district.equals(district)) &&
+        val clubs = mockClubs.filter { club ->
+            (query == null || listOf(
+                club.name,
+                club.location.district.name,
+                club.location.county,
+                club.location.postalCode,
+                club.location.country.name
+            ).any { it.contains(query, ignoreCase = true) }) &&
+                    (district == null || club.location.district.name.equals(district, ignoreCase = true)) &&
                     (county == null || club.location.county.equals(county, ignoreCase = true)) &&
-                    (country == null || club.location.country.equals(country)) &&
+                    (country == null || club.location.country.name.equals(country, ignoreCase = true)) &&
                     (postalCode == null || club.location.postalCode.startsWith(postalCode)) &&
-                    (club.sportType == sport)
+                    (club.sportsClub == sport)
         }
+        return clubs
     }
 }

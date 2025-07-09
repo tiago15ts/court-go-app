@@ -2,13 +2,13 @@ package pt.isel.courtandgo.frontend.service.http.models.court
 
 import kotlinx.serialization.Serializable
 import pt.isel.courtandgo.frontend.domain.Court
-import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.domain.SportTypeCourt
 
 @Serializable
 data class CourtDTO(
     val id: Int,
     val name: String,
-    val sportType: SportType,
+    val sportTypeCourt: SportTypeCourt,
     val surfaceType: String?,
     val capacity: Int,
     val price: Double,
@@ -17,7 +17,7 @@ data class CourtDTO(
     fun toDomain(): Court = Court(
         id = id,
         name = name,
-        sportType = sportType,
+        sportTypeCourt = sportTypeCourt,
         surfaceType = surfaceType,
         capacity = capacity,
         price = price,
@@ -28,7 +28,7 @@ data class CourtDTO(
         fun fromDomain(court: Court): CourtDTO = CourtDTO(
             id = court.id,
             name = court.name,
-            sportType = court.sportType,
+            sportTypeCourt = court.sportTypeCourt,
             surfaceType = court.surfaceType,
             capacity = court.capacity,
             price = court.price,

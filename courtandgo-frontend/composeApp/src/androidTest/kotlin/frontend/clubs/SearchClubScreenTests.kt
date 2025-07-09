@@ -1,6 +1,12 @@
 package frontend.clubs
 
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.filter
+import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -11,7 +17,8 @@ import org.junit.Rule
 import org.junit.Test
 import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubScreen
 import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubViewModel
-import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.domain.SportTypeCourt
+import pt.isel.courtandgo.frontend.domain.SportsClub
 import pt.isel.courtandgo.frontend.service.mock.MockClubService
 import pt.isel.courtandgo.frontend.service.mock.MockCourtService
 import pt.isel.courtandgo.frontend.service.mock.MockScheduleCourtService
@@ -65,10 +72,10 @@ class SearchClubScreenTests {
         }
 
         composeTestRule.onNodeWithText("Ténis").performClick()
-        assertEquals(SportType.TENNIS, viewModel.selectedSport.value)
+        assertEquals(SportsClub.Tennis, viewModel.selectedSport.value)
 
         composeTestRule.onNodeWithText("Padel").performClick()
-        assertEquals(SportType.PADEL, viewModel.selectedSport.value)
+        assertEquals(SportsClub.Padel, viewModel.selectedSport.value)
     }
 
     @Test
@@ -180,6 +187,7 @@ class SearchClubScreenTests {
         composeTestRule.onNodeWithText("Beloura Tennis Academy").assertDoesNotExist()
     }
 
+    @OptIn(ExperimentalTestApi::class)
     @Test
     fun testSearchClubScreen_searchWithPostalCode() {
         val viewModel = fakeSearchClubViewModel()
@@ -246,7 +254,7 @@ class SearchClubScreenTests {
         // Verifica campo de pesquisa
 
         composeTestRule.onNodeWithText("Padel").performClick()
-        assertEquals(SportType.PADEL, viewModel.selectedSport.value)
+        assertEquals(SportsClub.Padel, viewModel.selectedSport.value)
 
         composeTestRule.onNodeWithTag("searchField").performTextReplacement("Portugal")
 

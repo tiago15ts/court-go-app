@@ -1,7 +1,7 @@
 package pt.isel.courtandgo.frontend.service.mock
 
 import pt.isel.courtandgo.frontend.domain.Club
-import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.domain.SportsClub
 import pt.isel.courtandgo.frontend.service.ClubService
 import pt.isel.courtandgo.frontend.service.mock.repo.ClubRepoMock
 
@@ -30,7 +30,7 @@ class MockClubService(private val clubRepoMock: ClubRepoMock) : ClubService {
         return clubRepoMock.getClubsByName(name)
     }
 
-    override suspend fun getClubsBySport(sport: SportType): List<Club> {
+    override suspend fun getClubsBySport(sport: SportsClub): List<Club> {
         return clubRepoMock.getClubsBySport(sport)
     }
 
@@ -59,7 +59,7 @@ class MockClubService(private val clubRepoMock: ClubRepoMock) : ClubService {
         district: String?,
         country: String?,
         postalCode: String?,
-        sport: SportType
+        sport: SportsClub
     ): List<Club> {
         return clubRepoMock.getClubsFiltered(query, county, district, country, postalCode, sport)
     }

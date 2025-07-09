@@ -1,7 +1,7 @@
 package pt.isel.courtandgo.frontend.service
 
 import pt.isel.courtandgo.frontend.domain.Club
-import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.domain.SportsClub
 
 interface ClubService {
     suspend fun getAllClubs(): List<Club>
@@ -10,7 +10,7 @@ interface ClubService {
     suspend fun getClubsByCountry(country: String): List<Club>
     suspend fun getClubsByPostalCode(postalCode: String): List<Club>
     suspend fun getClubsByName(name: String): List<Club>
-    suspend fun getClubsBySport(sport: SportType): List<Club>
+    suspend fun getClubsBySport(sport: SportsClub): List<Club>
     //suspend fun getClubsFiltered(district: String, sport: SportType): List<Club>
     suspend fun getClubById(id: Int): Club?
     suspend fun getClubsByOwnerId(ownerId: Int): List<Club>
@@ -22,6 +22,6 @@ interface ClubService {
         district: String? = null,
         country: String? = null,
         postalCode: String? = null,
-        sport: SportType
+        sport: SportsClub
     ): List<Club>
 }

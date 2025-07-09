@@ -12,7 +12,8 @@ import pt.isel.courtandgo.frontend.domain.Country
 import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.domain.District
 import pt.isel.courtandgo.frontend.domain.Location
-import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.domain.SportTypeCourt
+import pt.isel.courtandgo.frontend.domain.SportsClub
 import pt.isel.courtandgo.frontend.reservations.confirmReservation.ConfirmReservationScreen
 import pt.isel.courtandgo.frontend.reservations.confirmReservation.ConfirmReservationViewModel
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.CourtAvailabilityViewModel
@@ -65,7 +66,7 @@ class ConfirmReservationScreenTest {
         id = 234,
         name = "Clube Teste",
         location = fakeLocation,
-        sportType = SportType.TENNIS,
+        sportsClub = SportsClub.Tennis,
         nrOfCourts = 3,
         clubOwnerId = 132,
         averagePrice = 15.0
@@ -74,7 +75,7 @@ class ConfirmReservationScreenTest {
     private val fakeCourt = Court(
         id = 345,
         name = "Court A",
-        sportType = SportType.TENNIS,
+        sportTypeCourt = SportTypeCourt.Tennis,
         surfaceType = "Terra batida",
         capacity = 6,
         price = 10.0,

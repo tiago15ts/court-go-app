@@ -13,14 +13,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.domain.Court
-import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.domain.SportTypeCourt
 import pt.isel.courtandgo.frontend.ui.padelColor
 import pt.isel.courtandgo.frontend.ui.tennisColor
 
 @Composable
 fun CourtDetailsSection(courtInfo: Court, clubInfo: Club) {
     Column(modifier = Modifier.padding(16.dp)) {
-        // 🔹 Nome
+
         Text(
             text = clubInfo.name,
             style = MaterialTheme.typography.headlineSmall
@@ -28,11 +28,10 @@ fun CourtDetailsSection(courtInfo: Court, clubInfo: Club) {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // 🔹 Cor por tipo de desporto
-        val (label, sportColor) = when (courtInfo.sportType) {
-            SportType.TENNIS -> "Ténis" to tennisColor
-            SportType.PADEL -> "Padel" to padelColor
-            SportType.BOTH -> TODO()
+        // Cor por tipo de desporto
+        val (label, sportColor) = when (courtInfo.sportTypeCourt) {
+            SportTypeCourt.Tennis -> "Ténis" to tennisColor
+            SportTypeCourt.Padel -> "Padel" to padelColor
         }
 
         Box(
@@ -52,7 +51,7 @@ fun CourtDetailsSection(courtInfo: Court, clubInfo: Club) {
         Spacer(modifier = Modifier.height(12.dp))
 
 
-        if (courtInfo.sportType == SportType.TENNIS) {
+        if (courtInfo.sportTypeCourt == SportTypeCourt.Tennis) {
             Text(
                 text = "Tipo de piso: ${courtInfo.surfaceType}",
                 style = MaterialTheme.typography.bodyMedium
@@ -73,7 +72,7 @@ fun CourtDetailsSection(courtInfo: Court, clubInfo: Club) {
 
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Localização: ${clubInfo.location.address}, ${clubInfo.location.county}, ${clubInfo.location.district}, ${clubInfo.location.postalCode}",
+            text = "Localização: ${clubInfo.location.address}, ${clubInfo.location.county}, ${clubInfo.location.district.name}, ${clubInfo.location.postalCode}",
             style = MaterialTheme.typography.bodyMedium
         )
     }

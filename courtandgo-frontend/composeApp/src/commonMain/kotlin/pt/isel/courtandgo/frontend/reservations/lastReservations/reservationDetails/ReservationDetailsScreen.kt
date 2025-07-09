@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -22,7 +21,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
@@ -61,9 +59,9 @@ fun ReservationDetailsScreen(
     val start = reservation.startTime
 
     val isFuture = start > now
-    val canCancel = isFuture && reservation.status != ReservationStatus.CANCELLED
+    val canCancel = isFuture && reservation.status != ReservationStatus.Cancelled
     val canStillCancel = start > now.plus(1, DateTimeUnit.HOUR)
-    val isConfirmed = reservation.status == ReservationStatus.CONFIRMED
+    val isConfirmed = reservation.status == ReservationStatus.Confirmed
 
     val isConfirming = remember { mutableStateOf(false) }
     val isCancelling = remember { mutableStateOf(false) }
@@ -100,7 +98,7 @@ fun ReservationDetailsScreen(
         Text("ID da Reserva: ${reservation.id}")
         Text("Clube: ${clubInfo.name}")
         Text("Campo: ${courtInfo.name}")
-        Text("Desporto: ${courtInfo.sportType.toPortugueseName()}")
+        Text("Desporto: ${courtInfo.sportTypeCourt.toPortugueseName()}")
         Text("Início: ${formatToDisplay(reservation.startTime)}")
         Text("Fim: ${formatToDisplay(reservation.endTime)}")
         Text("Preço Estimado: ${reservation.estimatedPrice} €")
@@ -194,7 +192,7 @@ fun ReservationDetailsScreen(
             }
         }
 
-        if (reservation.status != ReservationStatus.CANCELLED && isFuture) {
+        if (reservation.status != ReservationStatus.Cancelled && isFuture) {
             AddToCalendarButton(
                 title = "Reserva CourtAndGo - ${courtInfo.name} no ${clubInfo.name}",
                 description = "Reserva feita na app CourtAndGo",

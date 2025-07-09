@@ -2,7 +2,8 @@ package pt.isel.courtandgo.frontend.service.http
 
 import io.ktor.client.HttpClient
 import pt.isel.courtandgo.frontend.domain.Club
-import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.domain.SportTypeCourt
+import pt.isel.courtandgo.frontend.domain.SportsClub
 import pt.isel.courtandgo.frontend.service.ClubService
 import pt.isel.courtandgo.frontend.service.http.errors.InternalServerErrorException
 import pt.isel.courtandgo.frontend.service.http.errors.NotFoundException
@@ -66,7 +67,7 @@ class ClubServiceHttp(private val client: HttpClient) : ClubService {
         }
     }
 
-    override suspend fun getClubsBySport(sport: SportType): List<Club> {
+    override suspend fun getClubsBySport(sport: SportsClub): List<Club> {
         return try {
             val response = client.get<List<ClubDTO>>("/clubs/sport/${sport.name}")
             response.map { it.toDomain() }
@@ -107,7 +108,7 @@ class ClubServiceHttp(private val client: HttpClient) : ClubService {
         district: String?,
         country: String?,
         postalCode: String?,
-        sport: SportType
+        sport: SportsClub
     ): List<Club> {
         return try {
             val parameters = mutableListOf("sport=${sport.name}")

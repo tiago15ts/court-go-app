@@ -5,7 +5,6 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raedghazal.kotlinx_datetime_ext.plus
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.*
 import pt.isel.courtandgo.frontend.domain.Court
@@ -68,7 +67,7 @@ class ConfirmReservationViewModel(
             startTime = startDateTime,
             endTime = endDateTime,
             estimatedPrice = estimatedPrice,
-            status = ReservationStatus.PENDING
+            status = ReservationStatus.Pending
         )
 
         viewModelScope.launch {

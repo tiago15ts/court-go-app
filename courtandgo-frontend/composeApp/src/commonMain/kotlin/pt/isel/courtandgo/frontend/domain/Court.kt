@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 data class Court(
     val id: Int,
     val name: String, //e.g. Court 1, Court 2, etc.
-    val sportType: SportType,
+    val sportTypeCourt: SportTypeCourt,
     val surfaceType: String?,
     val capacity: Int,
     val price: Double,
@@ -13,6 +13,6 @@ data class Court(
 )
 
 @Serializable
-enum class SportType {
-    TENNIS, PADEL, BOTH
+enum class SportTypeCourt {
+    Tennis, Padel
 }

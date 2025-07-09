@@ -10,11 +10,11 @@ data class Reservation(
     val startTime: LocalDateTime,
     val endTime: LocalDateTime,
     val estimatedPrice: Double,
-    val status: ReservationStatus = ReservationStatus.PENDING
+    val status: ReservationStatus = ReservationStatus.Pending
 )
 
 @Serializable
 enum class ReservationStatus {
-    PENDING, CONFIRMED, CANCELLED
+    Pending, Confirmed, Cancelled
 }
 

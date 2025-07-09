@@ -14,7 +14,8 @@ import pt.isel.courtandgo.frontend.domain.District
 import pt.isel.courtandgo.frontend.domain.Location
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.domain.ReservationStatus
-import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.domain.SportTypeCourt
+import pt.isel.courtandgo.frontend.domain.SportsClub
 import pt.isel.courtandgo.frontend.reservations.receiptReservation.ReceiptReservationScreen
 import pt.isel.courtandgo.frontend.utils.dateUtils.CalendarLinkOpener
 import pt.isel.courtandgo.frontend.utils.dateUtils.formatToDisplay
@@ -51,7 +52,7 @@ class ReceiptConfirmationScreenTest {
         id = 1,
         name = "Clube Teste",
         location = fakeLocation,
-        sportType = SportType.TENNIS,
+        sportsClub = SportsClub.Tennis,
         nrOfCourts = 3,
         clubOwnerId = 132,
         averagePrice = 15.0
@@ -60,7 +61,7 @@ class ReceiptConfirmationScreenTest {
     private val fakeCourt = Court(
         id = 1,
         name = "Court A",
-        sportType = SportType.TENNIS,
+        sportTypeCourt = SportTypeCourt.Tennis,
         surfaceType = "Terra batida",
         capacity = 6,
         price = 10.0,
@@ -74,7 +75,7 @@ class ReceiptConfirmationScreenTest {
         startTime = fakeStartDateTime,
         endTime = fakeEndDateTime,
         estimatedPrice = fakeCourt.price,
-        status = ReservationStatus.PENDING
+        status = ReservationStatus.Pending
     )
 
     private val fakeCalendarOpener = object : CalendarLinkOpener {

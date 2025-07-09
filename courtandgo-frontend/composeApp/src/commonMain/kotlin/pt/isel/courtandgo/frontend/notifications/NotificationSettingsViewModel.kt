@@ -18,11 +18,11 @@ class NotificationSettingsViewModel : ViewModel() {
 
         if (!enabled) {
             reservations
-                .filter { it.status != ReservationStatus.CANCELLED }
+                .filter { it.status != ReservationStatus.Cancelled }
                 .forEach { scheduler.cancelReservationReminder(it.id.toString()) }
         } else {
             reservations
-                .filter { it.status != ReservationStatus.CANCELLED }
+                .filter { it.status != ReservationStatus.Cancelled }
                 .forEach { scheduleReservationNotification(it) }
         }
     }

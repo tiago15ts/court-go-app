@@ -13,7 +13,8 @@ import pt.isel.courtandgo.frontend.domain.Country
 import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.domain.District
 import pt.isel.courtandgo.frontend.domain.Location
-import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.domain.SportTypeCourt
+import pt.isel.courtandgo.frontend.domain.SportsClub
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.CourtAvailabilityViewModel
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.SelectedClubScreen
 import pt.isel.courtandgo.frontend.service.mock.MockCourtService
@@ -57,7 +58,7 @@ class SelectedClubScreenTest {
         id = 1,
         name = "Clube Teste",
         location = fakeLocation,
-        sportType = SportType.TENNIS,
+        sportsClub = SportsClub.Tennis,
         nrOfCourts = 3,
         clubOwnerId = 132,
         averagePrice = 15.0
@@ -66,7 +67,7 @@ class SelectedClubScreenTest {
     private val fakeCourt = Court(
         id = 1,
         name = "Court A",
-        sportType = SportType.TENNIS,
+        sportTypeCourt = SportTypeCourt.Tennis,
         surfaceType = "Terra batida",
         capacity = 6,
         price = 10.0,
@@ -119,7 +120,7 @@ class SelectedClubScreenTest {
         composeTestRule.onNodeWithText("Clube Teste").assertExists()
         composeTestRule.onNodeWithText("Detalhes").performClick()
 
-        composeTestRule.onNodeWithText(fakeCourt.sportType.toPortugueseName()).assertExists()
+        composeTestRule.onNodeWithText(fakeCourt.sportTypeCourt.toPortugueseName()).assertExists()
         composeTestRule.onNodeWithText("Tipo de piso: ${fakeCourt.surfaceType}").assertExists()
         composeTestRule.onNodeWithText("Capacidade por campo: ${fakeCourt.capacity} pessoas").assertExists()
         composeTestRule.onNodeWithText("O clube tem ${fakeClub.nrOfCourts} campos disponíveis.").assertExists()

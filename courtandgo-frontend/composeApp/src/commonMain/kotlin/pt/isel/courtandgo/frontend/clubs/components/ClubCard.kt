@@ -71,7 +71,7 @@ fun ClubCard(
                             .fillMaxWidth()
                             .padding(top = 8.dp)
                     ) {
-                        Text(text = "Distância Soon", style = MaterialTheme.typography.bodySmall)
+                        //Text(text = "Distância Soon", style = MaterialTheme.typography.bodySmall)
                         Text(text = "Desde $price€", style = MaterialTheme.typography.bodyMedium)
                     }
                 }

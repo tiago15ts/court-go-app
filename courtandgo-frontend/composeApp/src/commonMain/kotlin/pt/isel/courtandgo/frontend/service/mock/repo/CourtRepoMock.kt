@@ -1,7 +1,7 @@
 package pt.isel.courtandgo.frontend.service.mock.repo
 
 import pt.isel.courtandgo.frontend.domain.Court
-import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.domain.SportTypeCourt
 
 class CourtRepoMock {
 
@@ -10,7 +10,7 @@ class CourtRepoMock {
             id = 1,
             name = "Court 1",
             clubId = 1,
-            sportType = SportType.TENNIS,
+            sportTypeCourt = SportTypeCourt.Tennis,
             surfaceType = "Terra Batida",
             capacity = 4,
             price = 15.0,
@@ -19,7 +19,7 @@ class CourtRepoMock {
             id = 2,
             name = "Court 2",
             clubId = 4,
-            sportType = SportType.TENNIS,
+            sportTypeCourt = SportTypeCourt.Tennis,
             surfaceType = "Relva",
             capacity = 6,
             price = 20.0,
@@ -28,7 +28,7 @@ class CourtRepoMock {
             id = 3,
             name = "Court 3",
             clubId = 2,
-            sportType = SportType.PADEL,
+            sportTypeCourt = SportTypeCourt.Padel,
             surfaceType = null,
             capacity = 4,
             price = 10.0,
@@ -37,7 +37,7 @@ class CourtRepoMock {
             id = 4,
             name = "Court 2",
             clubId = 1,
-            sportType = SportType.TENNIS,
+            sportTypeCourt = SportTypeCourt.Tennis,
             surfaceType = "Terra Batida",
             capacity = 4,
             price = 15.0,
@@ -54,6 +54,6 @@ class CourtRepoMock {
     }
 
     fun getCourtsBySportType(sportType: String): List<Court> {
-        return courts.filter { it.sportType.toString() == sportType }
+        return courts.filter { it.sportTypeCourt.toString() == sportType }
     }
 }

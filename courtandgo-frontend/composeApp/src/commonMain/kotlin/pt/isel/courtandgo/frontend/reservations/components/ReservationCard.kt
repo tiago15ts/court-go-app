@@ -103,7 +103,7 @@ fun ReservationCard(
                         style = MaterialTheme.typography.bodySmall
                     )
 
-                    if (reservation.status == ReservationStatus.CANCELLED) {
+                    if (reservation.status == ReservationStatus.Cancelled) {
                         Text(
                             text = "Cancelado",
                             color = Color(0xFFB00020),
@@ -125,7 +125,7 @@ fun ReservationCard(
                     }
 
                     val isFuture = start > now
-                    if (isFuture && reservation.status == ReservationStatus.PENDING) {
+                    if (isFuture && reservation.status == ReservationStatus.Pending) {
                         Text(
                             text = "Por Confirmar",
                             color = Color(0xFFFFA000),
@@ -146,7 +146,7 @@ fun ReservationCard(
                         )
                     }
 
-                    if (isFuture && reservation.status == ReservationStatus.CONFIRMED) {
+                    if (isFuture && reservation.status == ReservationStatus.Confirmed) {
                         Text(
                             text = "Confirmado",
                             color = Color(0xFF2E7D32),
@@ -169,7 +169,7 @@ fun ReservationCard(
                 }
 
                 val hoursUntilStart = (start - now).inWholeHours
-                val showAlert = hoursUntilStart in 0..24 && reservation.status != ReservationStatus.CANCELLED
+                val showAlert = hoursUntilStart in 0..24 && reservation.status != ReservationStatus.Cancelled
 
                 if (showAlert) {
                     Box(

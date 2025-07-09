@@ -53,7 +53,6 @@ fun SearchClubField(viewModel: SearchClubViewModel) {
 
     val suggestions = run {
         val lowercaseQuery = localQuery.lowercase()
-        val locations = mutableListOf<String>()
         val locationSuggestions = mutableListOf<Pair<String, String>>()
         val clubNames = mutableListOf<String>()
 
@@ -89,15 +88,12 @@ fun SearchClubField(viewModel: SearchClubViewModel) {
                 localQuery = it
                 expanded = it.isNotBlank()
 
-                if (it.isNotBlank() && viewModel.selectedDistrict.value == null
-                    && viewModel.selectedCounty.value == null && viewModel.selectedPostalCode.value == null
-                    && viewModel.selectedCountry.value == null) {
-                    viewModel.updateDistrict(null)
-                    viewModel.updateCounty(null)
-                    viewModel.updatePostalCode(null)
-                    viewModel.updateCountry(null)
-                    viewModel.updateQuery(it)
-                }
+                viewModel.updateDistrict(null)
+                viewModel.updateCounty(null)
+                viewModel.updatePostalCode(null)
+                viewModel.updateCountry(null)
+
+                viewModel.updateQuery(it)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -163,14 +159,14 @@ fun SearchClubField(viewModel: SearchClubViewModel) {
 
                         items(locations) { (type, value) ->
                             SuggestionItem(text = value) {
-                                // Limpar tudo antes
+                                // Limpar todos os filtros
                                 viewModel.updateDistrict(null)
                                 viewModel.updateCounty(null)
                                 viewModel.updatePostalCode(null)
                                 viewModel.updateCountry(null)
                                 viewModel.updateQuery(null)
 
-                                // Atualizar apenas o campo correto
+                                // Atualizar apenas o campo correspondente
                                 when (type) {
                                     "district" -> viewModel.updateDistrict(value)
                                     "county" -> viewModel.updateCounty(value)

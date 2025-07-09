@@ -10,5 +10,5 @@ data class CreateReservationInput(
     val startTime: String,
     val endTime: String,
     val estimatedPrice: Double,
-    val status: ReservationStatus = ReservationStatus.PENDING
+    val status: ReservationStatus = ReservationStatus.Pending
 )

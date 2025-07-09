@@ -1,11 +1,11 @@
 package pt.isel.courtandgo.frontend.clubs
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import pt.isel.courtandgo.frontend.clubs.searchClub.ClubSearchUiState
 import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubViewModel
-import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.domain.SportTypeCourt
+import pt.isel.courtandgo.frontend.domain.SportsClub
 import pt.isel.courtandgo.frontend.service.mock.MockClubService
 import pt.isel.courtandgo.frontend.service.mock.MockCourtService
 import pt.isel.courtandgo.frontend.service.mock.MockScheduleCourtService
@@ -33,27 +33,27 @@ class SearchClubViewModelTest {
     @Test
     fun `fetchClubs should return tennis clubs in Lisboa`() = runTest {
         viewModel.updateDistrict("Lisboa")
-        viewModel.updateSport(SportType.TENNIS)
+        viewModel.updateSport(SportsClub.Tennis)
 
         viewModel.fetchClubs()
 
         val state = viewModel.uiState.first { it is ClubSearchUiState.Success }
         assertTrue(state is ClubSearchUiState.Success)
         val clubs = (state as ClubSearchUiState.Success).clubs
-        assertTrue(clubs.all { it.sportType == SportType.TENNIS && it.location.district.name == "Lisboa" })
+        assertTrue(clubs.all { it.sportsClub == SportsClub.Tennis && it.location.district.name == "Lisboa" })
     }
 
     @Test
     fun `fetchClubs should return padel clubs with name containing 'Arena'`() = runTest {
         viewModel.updateQuery("Arena")
-        viewModel.updateSport(SportType.PADEL)
+        viewModel.updateSport(SportsClub.Padel)
 
         viewModel.fetchClubs()
         val state = viewModel.uiState.first { it is ClubSearchUiState.Success }
         val clubs = (state as ClubSearchUiState.Success).clubs
 
         assertTrue(clubs.all {
-            it.sportType == SportType.PADEL && it.name.contains("Arena", ignoreCase = true)
+            it.sportsClub == SportsClub.Padel && it.name.contains("Arena", ignoreCase = true)
         })
     }
 

@@ -100,7 +100,7 @@ class ReservationServiceHttp(private val client : HttpClient) : ReservationServi
 
     override suspend fun setConfirmedReservation(id: Int): Boolean {
         return try {
-            val body = UpdateReservationStatusInput(status = ReservationStatus.CONFIRMED)
+            val body = UpdateReservationStatusInput(status = ReservationStatus.Confirmed)
 
             client.put<Unit>(
                 url = "/reservations/confirm/$id",

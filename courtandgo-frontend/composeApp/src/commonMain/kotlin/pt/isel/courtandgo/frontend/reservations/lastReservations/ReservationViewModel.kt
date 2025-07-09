@@ -59,14 +59,14 @@ class ReservationViewModel(
 
                 _futureReservations.value = all
                     .filter {
-                        it.status != ReservationStatus.CANCELLED &&
+                        it.status != ReservationStatus.Cancelled &&
                                 it.startTime.toInstant(zone) > now
                     }
                     .sortedBy { it.startTime.toInstant(zone) }
 
                 _pastReservations.value = all
                     .filter {
-                        it.status == ReservationStatus.CANCELLED ||
+                        it.status == ReservationStatus.Cancelled ||
                                 it.startTime.toInstant(zone) <= now
                     }
                     .sortedByDescending { it.startTime.toInstant(zone) }

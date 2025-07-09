@@ -14,15 +14,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import pt.isel.courtandgo.frontend.clubs.components.ClubCard
-import pt.isel.courtandgo.frontend.clubs.utils.SportToggleButton
+import pt.isel.courtandgo.frontend.clubs.utils.SportClubToggleButton
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import pt.isel.courtandgo.frontend.clubs.utils.SearchClubField
-import pt.isel.courtandgo.frontend.domain.SportType
 import pt.isel.courtandgo.frontend.utils.dateUtils.currentDate
 import pt.isel.courtandgo.frontend.utils.dateUtils.currentTime
 import pt.isel.courtandgo.frontend.domain.Club
+import pt.isel.courtandgo.frontend.domain.SportsClub
 
 
 @Composable
@@ -82,12 +82,12 @@ fun SearchClubScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                SportToggleButton(SportType.TENNIS, selectedSport == SportType.TENNIS) {
-                    viewModel.updateSport(SportType.TENNIS)
+                SportClubToggleButton(SportsClub.Tennis, selectedSport == SportsClub.Tennis) {
+                    viewModel.updateSport(SportsClub.Tennis)
 
                 }
-                SportToggleButton(SportType.PADEL, selectedSport == SportType.PADEL) {
-                    viewModel.updateSport(SportType.PADEL)
+                SportClubToggleButton(SportsClub.Padel, selectedSport == SportsClub.Padel) {
+                    viewModel.updateSport(SportsClub.Padel)
 
                 }
             }

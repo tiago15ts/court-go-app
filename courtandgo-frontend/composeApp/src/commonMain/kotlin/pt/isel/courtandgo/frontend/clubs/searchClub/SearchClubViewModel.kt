@@ -11,7 +11,8 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.domain.Court
-import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.domain.SportTypeCourt
+import pt.isel.courtandgo.frontend.domain.SportsClub
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.getDefaultSlotsForCourt
 import pt.isel.courtandgo.frontend.service.ClubService
 import pt.isel.courtandgo.frontend.service.CourtService
@@ -52,8 +53,8 @@ class SearchClubViewModel(
     private val _selectedCountry = MutableStateFlow<String?>(null)
     val selectedCountry: StateFlow<String?> = _selectedCountry.asStateFlow()
 
-    private val _selectedSport = MutableStateFlow(SportType.TENNIS)
-    val selectedSport: StateFlow<SportType> = _selectedSport.asStateFlow()
+    private val _selectedSport = MutableStateFlow(SportsClub.Tennis)
+    val selectedSport: StateFlow<SportsClub> = _selectedSport.asStateFlow()
 
     private val _clubHours = MutableStateFlow<Map<Int, List<LocalTime>>>(emptyMap())
     val clubHours: StateFlow<Map<Int, List<LocalTime>>> = _clubHours.asStateFlow()
@@ -85,7 +86,7 @@ class SearchClubViewModel(
         fetchClubs()
     }
 
-    fun updateSport(sport: SportType) {
+    fun updateSport(sport: SportsClub) {
         _selectedSport.value = sport
         fetchClubs()
     }

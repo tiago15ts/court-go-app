@@ -17,10 +17,8 @@ import pt.isel.courtandgo.frontend.reservations.lastReservations.ReservationsScr
 import pt.isel.courtandgo.frontend.service.ReservationService
 import pt.isel.courtandgo.frontend.service.mock.MockClubService
 import pt.isel.courtandgo.frontend.service.mock.MockCourtService
-import pt.isel.courtandgo.frontend.service.mock.MockReservationService
 import pt.isel.courtandgo.frontend.service.mock.repo.ClubRepoMock
 import pt.isel.courtandgo.frontend.service.mock.repo.CourtRepoMock
-import pt.isel.courtandgo.frontend.service.mock.repo.ReservationRepoMock
 import pt.isel.courtandgo.frontend.utils.dateUtils.formatToDisplay
 
 class ReservationsScreenTest {
@@ -48,7 +46,7 @@ class ReservationsScreenTest {
         startTime = fakeStartDateTime,
         endTime = fakeEndDateTime,
         estimatedPrice = 15.0,
-        status = ReservationStatus.PENDING
+        status = ReservationStatus.Pending
     )
 
     private val fakeReservation2 = Reservation(
@@ -64,7 +62,7 @@ class ReservationsScreenTest {
             time = LocalTime(11, 0)
         ),
         estimatedPrice = 20.0,
-        status = ReservationStatus.CONFIRMED
+        status = ReservationStatus.Confirmed
     )
 
     private val fakeList = listOf(fakeReservation, fakeReservation2)

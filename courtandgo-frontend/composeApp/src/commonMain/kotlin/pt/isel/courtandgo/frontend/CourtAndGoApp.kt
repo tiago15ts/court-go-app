@@ -22,7 +22,7 @@ import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.domain.Country
 import pt.isel.courtandgo.frontend.domain.District
 import pt.isel.courtandgo.frontend.domain.Location
-import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.domain.SportsClub
 import pt.isel.courtandgo.frontend.home.HomeScreen
 import pt.isel.courtandgo.frontend.notifications.EditNotificationsScreen
 import pt.isel.courtandgo.frontend.notifications.NotificationSettingsViewModel
@@ -211,7 +211,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
                                                 latitude = 0.0,
                                                 longitude = 0.0
                                             ),
-                                            sportType = SportType.BOTH,
+                                            sportsClub = SportsClub.Both,
                                             nrOfCourts = 0,
                                             clubOwnerId = 0,
                                             averagePrice = 0.0

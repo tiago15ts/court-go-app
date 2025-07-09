@@ -1,9 +1,8 @@
 package pt.isel.courtandgo.frontend.utils
 
-import pt.isel.courtandgo.frontend.domain.SportType
+import pt.isel.courtandgo.frontend.domain.SportTypeCourt
 
-fun SportType.toPortugueseName(): String = when (this) {
-    SportType.TENNIS -> "Ténis"
-    SportType.PADEL -> "Padel"
-    SportType.BOTH -> "Ambos"
+fun SportTypeCourt.toPortugueseName(): String = when (this) {
+    SportTypeCourt.Tennis -> "Ténis"
+    SportTypeCourt.Padel -> "Padel"
 }
