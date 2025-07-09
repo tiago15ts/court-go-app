@@ -5,9 +5,9 @@ Court&amp;Go Application
 # Setup
 ## How to start backend
 
-install aws-vault
+choco install aws-vault
 
-aws-vault add <profile-name>
+aws-vault add "profile-name"
 
-aws-vault exec <profile-name> -- npx sst dev
+aws-vault exec "profile-name" -- npx sst dev
 
