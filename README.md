@@ -7,7 +7,7 @@ Court&amp;Go Application
 
 choco install aws-vault
 
-aws-vault add <profile-name>
+aws-vault add "profile-name"
 
-aws-vault exec <profile-name> -- npx sst dev
+aws-vault exec "profile-name" -- npx sst dev
 
