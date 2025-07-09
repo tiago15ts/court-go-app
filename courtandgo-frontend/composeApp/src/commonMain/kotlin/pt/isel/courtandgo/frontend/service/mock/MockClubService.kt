@@ -44,10 +44,12 @@ class MockClubService(private val clubRepoMock: ClubRepoMock) : ClubService {
     override suspend fun getClubById(id: Int): Club? {
         return clubRepoMock.getClubById(id)
     }
-
+/*
     override suspend fun getClubsByOwnerId(ownerId: Int): List<Club> {
         return clubRepoMock.getClubsByOwnerId(ownerId)
     }
+
+ */
 
     override suspend fun getClubIdByCourtId(courtId: Int): Int {
         return clubRepoMock.getClubIdByCourtId(courtId)

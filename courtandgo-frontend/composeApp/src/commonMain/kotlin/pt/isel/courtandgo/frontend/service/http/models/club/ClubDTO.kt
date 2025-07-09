@@ -13,7 +13,6 @@ data class ClubDTO(
     val location: LocationDTO,
     val sportsClub: SportsClub,
     val nrOfCourts: Int,
-    val clubOwnerId: Int,
     val averagePrice: Double
 ) {
     fun toDomain(): Club = Club(
@@ -22,7 +21,6 @@ data class ClubDTO(
         location = location.toDomain(),
         sportsClub = sportsClub,
         nrOfCourts = nrOfCourts,
-        clubOwnerId = clubOwnerId,
         averagePrice = averagePrice
     )
 
@@ -33,7 +31,6 @@ data class ClubDTO(
             location = LocationDTO.fromDomain(club.location),
             sportsClub = club.sportsClub,
             nrOfCourts = club.nrOfCourts,
-            clubOwnerId = club.clubOwnerId,
             averagePrice = club.averagePrice
         )
     }

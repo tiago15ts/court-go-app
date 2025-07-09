@@ -8,7 +8,6 @@ data class Club(
     val location: Location,
     val sportsClub: SportsClub,
     val nrOfCourts: Int,
-    val clubOwnerId: Int,
     val averagePrice: Double,
 )
 

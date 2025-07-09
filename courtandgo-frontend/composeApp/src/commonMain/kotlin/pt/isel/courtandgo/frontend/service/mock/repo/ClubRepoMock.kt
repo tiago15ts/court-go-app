@@ -4,7 +4,6 @@ import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.domain.Country
 import pt.isel.courtandgo.frontend.domain.District
 import pt.isel.courtandgo.frontend.domain.Location
-import pt.isel.courtandgo.frontend.domain.SportTypeCourt
 import pt.isel.courtandgo.frontend.domain.SportsClub
 
 class ClubRepoMock {
@@ -15,7 +14,8 @@ class ClubRepoMock {
 
     private val mockClubs = listOf(
 
-        Club(1, "Beloura Tennis Academy",
+        Club(
+            1, "Beloura Tennis Academy",
             location = Location(
                 id = 1,
                 address = "Rua do Campo 123",
@@ -26,9 +26,10 @@ class ClubRepoMock {
                 latitude = 38.8000,
                 longitude = -9.4000
             ),
-            sportsClub = SportsClub.Tennis, nrOfCourts = 4, clubOwnerId = 1, 15.0
+            sportsClub = SportsClub.Tennis, nrOfCourts = 4, 15.0
         ),
-        Club(2, "Lisboa Rackets",
+        Club(
+            2, "Lisboa Rackets",
             location = Location(
                 id = 2,
                 address = "Avenida da Liberdade 456",
@@ -39,9 +40,10 @@ class ClubRepoMock {
                 latitude = 38.7200,
                 longitude = -9.1500
             ),
-            sportsClub = SportsClub.Padel, nrOfCourts = 4, clubOwnerId = 2, 10.0
+            sportsClub = SportsClub.Padel, nrOfCourts = 4, 10.0
         ),
-        Club(3, "Porto Club Padel",
+        Club(
+            3, "Porto Club Padel",
             location = Location(
                 id = 3,
                 address = "Rua de Santa Catarina 789",
@@ -52,9 +54,10 @@ class ClubRepoMock {
                 latitude = 41.1500,
                 longitude = -8.6100
             ),
-            sportsClub = SportsClub.Padel, nrOfCourts = 6, clubOwnerId = 3, 12.0
+            sportsClub = SportsClub.Padel, nrOfCourts = 6, 12.0
         ),
-        Club(4, "Estoril Country Club",
+        Club(
+            4, "Estoril Country Club",
             location = Location(
                 id = 4,
                 address = "Avenida Marginal 101",
@@ -65,9 +68,10 @@ class ClubRepoMock {
                 latitude = 38.7000,
                 longitude = -9.4000
             ),
-            sportsClub = SportsClub.Tennis, nrOfCourts = 4, clubOwnerId = 4, 20.0
+            sportsClub = SportsClub.Tennis, nrOfCourts = 4, 20.0
         ),
-        Club(5, "Braga Tennis Club",
+        Club(
+            5, "Braga Tennis Club",
             location = Location(
                 id = 5,
                 address = "Rua do Comércio 321",
@@ -78,7 +82,7 @@ class ClubRepoMock {
                 latitude = 41.5500,
                 longitude = -8.4200
             ),
-            sportsClub = SportsClub.Tennis, nrOfCourts = 4, clubOwnerId = 5, 13.5
+            sportsClub = SportsClub.Tennis, nrOfCourts = 4, 13.5
         )
     )
 
@@ -118,9 +122,12 @@ class ClubRepoMock {
         return mockClubs.find { it.id == id }
     }
 
+    /*
     fun getClubsByOwnerId(ownerId: Int): List<Club> {
         return mockClubs.filter { it.clubOwnerId == ownerId }
     }
+
+     */
 
     fun getClubIdByCourtId(courtId: Int): Int {
         // This is a mock implementation, assuming each club has a unique court ID

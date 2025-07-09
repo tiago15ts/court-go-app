@@ -1,10 +1,11 @@
 
 export function mapRowToClubDTO(row: any) {
   return {
-    clubId: row.clubid,
+    id: row.clubid,
     name: row.club_name,
-    sports: row.sports,
+    sportsClub: row.sports,
     nrOfCourts: row.nrofcourts,
+    averagePrice: parseFloat(row.averageprice),
     location: {
       id: row.location_id,
       address: row.address,

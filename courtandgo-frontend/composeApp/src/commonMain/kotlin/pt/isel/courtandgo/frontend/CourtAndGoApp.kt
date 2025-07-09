@@ -213,7 +213,6 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
                                             ),
                                             sportsClub = SportsClub.Both,
                                             nrOfCourts = 0,
-                                            clubOwnerId = 0,
                                             averagePrice = 0.0
                                         ),
                                         courtInfo = reservationVm.getCourtInfoByCourtId(reservation.courtId)

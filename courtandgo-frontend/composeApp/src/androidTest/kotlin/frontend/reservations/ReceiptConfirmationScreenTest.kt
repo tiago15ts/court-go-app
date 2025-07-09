@@ -54,7 +54,6 @@ class ReceiptConfirmationScreenTest {
         location = fakeLocation,
         sportsClub = SportsClub.Tennis,
         nrOfCourts = 3,
-        clubOwnerId = 132,
         averagePrice = 15.0
     )
 

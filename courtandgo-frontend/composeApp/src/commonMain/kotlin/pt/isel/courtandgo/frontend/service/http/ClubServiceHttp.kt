@@ -85,6 +85,7 @@ class ClubServiceHttp(private val client: HttpClient) : ClubService {
         }
     }
 
+    /*
     override suspend fun getClubsByOwnerId(ownerId: Int): List<Club> {
         return try {
             val response = client.get<List<ClubDTO>>("/clubs/owner/$ownerId")
@@ -93,6 +94,8 @@ class ClubServiceHttp(private val client: HttpClient) : ClubService {
             throw InternalServerErrorException("Failed to fetch clubs by owner ID $ownerId: ${e.message}", e)
         }
     }
+
+     */
 
     override suspend fun getClubIdByCourtId(courtId: Int): Int {
         return try {
