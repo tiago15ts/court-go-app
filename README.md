@@ -5,7 +5,7 @@ Court&amp;Go Application
 # Setup
 ## How to start backend
 
-install aws-vault
+choco install aws-vault
 
 aws-vault add <profile-name>
 
