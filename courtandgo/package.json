@@ -13,12 +13,20 @@
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.4",
+    "@types/node": "^24.0.12",
+    "@types/nodemailer": "^6.4.17",
     "aws-cdk-lib": "^2.187.0",
     "constructs": "10.3.0",
     "sst": "^3.16.0",
-    "typescript": "^5.8.2"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "dotenv": "^17.2.0",
+    "node-cron": "^4.2.0",
+    "nodemailer": "^7.0.5"
+  }
 }

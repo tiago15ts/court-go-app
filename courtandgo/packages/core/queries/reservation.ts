@@ -1,5 +1,7 @@
 import { db } from "../db";
 import { mapRowToReservationDTO } from "../mappers/reservationMapper";
+import { scheduleReservationReminder } from "../../../utils/reminders";
+
 
 export async function getAllReservations() {
   const query = `
@@ -43,6 +45,14 @@ export async function createReservation(data: {
     [data.courtId, data.userId, data.startTime, data.endTime, data.estimatedPrice, data.status]
   );
   const reservation = mapRowToReservationDTO(res1.rows[0]);
+
+  const playerRes = await db.query('SELECT email, name FROM Player WHERE id = $1', [data.userId]);
+  const player = playerRes.rows[0];
+
+  const courtRes = await db.query('SELECT clubName FROM Court WHERE id = $1', [data.courtId]);
+  const clubName = courtRes.rows[0]?.clubName ?? 'o clube';
+
+  scheduleReservationReminder(reservation, player.email, player.name, clubName);
 
   await db.query(
     `INSERT INTO Player_Reservation (reservationId, playerId, status)
