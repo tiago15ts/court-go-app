@@ -3,15 +3,7 @@ import { mapRowToReservationDTO } from "../mappers/reservationMapper";
 
 export async function getAllReservations() {
   const query = `
-    SELECT
-      reservationId,
-      courtId,
-      createdByPlayerId,
-      startTime,
-      endTime,
-      estimatedPrice,
-      status
-    FROM Reservation
+    SELECT * FROM Reservation
   `;
   const res = await db.query(query);
   return res.rows.map(mapRowToReservationDTO);
@@ -19,15 +11,7 @@ export async function getAllReservations() {
 
 export async function getReservationById(id: number) {
   const query = `
-    SELECT
-      reservationId,
-      courtId,
-      createdByPlayerId,
-      startTime,
-      endTime,
-      estimatedPrice,
-      status
-    FROM Reservation
+    SELECT * FROM Reservation
     WHERE reservationId = $1
   `;
   const res = await db.query(query, [id]);
@@ -37,17 +21,8 @@ export async function getReservationById(id: number) {
 
 export async function getReservationsForPlayer(playerId: number) {
   const query = `
-    SELECT
-      r.reservationId,
-      r.courtId,
-      r.createdByPlayerId,
-      r.startTime,
-      r.endTime,
-      r.estimatedPrice,
-      r.status
-    FROM Reservation r
-    JOIN Player_Reservation pr ON r.reservationId = pr.reservationId
-    WHERE pr.playerId = $1
+    SELECT * FROM Reservation r
+    WHERE r.createdByPlayerId = $1
   `;
   const res = await db.query(query, [playerId]);
   return res.rows.map(mapRowToReservationDTO);
@@ -74,7 +49,6 @@ export async function createReservation(data: {
      VALUES ($1, $2, 'Pending')`,
     [reservation.reservationId, data.userId]
   );
-
   return reservation;
 }
 
@@ -96,7 +70,6 @@ export async function updateReservation(data: {
   if (res.rows.length === 0) {
     throw new Error(`Reservation with id ${data.reservationId} not found`);
   }
-
   return mapRowToReservationDTO(res.rows[0]);
 }
 
@@ -125,7 +98,7 @@ export async function confirmReservation(id: number) {
     throw new Error(`Reservation with id ${id} not found`);
   }
   await db.query(
-    `UPDATE Player_Reservation SET status = 'CONFIRMED' WHERE reservationId = $1`,
+    `UPDATE Player_Reservation SET status = 'Confirmed' WHERE reservationId = $1`,
     [id]
   );
   return mapRowToReservationDTO(res.rows[0]);
@@ -140,7 +113,7 @@ export async function cancelReservation(id: number) {
     throw new Error(`Reservation with id ${id} not found`);
   }
   await db.query(
-    `UPDATE Player_Reservation SET status = 'CANCELLED' WHERE reservationId = $1`,
+    `UPDATE Player_Reservation SET status = 'Cancelled' WHERE reservationId = $1`,
     [id]
   );
   return mapRowToReservationDTO(res.rows[0]);
