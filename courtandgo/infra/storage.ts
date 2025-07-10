@@ -1,17 +1,20 @@
 
 export function MyStack({ stack }: StackContext) {
   
-  const bucket = new Bucket(stack, "Uploads");
+   const bucket = new sst.aws.Bucket( "Uploads");
 
-  const database = new RDS(stack, "Database", {
+   const vpc = new sst.aws.Vpc("MyVpc");
+
+   const database = new sst.aws.Postgres("CourtAndGo Database", {
     engine: "postgresql11.13", 
-    defaultDatabaseName: "mydb",
+    defaultDatabaseName: "courtandgodb",
     migrations: "../../Database/CreateTables.sql", 
     scaling: {
       autoPause: true,
       minCapacity: 1,
       maxCapacity: 2,
     },
+    vpc,
   });
 
   return {
@@ -19,3 +22,4 @@ export function MyStack({ stack }: StackContext) {
     database,
   };
 }
+
