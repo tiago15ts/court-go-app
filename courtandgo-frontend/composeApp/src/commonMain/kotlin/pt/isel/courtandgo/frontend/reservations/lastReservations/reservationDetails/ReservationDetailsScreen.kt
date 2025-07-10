@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -36,8 +37,9 @@ import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.domain.ReservationStatus
 import pt.isel.courtandgo.frontend.ui.greenConfirmation
-import pt.isel.courtandgo.frontend.utils.addEventToCalendar.AddToCalendarButton
-import pt.isel.courtandgo.frontend.utils.dateUtils.CalendarLinkOpener
+import pt.isel.courtandgo.frontend.utils.addEventToCalendar.CalendarDropdown
+import pt.isel.courtandgo.frontend.utils.addEventToCalendar.googleCalendar.AddToCalendarButton
+import pt.isel.courtandgo.frontend.utils.addEventToCalendar.CalendarLinkOpener
 import pt.isel.courtandgo.frontend.utils.dateUtils.formatToDisplay
 import pt.isel.courtandgo.frontend.utils.dateUtils.nowTime
 import pt.isel.courtandgo.frontend.utils.dateUtils.timeZone
@@ -201,6 +203,16 @@ fun ReservationDetailsScreen(
                 endTime = reservation.endTime,
                 calendarOpener = calendarOpener,
                 timeZone = timeZone,
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+            CalendarDropdown(
+                reservationId = reservation.id.toString(),
+                title = "Reserva CourtAndGo - ${courtInfo.name} no ${clubInfo.name}",
+                location = formatLocationForDisplay(clubInfo.location),
+                startTime = reservation.startTime,
+                endTime = reservation.endTime,
+                calendarOpener = calendarOpener,
             )
         }
     }

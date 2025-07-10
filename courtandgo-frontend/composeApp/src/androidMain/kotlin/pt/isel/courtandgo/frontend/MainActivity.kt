@@ -13,7 +13,7 @@ import pt.isel.courtandgo.frontend.dateUtils.initCalendarContext
 import pt.isel.courtandgo.frontend.notifications.initNotificationScheduler
 import pt.isel.courtandgo.frontend.service.http.CourtAndGoServiceHttp
 import pt.isel.courtandgo.frontend.service.mock.CourtAndGoServiceMock
-import pt.isel.courtandgo.frontend.utils.dateUtils.CalendarLinkOpener
+import pt.isel.courtandgo.frontend.utils.addEventToCalendar.CalendarLinkOpener
 
 
 class MainActivity : ComponentActivity() {

@@ -1,4 +1,4 @@
-package pt.isel.courtandgo.frontend.utils.addEventToCalendar
+package pt.isel.courtandgo.frontend.utils.addEventToCalendar.googleCalendar
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +14,7 @@ import courtandgo_frontend.composeapp.generated.resources.googleCalendarIcon
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import org.jetbrains.compose.resources.painterResource
-import pt.isel.courtandgo.frontend.utils.dateUtils.CalendarLinkOpener
+import pt.isel.courtandgo.frontend.utils.addEventToCalendar.CalendarLinkOpener
 
 
 @Composable

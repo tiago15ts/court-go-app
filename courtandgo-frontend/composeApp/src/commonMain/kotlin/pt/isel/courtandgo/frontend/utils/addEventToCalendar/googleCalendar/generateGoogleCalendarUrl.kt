@@ -1,4 +1,4 @@
-package pt.isel.courtandgo.frontend.utils.addEventToCalendar
+package pt.isel.courtandgo.frontend.utils.addEventToCalendar.googleCalendar
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone

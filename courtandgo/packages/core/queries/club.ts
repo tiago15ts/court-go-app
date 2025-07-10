@@ -202,6 +202,19 @@ export async function getClubsFiltered(params: {
   return res.rows.map(mapRowToClubDTO);
 }
 
+
+export async function getClubNameByCourtId(courtId: number) {
+  const res = await db.query(
+    `SELECT c.name AS club_name
+     FROM Club c
+     JOIN Court cor ON c.clubId = cor.clubId
+     WHERE cor.courtId = $1`,
+    [courtId]
+  );
+
+  return res.rows.length > 0 ? res.rows[0].club_name : null;
+}
+
 //queries exclusivas para admins.
 export async function createClub(club: {
   name: string;

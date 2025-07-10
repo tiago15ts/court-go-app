@@ -46,6 +46,7 @@ foundationLayoutAndroidVersion = "1.8.1"
 uiAndroidVersion = "1.8.2"
 uiTestJunit4Android = "1.8.2"
 
+
 [libraries]
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "uiTestManifest" }

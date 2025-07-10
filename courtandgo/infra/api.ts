@@ -31,6 +31,10 @@ api.route("GET /reservations/filter", { //confirmar se esta de acordo
 });
 //acho que falta uma rota
 
+api.route("GET /reservations/{id}/ics", {
+  handler: "functions/reservation/getICS.handler"
+});
+
 
 // === CourtService ===
 api.route("GET /courts", { handler: "functions/court/all.handler" });

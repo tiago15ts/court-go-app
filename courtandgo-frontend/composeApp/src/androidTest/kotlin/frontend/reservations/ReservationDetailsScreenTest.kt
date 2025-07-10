@@ -15,7 +15,7 @@ import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.domain.ReservationStatus
 import pt.isel.courtandgo.frontend.domain.SportTypeCourt
 import pt.isel.courtandgo.frontend.reservations.lastReservations.reservationDetails.ReservationDetailsScreen
-import pt.isel.courtandgo.frontend.utils.dateUtils.CalendarLinkOpener
+import pt.isel.courtandgo.frontend.utils.addEventToCalendar.CalendarLinkOpener
 import pt.isel.courtandgo.frontend.domain.Country
 import pt.isel.courtandgo.frontend.domain.District
 import pt.isel.courtandgo.frontend.domain.SportsClub

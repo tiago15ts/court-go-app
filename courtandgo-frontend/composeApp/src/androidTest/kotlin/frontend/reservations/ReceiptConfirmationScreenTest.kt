@@ -17,7 +17,7 @@ import pt.isel.courtandgo.frontend.domain.ReservationStatus
 import pt.isel.courtandgo.frontend.domain.SportTypeCourt
 import pt.isel.courtandgo.frontend.domain.SportsClub
 import pt.isel.courtandgo.frontend.reservations.receiptReservation.ReceiptReservationScreen
-import pt.isel.courtandgo.frontend.utils.dateUtils.CalendarLinkOpener
+import pt.isel.courtandgo.frontend.utils.addEventToCalendar.CalendarLinkOpener
 import pt.isel.courtandgo.frontend.utils.dateUtils.formatToDisplay
 
 class ReceiptConfirmationScreenTest {

@@ -47,7 +47,7 @@ import pt.isel.courtandgo.frontend.service.mock.repo.ClubRepoMock
 import pt.isel.courtandgo.frontend.service.mock.repo.CourtRepoMock
 import pt.isel.courtandgo.frontend.service.mock.repo.ReservationRepoMock
 import pt.isel.courtandgo.frontend.service.mock.repo.ScheduleCourtRepoMock
-import pt.isel.courtandgo.frontend.utils.dateUtils.CalendarLinkOpener
+import pt.isel.courtandgo.frontend.utils.addEventToCalendar.CalendarLinkOpener
 
 
 @Composable
