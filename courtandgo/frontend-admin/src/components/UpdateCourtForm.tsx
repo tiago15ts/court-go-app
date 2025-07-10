@@ -7,6 +7,12 @@ import {
   Paper,
   Stack,
   Alert,
+  InputAdornment,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { getCourtsByClubId, updateCourt } from "../api";
@@ -19,6 +25,12 @@ type Court = {
   capacity: number;
   pricePerHour: number;
 };
+
+const sportOptions = [
+  { value: "Tennis", label: "Ténis" },
+  { value: "Padel", label: "Padel" },
+];
+
 
 export function UpdateCourtForm() {
   const { clubId } = useParams<{ clubId: string }>();
@@ -83,13 +95,21 @@ export function UpdateCourtForm() {
               fullWidth
               required
             />
-            <TextField
-              label="Tipo (Tennis ou Padel)"
-              value={court.type}
-              onChange={(e) => handleChange(index, "type", e.target.value)}
-              fullWidth
-              required
-            />
+            <FormControl fullWidth required>
+  <InputLabel>Tipo</InputLabel>
+  <Select
+    label="Tipo"
+    value={court.type}
+    onChange={(e) => handleChange(index, "type", e.target.value)}
+  >
+    {sportOptions.map((option) => (
+      <MenuItem key={option.value} value={option.value}>
+        {option.label}
+      </MenuItem>
+    ))}
+  </Select>
+</FormControl>
+
           </Stack>
 
           <Stack direction="row" spacing={2} mt={2}>
@@ -109,16 +129,23 @@ export function UpdateCourtForm() {
               fullWidth
               required
             />
-            <TextField
-              label="Preço por hora"
-              type="number"
-              value={court.pricePerHour}
-              onChange={(e) =>
-                handleChange(index, "pricePerHour", e.target.value)
-              }
-              fullWidth
-              required
-            />
+            
+            <FormControl fullWidth sx={{ m: 1 }}>
+              <InputLabel>Preço por hora</InputLabel>
+              <OutlinedInput
+
+                type="number"
+                inputMode="decimal"
+                label="Preço por hora"
+                value={court.pricePerHour}
+                onChange={(e) => handleChange(index, "pricePerHour", e.target.value)}
+                startAdornment={<InputAdornment position="start">€</InputAdornment>}
+                inputProps={{
+                  step: "0.01",
+                  min: "0"
+                }}
+              />
+            </FormControl>
           </Stack>
         </Paper>
       ))}

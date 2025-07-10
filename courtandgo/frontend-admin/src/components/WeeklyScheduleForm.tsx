@@ -6,7 +6,6 @@ import {
   Typography,
   Paper,
   Checkbox,
-  FormControlLabel,
 } from "@mui/material";
 import { createWeeklySchedule } from "../api/schedule";
 

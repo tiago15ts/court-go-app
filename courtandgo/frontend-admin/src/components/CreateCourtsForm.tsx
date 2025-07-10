@@ -6,6 +6,13 @@ import {
   Typography,
   Paper,
   Stack,
+  InputAdornment,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  Select,
+  MenuItem,
+
 } from "@mui/material";
 
 type Court = {
@@ -21,6 +28,11 @@ type CourtField = keyof Court;
 type CreateCourtsFormProps = {
   clubId: number; // <- aqui defines a prop que estás a passar
 };
+
+const sportOptions = [
+  { value: "Tennis", label: "Ténis" },
+  { value: "Padel", label: "Padel" },
+];
 
 export function CreateCourtsForm({ clubId }: CreateCourtsFormProps) {
   const [courts, setCourts] = useState<Court[]>([
@@ -78,13 +90,21 @@ export function CreateCourtsForm({ clubId }: CreateCourtsFormProps) {
               fullWidth
               required
             />
-            <TextField
-              label="Tipo (Tennis ou Padel)"
-              value={court.type}
-              onChange={(e) => handleChange(index, "type", e.target.value)}
-              fullWidth
-              required
-            />
+            <FormControl fullWidth required>
+              <InputLabel>Tipo</InputLabel>
+              <Select
+                label="Tipo"
+                value={court.type}
+                onChange={(e) => handleChange(index, "type", e.target.value)}
+              >
+                {sportOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
           </Stack>
 
           <Stack spacing={2} direction="row" mt={2}>
@@ -104,16 +124,25 @@ export function CreateCourtsForm({ clubId }: CreateCourtsFormProps) {
               fullWidth
               required
             />
-            <TextField
-              label="Preço por hora"
-              type="number"
-              value={court.pricePerHour}
-              onChange={(e) =>
-                handleChange(index, "pricePerHour", e.target.value)
-              }
-              fullWidth
-              required
-            />
+
+            <FormControl fullWidth sx={{ m: 1 }}>
+              <InputLabel>Preço por hora</InputLabel>
+              <OutlinedInput
+
+                type="number"
+                inputMode="decimal"
+                label="Preço por hora"
+                value={court.pricePerHour}
+                onChange={(e) => handleChange(index, "pricePerHour", e.target.value)}
+                startAdornment={<InputAdornment position="start">€</InputAdornment>}
+                inputProps={{
+                  step: "0.01",
+                  min: "0"
+                }}
+                required
+              />
+            </FormControl>
+
           </Stack>
         </Paper>
       ))}
@@ -123,7 +152,7 @@ export function CreateCourtsForm({ clubId }: CreateCourtsFormProps) {
           Adicionar Court
         </Button>
         <Button type="submit" variant="contained">
-          Guardar Courts
+          Criar Courts
         </Button>
       </Stack>
     </Box>

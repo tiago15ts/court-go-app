@@ -13,14 +13,14 @@ import {
 import { createClub, createLocation } from "../api";
 
 const sportOptions = [
-  { value: "TENNIS", label: "Ténis" },
-  { value: "PADEL", label: "Padel" },
-  { value: "BOTH", label: "Ambos" },
+  { value: "Tennis", label: "Ténis" },
+  { value: "Padel", label: "Padel" },
+  { value: "Both", label: "Ambos" },
 ];
 
 export function CreateClubForm({ onClubCreated }: { onClubCreated: (clubId: number) => void }) {
   const [name, setName] = useState("");
-  const [sport, setSport] = useState("TENNIS");
+  const [sport, setSport] = useState("Tennis");
   const [numCourts, setNumCourts] = useState(1);
 
   // Campos de localização
