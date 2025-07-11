@@ -1,6 +1,12 @@
 import { link } from "fs";
 import { Resource } from "sst";
 
+
+
+// ----- NOT IN USE -----
+
+
+
 export const api = new sst.aws.ApiGatewayV2("CourtAndGoAPI22", {
   //link: [Resource.CourtAndGoDB],
 });

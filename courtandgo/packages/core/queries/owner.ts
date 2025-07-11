@@ -5,12 +5,14 @@ export async function createOwner(owner: {
   name: string;
   phone: string;
 }) {
-  const res = await db.query(
-    `INSERT INTO Player (email, name, phone)
+  const client = await db.connect();
+  const res = await client.query(
+    `INSERT INTO Owner (name, email, phone)
      VALUES ($1, $2, $3)
      RETURNING *`,
-    [owner.email, owner.name, owner.phone]
+    [owner.name, owner.email, owner.phone]
   );
+  client.release();
   return res.rows[0];
 }
 

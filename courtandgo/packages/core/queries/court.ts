@@ -2,33 +2,42 @@ import { db } from "../db";
 import { mapRowToCourtDTO } from '../mappers/courtMapper';
 
 export async function getCourtsByClub(clubId: number) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `SELECT c.* FROM Court c
      JOIN Club cl ON c.clubId = cl.clubId
      WHERE cl.clubId = $1`,
     [clubId]
   );
+  client.release();
   return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtById(id: number) {
-  const res = await db.query("SELECT * FROM Court WHERE courtId = $1", [id]);
+  const client = await db.connect();
+  const res = await client.query("SELECT * FROM Court WHERE courtId = $1", [id]);
+  client.release();
   return res.rows.length > 0 ? mapRowToCourtDTO(res.rows[0]) : null;
 }
 
 export async function getCourtsByType(type: string) {
-  const res = await db.query("SELECT * FROM Court WHERE type = $1", [type]);
+  const client = await db.connect();
+  const res = await client.query("SELECT * FROM Court WHERE type = $1", [type]);
+  client.release();
   return res.rows.map(mapRowToCourtDTO);
 }
 
 
 export async function getAllCourts() {
-  const res = await db.query("SELECT * FROM Court");
+  const client = await db.connect();
+  const res = await client.query("SELECT * FROM Court");
+  client.release();
   return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByDistrict(district: string) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `SELECT c.* FROM Court c
      JOIN Club cl ON c.clubId = cl.clubId
      JOIN Location l ON cl.locationId = l.locationId
@@ -36,16 +45,20 @@ export async function getCourtsByDistrict(district: string) {
      WHERE di.name ILIKE $1`,
     [district]
   );
+  client.release();
   return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsBySport(sport: string) {
-  const res = await db.query("SELECT * FROM Court WHERE type = $1", [sport]);
+  const client = await db.connect();
+  const res = await client.query("SELECT * FROM Court WHERE type = $1", [sport]);
+  client.release();
   return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsFiltered(district: string, sport: string) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `SELECT c.* FROM Court c
      JOIN Club cl ON c.clubId = cl.clubId
      JOIN Location l ON cl.locationId = l.locationId
@@ -53,37 +66,47 @@ export async function getCourtsFiltered(district: string, sport: string) {
      WHERE di.name ILIKE $1 AND c.type = $2`,
     [district, sport]
   );
+  client.release();
   return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByOwnerId(ownerId: number) {
-  const res = await db.query("SELECT * FROM Court WHERE ownerId = $1", [ownerId]);
+  const client = await db.connect();
+  const res = await client.query("SELECT * FROM Court WHERE ownerId = $1", [ownerId]);
+  client.release();
   return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByLocationId(locationId: number) {
-  const res = await db.query("SELECT * FROM Court WHERE locationId = $1", [locationId]);
+  const client = await db.connect();
+  const res = await client.query("SELECT * FROM Court WHERE locationId = $1", [locationId]);
+  client.release();
   return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByName(name: string) {
-  const res = await db.query("SELECT * FROM Court WHERE name ILIKE $1", [`%${name}%`]);
+  const client = await db.connect();
+  const res = await client.query("SELECT * FROM Court WHERE name ILIKE $1", [`%${name}%`]);
+  client.release();
   return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByCity(city: string) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `SELECT c.* FROM Court c
      JOIN Location l ON c.locationId = l.locationId
      JOIN City ci ON l.cityId = ci.cityId
      WHERE ci.name ILIKE $1`,
     [city]
   );
+  client.release();
   return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByCountry(country: string) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `SELECT c.* FROM Court c
      JOIN Location l ON c.locationId = l.locationId
      JOIN City ci ON l.cityId = ci.cityId
@@ -91,11 +114,13 @@ export async function getCourtsByCountry(country: string) {
      WHERE co.name ILIKE $1`,
     [country]
   );
+  client.release();
   return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByRegion(region: string) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `SELECT c.* FROM Court c
      JOIN Location l ON c.locationId = l.locationId
      JOIN City ci ON l.cityId = ci.cityId
@@ -103,26 +128,31 @@ export async function getCourtsByRegion(region: string) {
      WHERE r.name ILIKE $1`,
     [region]
   );
+  client.release();
   return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByPostalCode(postalCode: string) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `SELECT c.* FROM Court c
      JOIN Location l ON c.locationId = l.locationId
      WHERE l.postalCode ILIKE $1`,
     [postalCode]
   );
+  client.release();
   return res.rows.map(mapRowToCourtDTO);
 }
 
 export async function getCourtsByAddress(address: string) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `SELECT c.* FROM Court c
      JOIN Location l ON c.locationId = l.locationId
      WHERE l.address ILIKE $1`,
     [`%${address}%`]
   );
+  client.release();
   return res.rows.map(mapRowToCourtDTO);
 }
 
@@ -136,12 +166,14 @@ export async function createCourt(court: {
   capacity: number;
   pricePerHour: number;
 }) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `INSERT INTO Court (name, clubId, type, surfaceType, capacity, pricePerHour)
      VALUES ($1, $2, $3, $4, $5, $6)
      RETURNING *`,
     [court.name, court.clubId, court.type, court.surfaceType, court.capacity]
   );
+  client.release();
   return res.rows[0];
 }
 
@@ -154,6 +186,7 @@ export async function updateCourt(court: {
   capacity?: number;
   pricePerHour?: number;
 }) {
+  const client = await db.connect();
   const fields: string[] = [];
   const values: any[] = [];
   let i = 1;
@@ -189,10 +222,11 @@ export async function updateCourt(court: {
 
   values.push(court.courtId);
 
-  const res = await db.query(
+  const res = await client.query(
     `UPDATE Court SET ${fields.join(", ")} WHERE courtId = $${i} RETURNING *`,
     values
   );
+  client.release();
   return res.rows[0];
 }
 

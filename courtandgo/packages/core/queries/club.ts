@@ -28,7 +28,6 @@ const BASE_CLUB_GROUP_BY = `
 
 export async function getAllClubs() {
   const client = await db.connect();
-  
   const query = `
     SELECT
       cl.clubId,
@@ -70,89 +69,107 @@ export async function getAllClubs() {
 }
 
 export async function getClubsByDistrict(district: string) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `${BASE_CLUB_SELECT}
     WHERE d.name ILIKE $1
     ${BASE_CLUB_GROUP_BY}
     `,
     [district]
   );
+  client.release();
 
   return res.rows.map(mapRowToClubDTO);
 }
 
 
 export async function getClubsByCounty(county: string) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `${BASE_CLUB_SELECT} WHERE l.county ILIKE $1
     ${BASE_CLUB_GROUP_BY}`,
     [county]
   );
+  client.release();
   return res.rows.map(mapRowToClubDTO);
 }
 
 export async function getClubsByCountry(country: string) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `${BASE_CLUB_SELECT} WHERE co.name ILIKE $1
     ${BASE_CLUB_GROUP_BY}`,
     [country]
   );
+  client.release();
   return res.rows.map(mapRowToClubDTO);
 }
 
 export async function getClubsByPostalCode(postalCode: string) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `${BASE_CLUB_SELECT} WHERE l.postalCode ILIKE $1
     ${BASE_CLUB_GROUP_BY}`,
     [postalCode]
   );
+  client.release();
   return res.rows.map(mapRowToClubDTO);
 }
 
 export async function getClubsByName(name: string) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `${BASE_CLUB_SELECT} WHERE c.name ILIKE $1
     ${BASE_CLUB_GROUP_BY}`,
     [`%${name}%`]
   );
+  client.release();
   return res.rows.map(mapRowToClubDTO);
 }
 
 export async function getClubsBySport(sport: string) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `${BASE_CLUB_SELECT} WHERE c.sports = $1
     ${BASE_CLUB_GROUP_BY}`,
     [sport]
   );
+  client.release();
   return res.rows.map(mapRowToClubDTO);
 }
 
 export async function getClubById(id: number) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `${BASE_CLUB_SELECT} WHERE c.clubId = $1
     ${BASE_CLUB_GROUP_BY}`,
     [id]
   );
+  client.release();
   return res.rows.length > 0 ? mapRowToClubDTO(res.rows[0]) : null;
 }
 
 export async function getClubsByOwnerId(ownerId: number) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `${BASE_CLUB_SELECT} WHERE c.ownerId = $1
     ${BASE_CLUB_GROUP_BY}`,
     [ownerId]
   );
+  client.release();
   return res.rows.map(mapRowToClubDTO);
 }
 
 // get clubId by courtId
 export async function getClubIdByCourtId(courtId: number) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `SELECT cl.clubId FROM Club cl
      JOIN Court c ON cl.clubId = c.clubId
      WHERE c.courtId = $1`,
     [courtId]
   );
+  client.release();
   return res.rows[0]?.clubId || null;
 }
 
@@ -164,6 +181,7 @@ export async function getClubsFiltered(params: {
   postalCode?: string;
   sport: string;
 }) {
+  const client = await db.connect();
   const conditions: string[] = ["1=1"];
   const values: any[] = [];
   let i = 1;
@@ -204,13 +222,15 @@ export async function getClubsFiltered(params: {
     ${BASE_CLUB_GROUP_BY}
   `;
 
-  const res = await db.query(query, values);
+  const res = await client.query(query, values);
+  client.release();
   return res.rows.map(mapRowToClubDTO);
 }
 
 
 export async function getClubNameByCourtId(courtId: number) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `SELECT c.name AS club_name
      FROM Club c
      JOIN Court cor ON c.clubId = cor.clubId
@@ -218,6 +238,7 @@ export async function getClubNameByCourtId(courtId: number) {
     [courtId]
   );
 
+  client.release();
   return res.rows.length > 0 ? res.rows[0].club_name : null;
 }
 
@@ -229,12 +250,14 @@ export async function createClub(club: {
   locationId: number;
   ownerId: number;
 }) {
-  const res = await db.query(
+  const client = await db.connect();
+  const res = await client.query(
     `INSERT INTO Club (name, sports, nrOfCourts, locationId, ownerId)
      VALUES ($1, $2, $3, $4, $5)
      RETURNING *`,
     [club.name, club.sports, club.nrOfCourts, club.locationId, club.ownerId]
   );
+  client.release();
   return res.rows[0];
 }
 
@@ -245,6 +268,7 @@ export async function updateClub(club: {
   nrOfCourts?: number;
   locationId?: number;
 }) {
+  const client = await db.connect();
   const fields: string[] = [];
   const values: any[] = [];
   let i = 1;
@@ -273,7 +297,8 @@ export async function updateClub(club: {
   values.push(club.clubId);
   const query = `UPDATE Club SET ${fields.join(", ")} WHERE clubId = $${values.length} RETURNING *`;
 
-  const res = await db.query(query, values);
+  const res = await client.query(query, values);
+  client.release();
   return res.rows[0];
 }
 
