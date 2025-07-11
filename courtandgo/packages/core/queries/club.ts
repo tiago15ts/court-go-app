@@ -1,6 +1,8 @@
 import { db } from "../db";
 import { mapRowToClubDTO } from "../mappers/clubMapper";
 
+
+
 const BASE_CLUB_SELECT = `
   SELECT 
     c.clubId, c.name AS club_name, c.sports, c.nrOfCourts,
@@ -25,6 +27,8 @@ const BASE_CLUB_GROUP_BY = `
 `;
 
 export async function getAllClubs() {
+  const client = await db.connect();
+  
   const query = `
     SELECT
       cl.clubId,
@@ -59,7 +63,9 @@ export async function getAllClubs() {
       d.districtId, d.name, d.countryId,
       c.countryId, c.name
   `;
-  const res = await db.query(query);
+  const res = await client.query(query);
+  client.release();
+  
   return res.rows.map(mapRowToClubDTO);
 }
 

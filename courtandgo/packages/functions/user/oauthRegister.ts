@@ -3,7 +3,7 @@ import { getUserByEmail } from "../../core/queries/user";
 import { registerUser } from "../../core/queries/user";
 
 
-// POST /auth/oauth-register
+// POST /user/oauthregister
 export async function handler(event) {
   const body = JSON.parse(event.body || "{}");
   const { email, name, countryCode, contact } = body;

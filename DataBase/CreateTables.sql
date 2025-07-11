@@ -19,7 +19,7 @@ CREATE TABLE Location (
     county VARCHAR(100) NOT NULL,
     postalCode VARCHAR(20) NOT NULL,
     latitude DECIMAL(9,6),
-    longitude DECIMAL(9,6),
+    longitude DECIMAL(9,6)
 );
 
 
@@ -38,8 +38,8 @@ CREATE TABLE Club(
     sports VARCHAR(100) CHECK (sports IN ('Tennis', 'Padel', 'Both')),
     nrOfCourts INT,
     locationId INT REFERENCES Location(locationId),
-    ownerId INT REFERENCES Owner(ownerId),
-)
+    ownerId INT REFERENCES Owner(ownerId)
+);
 
 
 CREATE TABLE Court (
@@ -49,7 +49,7 @@ CREATE TABLE Court (
     type VARCHAR(20) CHECK (type IN ('Tennis', 'Padel')),
     surfaceType VARCHAR(50),
     capacity INT,
-    pricePerHour DECIMAL(6,2),
+    pricePerHour DECIMAL(6,2)
 );
 
 --CREATE TABLE Court_Price (
