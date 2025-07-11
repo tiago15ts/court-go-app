@@ -15,4 +15,6 @@ interface UserService{
     suspend fun getUserByEmail(email: String): User?
 
     suspend fun updateUser(user: User): User
+
+    suspend fun oauthRegister(email: String, name: String, countryCode: String, contact: String): User
 }

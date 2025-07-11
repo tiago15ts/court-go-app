@@ -15,7 +15,6 @@ export async function registerUser(user: {
   name: string;
   countryId: number;
   phone: string;
-  password: string;
 }) {
   const res = await db.query(
     `INSERT INTO Player (email, name, countryId, phone)

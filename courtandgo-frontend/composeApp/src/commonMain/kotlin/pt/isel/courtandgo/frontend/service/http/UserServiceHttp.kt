@@ -97,4 +97,25 @@ class UserServiceHttp(private val client: HttpClient) : UserService {
             throw UpdateUserException("Erro ao atualizar utilizador: ${e.message}", e)
         }
     }
+
+    override suspend fun oauthRegister(
+        email: String,
+        name: String,
+        countryCode: String,
+        contact: String
+    ): User {
+        val userInput = UserRegisterInput(
+            email = email,
+            name = name,
+            countryCode = countryCode,
+            contact = contact,
+            password = "" // Password is not used for OAuth registration
+        )
+        return try {
+            val dto = client.post<UserDTO>("/user/oauth-register", body = userInput)
+            dto.toUser()
+        } catch (e: CourtAndGoException) {
+            throw RegistrationException("Erro ao registar utilizador OAuth: ${e.message}", e)
+        }
+    }
 }

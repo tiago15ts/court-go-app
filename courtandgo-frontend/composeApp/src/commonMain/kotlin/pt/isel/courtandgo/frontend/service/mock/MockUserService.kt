@@ -38,5 +38,14 @@ class MockUserService(private val repoMock: UserRepoMock) : UserService {
         return repoMock.updateUser(user)
     }
 
+    override suspend fun oauthRegister(
+        email: String,
+        name: String,
+        countryCode: String,
+        contact: String
+    ): User {
+        return repoMock.oauthRegister(email, name, countryCode, contact)
+    }
+
 
 }

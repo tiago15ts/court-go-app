@@ -61,5 +61,19 @@ class UserRepoMock {
         }
     }
 
+    fun oauthRegister(
+        email: String,
+        name: String,
+        countryCode: String,
+        contact: String
+    ): User {
+        if (users.any { it.email == email }) {
+            throw IllegalArgumentException("Email já utilizado.")
+        }
+        val user = User(currentId++, name, email, countryCode, contact, null, null, null, null, null)
+        users.add(user)
+        return user
+    }
+
 
 }

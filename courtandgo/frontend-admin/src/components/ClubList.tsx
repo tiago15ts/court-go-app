@@ -12,13 +12,18 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-export function ClubList({ ownerId }: { ownerId: number }) {
+export function ClubList({ ownerId }: { ownerId: string | null }) {
   const [clubs, setClubs] = useState<any[]>([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    getClubsByOwnerId(ownerId).then(setClubs);
-  }, [ownerId]);
+useEffect(() => {
+  if (!ownerId) return;
+  getClubsByOwnerId(ownerId)
+    .then(setClubs)
+    .catch((error) => {
+      console.error("Erro ao carregar clubes:", error);
+    });
+}, [ownerId]);
 
   return (
     <Box sx={{ maxWidth: 600, marginTop: 3 }}>

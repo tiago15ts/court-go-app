@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   TextField,
@@ -6,8 +6,11 @@ import {
   Typography,
   Paper,
   Checkbox,
+  Alert,
+  
 } from "@mui/material";
 import { createWeeklySchedule } from "../api/schedule";
+import { getWeeklyScheduleByClubId } from "../api/mocks";
 
 const daysOfWeek = [
   { value: "MONDAY", label: "Segunda-feira" },
@@ -25,9 +28,12 @@ export function WeeklyScheduleForm({ clubId }: { clubId: number }) {
       dayOfWeek: day.value,
       startTime: "",
       endTime: "",
-      open: true, // novo campo para indicar se está aberto
+      open: true,
     }))
   );
+
+  const [loading, setLoading] = useState(false);
+  const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
   function handleChange(
     index: number,
@@ -42,7 +48,6 @@ export function WeeklyScheduleForm({ clubId }: { clubId: number }) {
   function handleOpenChange(index: number, checked: boolean) {
     const updated = [...schedules];
     updated[index].open = checked;
-    // se fechar o dia, limpa os horários
     if (!checked) {
       updated[index].startTime = "";
       updated[index].endTime = "";
@@ -52,18 +57,46 @@ export function WeeklyScheduleForm({ clubId }: { clubId: number }) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setLoading(true);
+    setFeedback(null);
 
-    for (const schedule of schedules) {
-      await createWeeklySchedule({
-        clubId,
-        dayOfWeek: schedule.dayOfWeek,
-        startTime: schedule.open ? schedule.startTime : null,
-        endTime: schedule.open ? schedule.endTime : null,
-      });
+    try {
+      for (const schedule of schedules) {
+        await createWeeklySchedule({
+          clubId,
+          dayOfWeek: schedule.dayOfWeek,
+          startTime: schedule.open ? schedule.startTime : null,
+          endTime: schedule.open ? schedule.endTime : null,
+        });
+      }
+      setFeedback({ type: "success", message: "Horários guardados com sucesso!" });
+    } catch (error) {
+      setFeedback({ type: "error", message: "Erro ao guardar horários. Tente novamente." });
+    } finally {
+      setLoading(false);
+      setTimeout(() => setFeedback(null), 5000); // feedback desaparece após 5 segundos
     }
-
-    alert("Horários adicionados");
   }
+
+  useEffect(() => {
+  async function loadSchedules() {
+    const savedSchedules = await getWeeklyScheduleByClubId(clubId);
+    if (savedSchedules && savedSchedules.length > 0) {
+      const mappedSchedules = daysOfWeek.map(day => {
+        const sched = savedSchedules.find(s => s.dayOfWeek === day.value);
+        return {
+          dayOfWeek: day.value,
+          startTime: sched?.startTime || "",
+          endTime: sched?.endTime || "",
+          open: Boolean(sched?.startTime && sched?.endTime),
+        };
+      });
+      setSchedules(mappedSchedules);
+    }
+  }
+  loadSchedules();
+}, [clubId]);
+
 
   return (
     <Box
@@ -72,6 +105,8 @@ export function WeeklyScheduleForm({ clubId }: { clubId: number }) {
       sx={{ maxWidth: 600, p: 2, display: "flex", flexDirection: "column", gap: 3 }}
     >
       <Typography variant="h6" mb={1}>Horário Semanal</Typography>
+
+      {feedback && <Alert severity={feedback.type}>{feedback.message}</Alert>}
 
       <Paper sx={{ p: 2 }}>
         <Box sx={{ display: "flex", fontWeight: "bold", mb: 1 }}>
@@ -102,7 +137,7 @@ export function WeeklyScheduleForm({ clubId }: { clubId: number }) {
                 onChange={(e) => handleChange(index, "startTime", e.target.value)}
                 fullWidth
                 inputProps={{ step: 300 }}
-                disabled={!schedule.open} // desabilita se não estiver aberto
+                disabled={!schedule.open}
               />
             </Box>
 
@@ -113,15 +148,15 @@ export function WeeklyScheduleForm({ clubId }: { clubId: number }) {
                 onChange={(e) => handleChange(index, "endTime", e.target.value)}
                 fullWidth
                 inputProps={{ step: 300 }}
-                disabled={!schedule.open} // desabilita se não estiver aberto
+                disabled={!schedule.open}
               />
             </Box>
           </Box>
         ))}
       </Paper>
 
-      <Button type="submit" variant="contained">
-        Guardar Horários
+      <Button type="submit" variant="contained" disabled={loading}>
+        {loading ? "A guardar..." : "Guardar Horários"}
       </Button>
     </Box>
   );

@@ -8,8 +8,12 @@ import {
   Stack,
 } from "@mui/material";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
+import { signUpUser } from "../api/auth";
+import { useAuth } from "../components/authContext";
+
 
 export function RegisterForm() {
+  const { setOwnerId } = useAuth();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -19,26 +23,33 @@ export function RegisterForm() {
 
   const navigate = useNavigate();
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setSuccess(false);
+async function handleSubmit(e: React.FormEvent) {
+  e.preventDefault();
+  setError(null);
+  setSuccess(false);
 
-    try {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, name, password, contact }),
-      });
+  try {
+    // Chamar a função que regista no Cognito direto
+    const result: any= await signUpUser({
+      email,
+      password,
+      name,
+      phone: contact,  // usa o contact para o phone
+    });
 
-      if (!res.ok) throw new Error("Erro ao registar");
+    console.log("Registo efetuado, precisa de confirmar:", result);
+    const userSub = result.userSub;
+    setOwnerId(userSub);
 
-      setSuccess(true);
-      setTimeout(() => navigate("/dashboard"), 1500);
-    } catch (err) {
-      setError("Erro no registo. Verifica os dados ou tenta mais tarde.");
-    }
+    setSuccess(true);
+
+    // Se quiseres podes redirecionar para uma página de confirmação de código
+    setTimeout(() => navigate("/dashboard"), 300);
+  } catch (err: any) {
+    setError(err.message || "Erro no registo. Verifica os dados ou tenta mais tarde.");
   }
+}
+
 
   return (
     <>
@@ -86,7 +97,6 @@ export function RegisterForm() {
         type="tel"
         value={contact}
         onChange={(e) => setContact(e.target.value)}
-        inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
         required
       />
 
@@ -124,3 +134,5 @@ export function RegisterForm() {
     </>
   );
 }
+
+

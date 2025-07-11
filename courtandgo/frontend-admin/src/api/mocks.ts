@@ -3,8 +3,10 @@
 import { fakeClubs } from "./mockData";
 import { fakeCourts } from "./mockData";
 import { fakeLocations } from "./mockData";
+import { fakeSchedules } from "./mockData";
 
-export async function getClubsByOwnerId(ownerId: number) {
+
+export async function getClubsByOwnerId(ownerId: string | null) {
   return new Promise<any[]>(resolve => {
     setTimeout(() => resolve(fakeClubs), 300);
   });
@@ -96,6 +98,15 @@ export async function getLocationsByClubId(clubId: number) {
       if (!location) return reject(new Error("Localização não encontrada"));
 
       resolve(location);
+    }, 300);
+  });
+}
+
+export async function getWeeklyScheduleByClubId(clubId: number) {
+  return new Promise<any[]>((resolve) => {
+    setTimeout(() => {
+      const schedules = fakeSchedules.filter(s => s.clubId === clubId);
+      resolve(schedules);
     }, 300);
   });
 }

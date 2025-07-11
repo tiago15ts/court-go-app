@@ -12,10 +12,11 @@ import {
   OutlinedInput,
   Select,
   MenuItem,
-
 } from "@mui/material";
 
 type Court = {
+  courtId: number;
+  clubId: number;
   name: string;
   type: string;
   surfaceType: string;
@@ -26,8 +27,11 @@ type Court = {
 type CourtField = keyof Court;
 
 type CreateCourtsFormProps = {
-  clubId: number; // <- aqui defines a prop que estás a passar
+  clubId: number;
 };
+
+// Mock global para guardar courts criados
+const mockCourts: Court[] = [];
 
 const sportOptions = [
   { value: "Tennis", label: "Ténis" },
@@ -35,7 +39,7 @@ const sportOptions = [
 ];
 
 export function CreateCourtsForm({ clubId }: CreateCourtsFormProps) {
-  const [courts, setCourts] = useState<Court[]>([
+  const [courts, setCourts] = useState<Omit<Court, "courtId" | "clubId">[]>([
     {
       name: "",
       type: "",
@@ -45,7 +49,11 @@ export function CreateCourtsForm({ clubId }: CreateCourtsFormProps) {
     },
   ]);
 
-  function handleChange(index: number, field: CourtField, value: string) {
+  function handleChange(
+    index: number,
+    field: keyof Omit<Court, "courtId" | "clubId">,
+    value: string
+  ) {
     const updated = [...courts];
     updated[index] = {
       ...updated[index],
@@ -66,8 +74,30 @@ export function CreateCourtsForm({ clubId }: CreateCourtsFormProps) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log("Enviar courts:", courts);
-    // Aqui chamar createCourt para cada court, ou enviar tudo de uma vez conforme a tua API
+
+    // Simular o createCourt para cada court e associar ao clubId
+    courts.forEach((courtData, i) => {
+      const newCourtId = mockCourts.length + 1;
+      mockCourts.push({
+        courtId: newCourtId,
+        clubId,
+        ...courtData,
+      });
+    });
+
+    console.log("Courts criados:", mockCourts.filter(c => c.clubId === clubId));
+    alert(`Criados ${courts.length} courts para o clube ${clubId}`);
+
+    // Poderias aqui limpar os courts ou redirecionar conforme necessidade
+    setCourts([
+      {
+        name: "",
+        type: "",
+        surfaceType: "",
+        capacity: 0,
+        pricePerHour: 0,
+      },
+    ]);
   }
 
   return (
@@ -104,7 +134,6 @@ export function CreateCourtsForm({ clubId }: CreateCourtsFormProps) {
                 ))}
               </Select>
             </FormControl>
-
           </Stack>
 
           <Stack spacing={2} direction="row" mt={2}>
@@ -128,21 +157,21 @@ export function CreateCourtsForm({ clubId }: CreateCourtsFormProps) {
             <FormControl fullWidth sx={{ m: 1 }}>
               <InputLabel>Preço por hora</InputLabel>
               <OutlinedInput
-
                 type="number"
                 inputMode="decimal"
                 label="Preço por hora"
                 value={court.pricePerHour}
-                onChange={(e) => handleChange(index, "pricePerHour", e.target.value)}
+                onChange={(e) =>
+                  handleChange(index, "pricePerHour", e.target.value)
+                }
                 startAdornment={<InputAdornment position="start">€</InputAdornment>}
                 inputProps={{
                   step: "0.01",
-                  min: "0"
+                  min: "0",
                 }}
                 required
               />
             </FormControl>
-
           </Stack>
         </Paper>
       ))}

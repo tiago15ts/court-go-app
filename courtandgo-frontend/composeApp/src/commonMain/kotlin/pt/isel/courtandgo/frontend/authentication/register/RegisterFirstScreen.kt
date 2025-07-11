@@ -126,6 +126,7 @@ fun RegisterFirstScreen(
                             email = googleUser.email ?: "Atualize o seu email"
                         ) {
                             onGoogleRegister(googleUser.idToken)
+                            println(googleUser.idToken)
                         }
                     } else {
                         viewModel.setError("Falha ao registar-se com a conta Google.")

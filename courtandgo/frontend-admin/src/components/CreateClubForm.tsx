@@ -10,7 +10,27 @@ import {
   InputLabel,
   Select,
 } from "@mui/material";
-import { createClub, createLocation } from "../api";
+import { useAuth } from "./authContext";
+import { useNavigate } from "react-router-dom";
+
+// Mock para guardar locais
+const mockLocations: {
+  locationId: number;
+  address: string;
+  county: string;
+  district: string;
+  postalCode: string;
+}[] = [];
+
+// Mock para guardar clubes
+const mockClubs: {
+  clubId: number;
+  name: string;
+  sports: string;
+  nrOfCourts: number;
+  ownerId: string;
+  locationId: number;
+}[] = [];
 
 const sportOptions = [
   { value: "Tennis", label: "Ténis" },
@@ -31,34 +51,58 @@ export function CreateClubForm({ onClubCreated }: { onClubCreated: (clubId: numb
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const { ownerId } = useAuth();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setSuccess(false);
 
+    if (!ownerId) {
+      setError("Precisa de estar autenticado para criar um clube.");
+      return;
+    }
+
     try {
-  
-      const location = await createLocation({
+      // Cria o mock location
+      const newLocationId = mockLocations.length + 1;
+      mockLocations.push({
+        locationId: newLocationId,
         address,
         county,
         district,
         postalCode,
       });
 
-      const club = await createClub({
+      // Cria o mock clube
+      const newClubId = mockClubs.length + 1;
+      mockClubs.push({
+        clubId: newClubId,
         name,
         sports: sport,
         nrOfCourts: numCourts,
-        ownerId: 1, // hardcoded
-        locationId: location.locationId,
+        ownerId,
+        locationId: newLocationId,
       });
 
       setSuccess(true);
-      onClubCreated(club.clubId);
+      onClubCreated(newClubId);
+
+      // Limpar campos (opcional)
+      setName("");
+      setSport("Tennis");
+      setNumCourts(1);
+      setAddress("");
+      setCounty("");
+      setDistrict("");
+      setPostalCode("");
     } catch (err) {
       setError("Erro ao criar clube ou localização.");
     }
+
+    setTimeout(() => navigate("/clubs"), 300);
   }
 
   return (

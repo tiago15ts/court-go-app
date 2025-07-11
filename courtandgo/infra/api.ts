@@ -7,6 +7,7 @@ api.route("POST /user/logout", { handler: "functions/user/logout.handler" });
 api.route("GET /user/{id}", { handler: "functions/user/getById.handler" });
 api.route("GET /user/email/{email}", { handler: "functions/user/getByEmail.handler" });
 api.route("PUT /user", { handler: "functions/user/update.handler" });
+api.route("POST /user/oauth-register", { handler: "functions/user/oauth-register.handler" });
 
 // === ScheduleCourtsService ===
 api.route("GET /schedule/weekly/{courtId}", { handler: "functions/schedule/weekly.handler" });
@@ -67,3 +68,7 @@ api.route("PUT /clubs", { handler: "functions/club/update.handler" }); // Update
 
 api.route("POST /clubs/location", { handler: "functions/club/createLocation.handler" }); // Create a new location for a club
 api.route("PUT /clubs/location", { handler: "functions/club/updateLocation.handler" }); // Update location details for a club
+
+// === OwnerService ===
+api.route("POST /owners/register", { handler: "functions/owners/register.handler" });
+//api.route("POST /owners/login", { handler: "functions/owners/login.handler" });

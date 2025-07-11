@@ -8,34 +8,32 @@ import {
   Stack,
 } from "@mui/material";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
+import { signInUser } from "../api/login"; 
+import { useAuth } from "./authContext"; 
 
 export function LoginForm() {
+  const { setOwnerId } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
+async function handleSubmit(e: React.FormEvent) {
+  e.preventDefault();
+  setError(null);
 
-    try {
-      // Substituir pelo teu endpoint real de login
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+  try {
+    const session : any = await signInUser({ email, password });
+    console.log("Login bem sucedido:", session);
 
-      if (!res.ok) throw new Error("Credenciais inválidas");
-
-      // Supondo que o login correu bem, redireciona para o dashboard
-      navigate("/dashboard");
-    } catch (err) {
-      setError("Email ou palavra-passe inválidos.");
-    }
+    
+    // Redireciona para o dashboard
+    navigate("/dashboard");
+  } catch (err: any) {
+    setError(err.message || "Email ou palavra-passe inválidos.");
   }
+}
 
   return (
     <Box

@@ -1,7 +1,7 @@
 
 export function MyStack({ stack }: StackContext) {
   
-   const bucket = new sst.aws.Bucket( "Uploads");
+   const bucket = new sst.aws.Bucket("Uploads");
 
    const vpc = new sst.aws.Vpc("MyVpc");
 

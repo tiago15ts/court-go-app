@@ -10,6 +10,7 @@ class AuthRepositoryImpl(
 
     override suspend fun loginWithEmail(email: String, password: String): User {
         val user = courtAndGoService.userService.login(email, password)
+
         return user ?: throw Exception("Erro ao iniciar sessão")
     }
 
@@ -21,12 +22,11 @@ class AuthRepositoryImpl(
         setToken(tokenId) // Guardar token
 
         val user = courtAndGoService.userService.getUserByEmail(email)
-            ?: courtAndGoService.userService.register( //todo fix this
+            ?: courtAndGoService.userService.oauthRegister(
                 email = email,
                 name = name,
                 countryCode = "+351",
-                contact = "Atualize o seu contacto",
-                password = "oauth" // ou usa null se for suportado
+                contact = "Atualize o seu contacto"
             )
 
         return user
