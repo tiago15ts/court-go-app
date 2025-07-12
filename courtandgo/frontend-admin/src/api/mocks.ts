@@ -88,7 +88,7 @@ export async function getCourtsByClubId(clubId: number) {
   });
 }
 
-export async function getLocationsByClubId(clubId: number) {
+export async function getLocationByClubId(clubId: number) {
   return new Promise<any>((resolve, reject) => {
     setTimeout(() => {
       const club = fakeClubs.find(c => c.clubId === clubId);

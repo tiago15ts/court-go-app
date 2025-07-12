@@ -8,13 +8,19 @@ export default function CreateClubPage() {
 
   return (
     <Box sx={{ maxWidth: 800, mx: "auto", mt: 4 }}>
-      <Typography variant="h4" gutterBottom>Criar Clube e Courts</Typography>
+      <Typography variant="h4" gutterBottom>
+        Criar Clube e Courts
+      </Typography>
 
       <CreateClubForm onClubCreated={setCreatedClubId} />
 
-      
-        <CreateCourtsForm clubId={1} />
-      
+      {createdClubId ? (
+        <CreateCourtsForm clubId={createdClubId} />
+      ) : (
+        <Typography variant="body1" mt={4}>
+          Crie um clube primeiro para adicionar courts.
+        </Typography>
+      )}
     </Box>
   );
 }

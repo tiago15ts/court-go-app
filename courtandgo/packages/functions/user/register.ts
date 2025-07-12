@@ -15,6 +15,13 @@ export async function handler(event) {
   const body = JSON.parse(event.body || "{}");
   const { email, password, name, countryCode, contact } = body;
 
+  if (!email || !password || !name || !contact || !countryCode) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: "Campos obrigatórios em falta." }),
+    };
+  }
+
   try {
     const command = new SignUpCommand({
       ClientId: COGNITO_CLIENT_ID!,
@@ -22,10 +29,12 @@ export async function handler(event) {
       Password: password,
       UserAttributes: [
         { Name: "name", Value: name },
-        { Name: "phone_number", Value: `+${countryCode}${contact}` },
+        { Name: "phone_number", Value: `${countryCode}${contact}` },
         { Name: "email", Value: email },
       ],
     });
+
+    await cognito.send(command);
 
     await cognito.send(new AdminConfirmSignUpCommand({
       UserPoolId: COGNITO_USER_POOL_ID,
@@ -41,7 +50,7 @@ export async function handler(event) {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true }),
+      body: JSON.stringify({ user }),
     };
   } catch (err) {
     return {

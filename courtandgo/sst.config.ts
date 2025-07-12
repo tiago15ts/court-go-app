@@ -41,9 +41,10 @@ export default $config({
     api.route("POST /user/login", { handler: "packages/functions/user/login.handler" });
     api.route("POST /user/logout", { handler: "packages/functions/user/logout.handler" });
     api.route("GET /user/{id}", { handler: "packages/functions/user/getById.handler" });
-    api.route("GET /user/email", { handler: "packages/functions/user/getByEmail.handler" });
+    api.route("GET /user/email/{email}", { handler: "packages/functions/user/getByEmail.handler" });
     api.route("PUT /user/{id}", { handler: "packages/functions/user/update.handler" });
     api.route("POST /user/oauthregister", { handler: "packages/functions/user/oauthregister.handler" });
+    api.route("GET /user", { handler: "packages/functions/user/getAll.handler" });
 
     // === ScheduleCourtsService ===
     api.route("GET /schedule/weekly/{courtId}", { handler: "packages/functions/schedule/weekly.handler" });
@@ -99,15 +100,18 @@ export default $config({
     api.route("GET /clubs/court/{courtId}", { handler: "packages/functions/club/getClubIdByCourtId.handler" });
     api.route("GET /clubs/filter", { handler: "packages/functions/club/getFiltered.handler" }); //confirmar se esta de acordo
     api.route("POST /clubs", { handler: "packages/functions/club/create.handler" }); // Create a new club
-    api.route("PUT /clubs", { handler: "packages/functions/club/update.handler" }); // Update club details
+    api.route("PUT /clubs/{id}", { handler: "packages/functions/club/update.handler" }); // Update club details
 
 
     api.route("POST /clubs/location", { handler: "packages/functions/club/createLocation.handler" }); // Create a new location for a club
-    api.route("PUT /clubs/location", { handler: "packages/functions/club/updateLocation.handler" }); // Update location details for a club
+    api.route("PUT /clubs/location/{id}", { handler: "packages/functions/club/updateLocation.handler" }); // Update location details for a club
+    api.route("GET /clubs/{clubId}/location", { handler: "packages/functions/club/getLocationByClubId.handler" }); // Get location by club ID
 
     // === OwnerService ===
     api.route("POST /owners/register", { handler: "packages/functions/owners/register.handler" });
-    //api.route("POST /owners/login", { handler: "packages/functions/owners/login.handler" });
+    api.route("POST /owners/login", { handler: "packages/functions/owners/login.handler" });
+
+
 
     const site = new sst.aws.React("CourtAndGoAdminSite", {
       path: "frontend-admin",

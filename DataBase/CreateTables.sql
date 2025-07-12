@@ -67,7 +67,7 @@ CREATE TABLE Player (
     birthDate TIMESTAMP,
     gender VARCHAR(10),
     email VARCHAR(100) NOT NULL,
-    countryId INT REFERENCES Country(countryId),
+    countryId VARCHAR(10), -- exemplo +351
     weight DECIMAL(5,2),
     height DECIMAL(5,2),
     photo VARCHAR(255),

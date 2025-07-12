@@ -25,7 +25,7 @@ export async function updateCourt(court: any) {
 }
 
 export async function getCourtsByClubId(clubId: number) {
-  const res = await fetch(`${API_URL}/clubs/${clubId}/courts`);
+  const res = await fetch(`${API_URL}/courts/club/${clubId}`);
   if (!res.ok) {
     throw new Error("Failed to fetch courts");
   }

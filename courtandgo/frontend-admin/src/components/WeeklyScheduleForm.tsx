@@ -74,7 +74,7 @@ export function WeeklyScheduleForm({ clubId }: { clubId: number }) {
       setFeedback({ type: "error", message: "Erro ao guardar horários. Tente novamente." });
     } finally {
       setLoading(false);
-      setTimeout(() => setFeedback(null), 5000); // feedback desaparece após 5 segundos
+      setTimeout(() => setFeedback(null), 3000); 
     }
   }
 

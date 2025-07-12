@@ -11,5 +11,5 @@ data class UpdateUserInput(
     val newBirthDate: String?,
     val newWeight : Double?,
     val newHeight : Double?,
-    val newLocation : String?
+    //val newLocation : String?
 )

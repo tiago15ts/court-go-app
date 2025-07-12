@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { updateClub, updateLocation } from "../api";
+import { updateClub} from "../api/clubs";
+import { updateLocation } from "../api/location";
+
 import {
   TextField,
   Button,

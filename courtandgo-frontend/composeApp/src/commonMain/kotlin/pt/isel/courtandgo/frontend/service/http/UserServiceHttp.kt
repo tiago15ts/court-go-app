@@ -22,14 +22,14 @@ class UserServiceHttp(private val client: HttpClient) : UserService {
         name: String,
         countryCode: String,
         contact: String,
-        password: String
+        //password: String
     ): User {
         val userInput = UserRegisterInput(
             email = email,
             name = name,
             countryCode = countryCode,
             contact = contact,
-            password = password
+            //password = password
         )
         return try {
             val dto = client.post<UserDTO>("/user/register", body = userInput)
@@ -89,9 +89,9 @@ class UserServiceHttp(private val client: HttpClient) : UserService {
                 user.birthDate,
                 user.weight,
                 user.height,
-                user.location
+                //user.location
             )
-            val dto = client.put<UserDTO>("/user", body = updateUserInput)
+            val dto = client.put<UserDTO>("/user/${user.id}", body = updateUserInput)
             dto.toUser()
         } catch (e: CourtAndGoException) {
             throw UpdateUserException("Erro ao atualizar utilizador: ${e.message}", e)
@@ -109,7 +109,7 @@ class UserServiceHttp(private val client: HttpClient) : UserService {
             name = name,
             countryCode = countryCode,
             contact = contact,
-            password = "" // Password is not used for OAuth registration
+            //password = "" // Password is not used for OAuth registration
         )
         return try {
             val dto = client.post<UserDTO>("/user/oauth-register", body = userInput)

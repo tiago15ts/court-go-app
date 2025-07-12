@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getClubsByOwnerId } from "../api";
+import { getClubsByOwnerId } from "../api/clubs";
 import {
   List,
   ListItem,

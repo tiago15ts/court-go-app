@@ -31,7 +31,7 @@ class EditProfileScreenTest {
         email = "joao@example.com",
         countryCode = "+351",
         phone = "912345678",
-        location = "Lisboa",
+        //location = "Lisboa",
         birthDate = "1990-01-01",
         gender = "Masculino",
         weight = 75.0,

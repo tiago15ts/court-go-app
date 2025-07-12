@@ -1,7 +1,7 @@
 const API_URL = process.env.REACT_APP_API_URL;
 
 export async function createLocation(location: any) {
-  const res = await fetch(`${API_URL}/locations`, {
+  const res = await fetch(`${API_URL}/clubs/locations`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(location),
@@ -13,7 +13,7 @@ export async function createLocation(location: any) {
 }
 
 export async function updateLocation(location: any) {
-  const res = await fetch(`${API_URL}/locations/${location.locationId}`, {
+  const res = await fetch(`${API_URL}/clubs/locations/${location.locationId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(location),
@@ -24,8 +24,8 @@ export async function updateLocation(location: any) {
   return await res.json();
 }
 
-export async function getLocationsByClubId(clubId: number) {
-  const res = await fetch(`${API_URL}/clubs/${clubId}/locations`);
+export async function getLocationByClubId(clubId: number) {
+  const res = await fetch(`${API_URL}/clubs/${clubId}/location`);
   if (!res.ok) {
     throw new Error("Failed to fetch locations");
   }

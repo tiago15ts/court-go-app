@@ -2,7 +2,7 @@ import {
   CognitoIdentityProviderClient,
   InitiateAuthCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
-import { getUserByEmail } from "../../core/queries/user";
+import { getOwnerByEmail } from "../../core/queries/owner";
 
 const COGNITO_USER_POOL_ID = "eu-west-3_6c1AJ3Oez";
 const COGNITO_CLIENT_ID = "1fh5i2j79qsdbqihk2lmo0q6q6";
@@ -26,15 +26,15 @@ export async function handler(event) {
 
     const response = await client.send(command);
     
-    const tokens = {
+    const ownersTokens = {
       accessToken: response.AuthenticationResult?.AccessToken,
       idToken: response.AuthenticationResult?.IdToken,
       refreshToken: response.AuthenticationResult?.RefreshToken,
     };
 
-    const user = await getUserByEmail(email);
+    const user = await getOwnerByEmail(email);
 
-    console.log(tokens);
+    console.log(ownersTokens);
 
     return {
       statusCode: 200,

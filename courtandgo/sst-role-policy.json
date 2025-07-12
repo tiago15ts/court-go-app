@@ -10,7 +10,8 @@
         "iam:PutRolePolicy",
         "iam:CreatePolicy",
         "iam:GetRole",
-        "iam:DeleteRole"
+        "iam:DeleteRole",
+        "cognito-idp:AdminConfirmSignUp"
       ],
       "Resource": "*"
     }

@@ -1,23 +1,24 @@
 import { db } from "../db";
+import { mapRowToUserDTO } from "../mappers/userMapper";
 
 export async function getUserById(id: number) {
   const client = await db.connect();
-  const res = await client.query("SELECT * FROM Player WHERE playerId = $1", [id]);
+  const res = await client.query("SELECT * FROM Player WHERE playerid = $1", [id]);
   client.release();
-  return res.rows[0] || null;
+  return res.rows[0] ? mapRowToUserDTO(res.rows[0]) : null;
 }
 
 export async function getUserByEmail(email: string) {
   const client = await db.connect();
   const res = await client.query("SELECT * FROM Player WHERE email = $1", [email]);
   client.release();
-  return res.rows[0] || null;
+  return res.rows[0] ? mapRowToUserDTO(res.rows[0]) : null;
 }
 
 export async function registerUser(user: {
   email: string;
   name: string;
-  countryId: number;
+  countryId: string;
   phone: string;
 }) {
   const client = await db.connect();
@@ -28,7 +29,7 @@ export async function registerUser(user: {
     [user.email, user.name, user.countryId, user.phone]
   );
   client.release();
-  return res.rows[0];
+  return mapRowToUserDTO(res.rows[0]);
 }
 
 export async function updateUser(user: any) {
@@ -39,23 +40,23 @@ export async function updateUser(user: any) {
     [user.name, user.phone, user.countryId, user.playerId, user.birthdate, user.weight, user.height, user.gender]
   );
   client.release();
-  return res.rows[0];
+  return mapRowToUserDTO(res.rows[0]);
 }
 
 export async function deleteUser(id: number) {
   const client = await db.connect();
   const res = await client.query("DELETE FROM Player WHERE playerId = $1 RETURNING *", [id]);
   client.release();
-  return res.rows[0];
+  return mapRowToUserDTO(res.rows[0]);
 }
 
 export async function getAllUsers() {
   const client = await db.connect();
   const res = await client.query("SELECT * FROM Player");
   client.release();
-  return res.rows;
+  return res.rows.map(mapRowToUserDTO);
 }
-
+/*
 export async function getUserReservations(userId: number) {
   const client = await db.connect();
   const res = await client.query(
@@ -68,4 +69,5 @@ export async function getUserReservations(userId: number) {
   client.release();
   return res.rows;
 }
+  */
 

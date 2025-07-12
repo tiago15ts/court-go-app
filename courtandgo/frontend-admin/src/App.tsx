@@ -14,7 +14,6 @@ function App() {
       <Routes>
         {/* Redirecionar "/" para "/register" */}
         <Route path="/" element={<Navigate to="/register" />} />
-
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />

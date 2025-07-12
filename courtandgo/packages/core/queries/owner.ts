@@ -16,5 +16,27 @@ export async function createOwner(owner: {
   return res.rows[0];
 }
 
+export async function getOwnerById(id: number) {
+  const client = await db.connect();
+  const res = await client.query(
+    `SELECT * FROM Owner WHERE id = $1`,
+    [id]
+  );
+  client.release();
+  return res.rows[0];
+}
+
+export async function getOwnerByEmail(email: string) {
+  const client = await db.connect();
+  const res = await client.query(
+    `SELECT * FROM Owner WHERE email = $1`,
+    [email]
+  );
+  client.release();
+  return res.rows[0];
+}
+
+
+
 
 

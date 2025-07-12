@@ -4,7 +4,7 @@ import * as CourtAPI from "./courts";
 import * as LocationAPI from "./location";
 import * as MockAPI from "./mocks";
 
-
+/*
 const isDev = process.env.NODE_ENV === "development";
 
 const Clubs = isDev ? MockAPI : ClubAPI;
@@ -23,5 +23,6 @@ export const getCourtsByClubId = Courts.getCourtsByClubId;
 
 export const createLocation = Locations.createLocation;
 export const updateLocation = Locations.updateLocation;
-export const getLocationsByClubId = Locations.getLocationsByClubId;
+export const getLocationByClubId = Locations.getLocationByClubId;
 
+*/
