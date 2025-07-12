@@ -1,7 +1,7 @@
 import { getCourtsByDistrict } from "../../core/queries/court";
 
 export async function handler(event) {
-  const { district } = event.pathParameters || {};
+  const { district } = event.queryStringParameters || {};
   const courts = await getCourtsByDistrict(district);
   return {
     statusCode: 200,

@@ -1,7 +1,15 @@
 import { getUserByEmail } from "../../core/queries/user";
 
 export async function handler(event) {
-  const { email } = event.pathParameters || {};
+  const { email } = event.queryStringParameters || {};
+
+  if (!email) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: "Missing 'email' query parameter" }),
+    };
+  }
+
   const user = await getUserByEmail(email);
 
   return {

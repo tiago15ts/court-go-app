@@ -32,6 +32,7 @@
     "node-cron": "^4.2.0",
     "nodemailer": "^7.0.5",
     "pg": "^8.16.3",
-    "postgres": "^3.4.7"
+    "postgres": "^3.4.7",
+    "sst-win32-x64": "^3.17.10"
   }
 }

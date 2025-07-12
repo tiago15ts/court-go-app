@@ -41,8 +41,8 @@ export default $config({
     api.route("POST /user/login", { handler: "packages/functions/user/login.handler" });
     api.route("POST /user/logout", { handler: "packages/functions/user/logout.handler" });
     api.route("GET /user/{id}", { handler: "packages/functions/user/getById.handler" });
-    api.route("GET /user/email/{email}", { handler: "packages/functions/user/getByEmail.handler" });
-    api.route("PUT /user", { handler: "packages/functions/user/update.handler" });
+    api.route("GET /user/email", { handler: "packages/functions/user/getByEmail.handler" });
+    api.route("PUT /user/{id}", { handler: "packages/functions/user/update.handler" });
     api.route("POST /user/oauthregister", { handler: "packages/functions/user/oauthregister.handler" });
 
     // === ScheduleCourtsService ===
@@ -58,11 +58,11 @@ export default $config({
     // === ReservationService ===
     api.route("GET /reservations", { handler: "packages/functions/reservation/getAll.handler" });
     api.route("GET /reservations/{id}", { handler: "packages/functions/reservation/getById.handler" });
-    api.route("GET /reservations/player/{playerId}", { handler: "packages/functions/reservation/getByPlayer.handler" });
+    api.route("GET /player/{playerId}/reservations", { handler: "packages/functions/reservation/getByPlayer.handler" });
     api.route("POST /reservations", { handler: "packages/functions/reservation/create.handler" }); // Create a new reservation
     api.route("PUT /reservations/{id}", { handler: "packages/functions/reservation/update.handler" }); // Update reservation by ID
-    api.route("DELETE /reservations/cancel/{id}", { handler: "packages/functions/reservation/delete.handler" }); // Cancel reservation by ID
-    api.route("POST /reservations/confirm/{id}", { handler: "packages/functions/reservation/confirm.handler" }); // Confirm reservation by ID
+    api.route("DELETE /reservations/{id}/cancel", { handler: "packages/functions/reservation/delete.handler" }); // Cancel reservation by ID
+    api.route("POST /reservations/{id}/confirm", { handler: "packages/functions/reservation/confirm.handler" }); // Confirm reservation by ID
     api.route("GET /reservations/filter", { //confirmar se esta de acordo
       handler: "packages/functions/reservation/getByCourtIdsAndDate.handler",
     });
@@ -75,8 +75,8 @@ export default $config({
 
     // === CourtService ===
     api.route("GET /courts", { handler: "packages/functions/court/all.handler" });
-    api.route("GET /courts/district/{district}", { handler: "packages/functions/court/byDistrict.handler" });
-    api.route("GET /courts/sport/{sport}", { handler: "packages/functions/court/bySportType.handler" }); // Get courts by sport type
+    api.route("GET /courts/district", { handler: "packages/functions/court/byDistrict.handler" });
+    api.route("GET /courts/sport", { handler: "packages/functions/court/bySportType.handler" }); // Get courts by sport type
     api.route("GET /courts/filter", { handler: "packages/functions/court/getFiltered.handler" });
     api.route("GET /courts/{id}", { handler: "packages/functions/court/getById.handler" }); // Get court by ID
     api.route("GET /courts/owner/{ownerId}", { handler: "packages/functions/court/byOwner.handler" });
@@ -88,12 +88,12 @@ export default $config({
 
     // === ClubService ===
     api.route("GET /clubs", { handler: "packages/functions/club/getAll.handler" });
-    api.route("GET /clubs/district/{district}", { handler: "packages/functions/club/getByDistrict.handler" });
-    api.route("GET /clubs/county/{county}", { handler: "packages/functions/club/getByCounty.handler" });
-    api.route("GET /clubs/country/{country}", { handler: "packages/functions/club/getByCountry.handler" });
-    api.route("GET /clubs/postal/{postalCode}", { handler: "packages/functions/club/getByPostal.handler" });
-    api.route("GET /clubs/name/{name}", { handler: "packages/functions/club/getByName.handler" });
-    api.route("GET /clubs/sport/{sport}", { handler: "packages/functions/club/getBySport.handler" });
+    api.route("GET /clubs/district", { handler: "packages/functions/club/getByDistrict.handler" });
+    api.route("GET /clubs/county", { handler: "packages/functions/club/getByCounty.handler" });
+    api.route("GET /clubs/country", { handler: "packages/functions/club/getByCountry.handler" });
+    api.route("GET /clubs/postal", { handler: "packages/functions/club/getByPostal.handler" });
+    api.route("GET /clubs/name", { handler: "packages/functions/club/getByName.handler" });
+    api.route("GET /clubs/sport", { handler: "packages/functions/club/getBySport.handler" });
     api.route("GET /clubs/{id}", { handler: "packages/functions/club/getById.handler" }); // Get club by ID
     api.route("GET /clubs/owner/{ownerId}", { handler: "packages/functions/club/getByOwner.handler" });
     api.route("GET /clubs/court/{courtId}", { handler: "packages/functions/club/getClubIdByCourtId.handler" });
