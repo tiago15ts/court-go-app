@@ -44,6 +44,7 @@ export default $config({
     api.route("GET /user/email/{email}", { handler: "packages/functions/user/getByEmail.handler" });
     api.route("PUT /user", { handler: "packages/functions/user/update.handler" });
     api.route("POST /user/oauthregister", { handler: "packages/functions/user/oauthregister.handler" });
+    api.route("GET /user", { handler: "packages/functions/user/getAll.handler" });
 
     // === ScheduleCourtsService ===
     api.route("GET /schedule/weekly/{courtId}", { handler: "packages/functions/schedule/weekly.handler" });

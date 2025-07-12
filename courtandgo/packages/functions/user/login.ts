@@ -34,10 +34,11 @@ export async function handler(event) {
 
     const user = await getUserByEmail(email);
 
+    console.log(tokens);
+
     return {
       statusCode: 200,
       body: JSON.stringify({
-        tokens,
         user
       }),
     };

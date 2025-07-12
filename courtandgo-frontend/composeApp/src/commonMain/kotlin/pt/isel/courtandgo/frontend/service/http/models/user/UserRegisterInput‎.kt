@@ -9,5 +9,5 @@ data class UserRegisterInput(
     val name: String,
     val countryCode: String,
     val contact: String,
-    val password: String
+    //val password: String
 )

@@ -178,6 +178,7 @@ fun EditProfileScreen(
                 Spacer(Modifier.height(12.dp))
 
                 Column {
+                    /*
                     Text("Selecione o seu distrito:", fontWeight = FontWeight.Bold)
                     DropdownMenuField(
                         optionsList = distritosPortugal,
@@ -187,6 +188,8 @@ fun EditProfileScreen(
                         },
                         modifier = Modifier.fillMaxWidth(1f)
                     )
+
+                     */
                 }
 
 

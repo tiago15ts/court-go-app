@@ -10,7 +10,12 @@ data class UserDTO(
     val name: String,
     val countryCode: String,
     val phone: String,
+    val gender: String?,
+    val birthDate: String?,
+    val weight : Double?,
+    val height : Double?,
+
 ) {
-    fun toUser() = User(id, email, name, countryCode, phone)
+    fun toUser() = User(id, email, name, countryCode, phone, gender, birthDate, weight, height)
 }
 

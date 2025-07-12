@@ -13,5 +13,5 @@ data class User(
     val birthDate: String? = null,
     val weight : Double? = null,
     val height : Double? = null,
-    val location : String? = null,
+    //val location : String? = null,
 )
