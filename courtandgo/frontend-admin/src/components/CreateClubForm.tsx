@@ -12,25 +12,9 @@ import {
 } from "@mui/material";
 import { useAuth } from "./authContext";
 import { useNavigate } from "react-router-dom";
+import { createLocation } from "../api/location";
+import { createClub } from "../api/clubs";
 
-// Mock para guardar locais
-const mockLocations: {
-  locationId: number;
-  address: string;
-  county: string;
-  district: string;
-  postalCode: string;
-}[] = [];
-
-// Mock para guardar clubes
-const mockClubs: {
-  clubId: number;
-  name: string;
-  sports: string;
-  nrOfCourts: number;
-  ownerId: string;
-  locationId: number;
-}[] = [];
 
 const sportOptions = [
   { value: "Tennis", label: "Ténis" },
@@ -55,55 +39,52 @@ export function CreateClubForm({ onClubCreated }: { onClubCreated: (clubId: numb
 
   const { ownerId } = useAuth();
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setSuccess(false);
+async function handleSubmit(e: React.FormEvent) {
+  e.preventDefault();
+  setError(null);
+  setSuccess(false);
 
-    if (!ownerId) {
-      setError("Precisa de estar autenticado para criar um clube.");
-      return;
-    }
+  if (!ownerId) {
+    setError("Precisa de estar autenticado para criar um clube.");
+    return;
+  }
 
-    try {
-      // Cria o mock location
-      const newLocationId = mockLocations.length + 1;
-      mockLocations.push({
-        locationId: newLocationId,
-        address,
-        county,
-        district,
-        postalCode,
-      });
+  try {
+    // 1. Criar localização real
+    const location = await createLocation({
+      address,
+      county,
+      district,
+      postalCode,
+    });
 
-      // Cria o mock clube
-      const newClubId = mockClubs.length + 1;
-      mockClubs.push({
-        clubId: newClubId,
-        name,
-        sports: sport,
-        nrOfCourts: numCourts,
-        ownerId,
-        locationId: newLocationId,
-      });
+    // 2. Criar clube real associado à localização e ao owner autenticado
+    const club = await createClub({
+      name,
+      sports: sport,
+      nrOfCourts: numCourts,
+      ownerId,
+      locationId: location.locationId,
+    });
 
-      setSuccess(true);
-      onClubCreated(newClubId);
+    setSuccess(true);
+    onClubCreated(club.clubId);
 
-      // Limpar campos (opcional)
-      setName("");
-      setSport("Tennis");
-      setNumCourts(1);
-      setAddress("");
-      setCounty("");
-      setDistrict("");
-      setPostalCode("");
-    } catch (err) {
-      setError("Erro ao criar clube ou localização.");
-    }
+    // Limpar campos
+    setName("");
+    setSport("Tennis");
+    setNumCourts(1);
+    setAddress("");
+    setCounty("");
+    setDistrict("");
+    setPostalCode("");
 
     setTimeout(() => navigate("/clubs"), 300);
+  } catch (err: any) {
+    console.error(err);
+    setError(err.message || "Erro ao criar clube ou localização.");
   }
+}
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ mb: 4 }}>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getClubById, getLocationsByClubId } from "../api";
+import { getClubById,  } from "../api/clubs";
+import { getLocationByClubId } from "../api/location";
 import { UpdateClubForm } from "../components/UpdateClubForm";
 import { CircularProgress, Typography, Box } from "@mui/material";
 
@@ -15,7 +16,7 @@ export default function UpdateClubPage() {
         const clubData = await getClubById(Number(clubId));
 
         // carrega a localização correta com base no locationId
-        const locationData = await getLocationsByClubId(clubData.locationId);
+        const locationData = await getLocationByClubId(clubData.locationId);
 
         // junta a localização ao clube antes de passar ao form
         setClub({

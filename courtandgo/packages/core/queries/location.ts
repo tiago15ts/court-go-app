@@ -91,7 +91,7 @@ export async function updateLocation(location: {
   return res.rows[0];
 }
 
-export async function getLocationsByClubId(clubId: number) {
+export async function getLocationByClubId(clubId: number) {
   const client = await db.connect();
   const res = await client.query(
     `SELECT l.* FROM Location l

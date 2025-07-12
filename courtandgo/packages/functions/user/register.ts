@@ -15,6 +15,13 @@ export async function handler(event) {
   const body = JSON.parse(event.body || "{}");
   const { email, password, name, countryCode, contact } = body;
 
+  if (!email || !password || !name || !contact || !countryCode) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: "Campos obrigatórios em falta." }),
+    };
+  }
+
   try {
     const command = new SignUpCommand({
       ClientId: COGNITO_CLIENT_ID!,

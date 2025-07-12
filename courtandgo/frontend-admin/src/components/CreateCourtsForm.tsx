@@ -13,6 +13,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import { createCourt } from "../api/courts";
 
 type Court = {
   courtId: number;
@@ -24,14 +25,9 @@ type Court = {
   pricePerHour: number;
 };
 
-type CourtField = keyof Court;
-
 type CreateCourtsFormProps = {
   clubId: number;
 };
-
-// Mock global para guardar courts criados
-const mockCourts: Court[] = [];
 
 const sportOptions = [
   { value: "Tennis", label: "Ténis" },
@@ -40,14 +36,10 @@ const sportOptions = [
 
 export function CreateCourtsForm({ clubId }: CreateCourtsFormProps) {
   const [courts, setCourts] = useState<Omit<Court, "courtId" | "clubId">[]>([
-    {
-      name: "",
-      type: "",
-      surfaceType: "",
-      capacity: 0,
-      pricePerHour: 0,
-    },
+    { name: "", type: "", surfaceType: "", capacity: 0, pricePerHour: 0 },
   ]);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   function handleChange(
     index: number,
@@ -72,32 +64,25 @@ export function CreateCourtsForm({ clubId }: CreateCourtsFormProps) {
     ]);
   }
 
-  function handleSubmit(e: React.FormEvent) {
+ async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setError(null);
+    setSuccess(false);
 
-    // Simular o createCourt para cada court e associar ao clubId
-    courts.forEach((courtData, i) => {
-      const newCourtId = mockCourts.length + 1;
-      mockCourts.push({
-        courtId: newCourtId,
-        clubId,
-        ...courtData,
-      });
-    });
+    try {
+      // Criar todos os courts via API, aguardando um a um (ou usar Promise.all)
+      for (const courtData of courts) {
+        await createCourt({
+          ...courtData,
+          clubId,
+        });
+      }
 
-    console.log("Courts criados:", mockCourts.filter(c => c.clubId === clubId));
-    alert(`Criados ${courts.length} courts para o clube ${clubId}`);
-
-    // Poderias aqui limpar os courts ou redirecionar conforme necessidade
-    setCourts([
-      {
-        name: "",
-        type: "",
-        surfaceType: "",
-        capacity: 0,
-        pricePerHour: 0,
-      },
-    ]);
+      setSuccess(true);
+      setCourts([{ name: "", type: "", surfaceType: "", capacity: 0, pricePerHour: 0 }]);
+    } catch (err: any) {
+      setError(err.message || "Erro ao criar courts");
+    }
   }
 
   return (
@@ -107,6 +92,8 @@ export function CreateCourtsForm({ clubId }: CreateCourtsFormProps) {
       sx={{ maxWidth: 800, mx: "auto", display: "flex", flexDirection: "column", gap: 3 }}
     >
       <Typography variant="h5">Courts do Clube</Typography>
+      {success && <Typography color="success.main">Courts criados com sucesso!</Typography>}
+      {error && <Typography color="error.main">{error}</Typography>}
 
       {courts.map((court, index) => (
         <Paper key={index} sx={{ p: 2 }}>

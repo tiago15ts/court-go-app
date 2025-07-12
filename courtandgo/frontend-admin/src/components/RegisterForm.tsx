@@ -8,7 +8,7 @@ import {
   Stack,
 } from "@mui/material";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
-import { signUpUser } from "../api/auth";
+import {  createOwner } from "../api/register";
 import { useAuth } from "../components/authContext";
 
 
@@ -29,26 +29,25 @@ async function handleSubmit(e: React.FormEvent) {
   setSuccess(false);
 
   try {
-    // Chamar a função que regista no Cognito direto
-    const result: any= await signUpUser({
+    const result = await createOwner({
       email,
-      password,
       name,
-      phone: contact,  // usa o contact para o phone
+      phone: contact,
+      password,
     });
 
-    console.log("Registo efetuado, precisa de confirmar:", result);
-    const userSub = result.userSub;
-    setOwnerId(userSub);
+    console.log("Registo bem-sucedido:", result);
+
+    setOwnerId(result.ownerId); 
 
     setSuccess(true);
 
-    // Se quiseres podes redirecionar para uma página de confirmação de código
     setTimeout(() => navigate("/dashboard"), 300);
   } catch (err: any) {
     setError(err.message || "Erro no registo. Verifica os dados ou tenta mais tarde.");
   }
 }
+
 
 
   return (

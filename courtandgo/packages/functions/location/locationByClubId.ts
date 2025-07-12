@@ -1,18 +1,18 @@
-import { getLocationsByClubId } from "../../core/queries/location";
+import { getLocationByClubId } from "../../core/queries/location";
 
-export async function getLocationsByClubIdHandler(event: any) {
+export async function getLocationByClubIdHandler(event: any) {
   const clubId = parseInt(event.pathParameters.clubId);
   try {
-    const locations = await getLocationsByClubId(clubId);
+    const location = await getLocationByClubId(clubId);
     return {
       statusCode: 200,
-      body: JSON.stringify(locations),
+      body: JSON.stringify(location),
     };
   } catch (error) {
-    console.error("Error fetching locations:", error);
+    console.error("Error fetching location:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: "Failed to fetch locations" }),
+      body: JSON.stringify({ message: "Failed to fetch location" }),
     };
   }
 }

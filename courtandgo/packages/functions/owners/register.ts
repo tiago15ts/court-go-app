@@ -1,9 +1,9 @@
 import {
   CognitoIdentityProviderClient,
   SignUpCommand,
-  AdminAddUserToGroupCommand,
+  AdminConfirmSignUpCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
-import { createOwner} from "../../core/queries/owner";
+import { createOwner } from "../../core/queries/owner";
 
 const REGION = "eu-west-3";
 const USER_POOL_ID = "eu-west-3_6c1AJ3Oez";
@@ -11,7 +11,7 @@ const CLIENT_ID = "1fh5i2j79qsdbqihk2lmo0q6q6";
 
 const cognito = new CognitoIdentityProviderClient({ region: REGION });
 
-export async function handler(event : any) {
+export async function handler(event: any) {
   const body = JSON.parse(event.body || "{}");
   const { email, password, name, phone } = body;
 
@@ -23,7 +23,7 @@ export async function handler(event : any) {
   }
 
   try {
-    // 1. Criar utilizador no Cognito
+    
     await cognito.send(
       new SignUpCommand({
         ClientId: CLIENT_ID,
@@ -37,14 +37,16 @@ export async function handler(event : any) {
       })
     );
 
-    // 2. Adicionar ao grupo 'owners'
-    await cognito.send(
-      new AdminAddUserToGroupCommand({
-        UserPoolId: USER_POOL_ID,
-        Username: email,
-        GroupName: "owners",
-      })
-    );
+
+
+    await cognito.send(new AdminConfirmSignUpCommand({
+      UserPoolId: USER_POOL_ID,
+      Username: email,
+    }));
+
+    
+    
+    
 
     const owner = await createOwner({
       email,
@@ -56,7 +58,7 @@ export async function handler(event : any) {
       statusCode: 201,
       body: JSON.stringify({ owner, message: "Owner registado com sucesso." }),
     };
-  } catch (err : any) {
+  } catch (err: any) {
     console.error("Erro no registo do owner:", err);
     return {
       statusCode: 400,

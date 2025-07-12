@@ -91,7 +91,7 @@ class UserServiceHttp(private val client: HttpClient) : UserService {
                 user.height,
                 //user.location
             )
-            val dto = client.put<UserDTO>("/user", body = updateUserInput)
+            val dto = client.put<UserDTO>("/user/${user.id}", body = updateUserInput)
             dto.toUser()
         } catch (e: CourtAndGoException) {
             throw UpdateUserException("Erro ao atualizar utilizador: ${e.message}", e)

@@ -8,8 +8,8 @@ import {
   Stack,
 } from "@mui/material";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
-import { signInUser } from "../api/login"; 
-import { useAuth } from "./authContext"; 
+import { loginOwner } from "../api/login";
+import { useAuth } from "./authContext";
 
 export function LoginForm() {
   const { setOwnerId } = useAuth();
@@ -24,16 +24,19 @@ async function handleSubmit(e: React.FormEvent) {
   setError(null);
 
   try {
-    const session : any = await signInUser({ email, password });
-    console.log("Login bem sucedido:", session);
+    const ownerData = await loginOwner(email, password);
 
-    
-    // Redireciona para o dashboard
+    setOwnerId(ownerData.ownerId);
+    //setToken(ownerData.token);
+
+    console.log("Login bem sucedido:", ownerData);
+
     navigate("/dashboard");
   } catch (err: any) {
     setError(err.message || "Email ou palavra-passe inválidos.");
   }
 }
+
 
   return (
     <Box

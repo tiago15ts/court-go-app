@@ -6,7 +6,7 @@ export async function getClubsByOwnerId(ownerId: string | null) {
 }
 
 export async function updateClub(club: any) {
-  const res = await fetch(`${API_URL}/clubs`, {
+  const res = await fetch(`${API_URL}/clubs/${club.id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(club),

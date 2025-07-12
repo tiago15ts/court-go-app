@@ -15,7 +15,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { getCourtsByClubId, updateCourt } from "../api";
+import { getCourtsByClubId, updateCourt } from "../api/courts";
 
 type Court = {
   courtId: number;
