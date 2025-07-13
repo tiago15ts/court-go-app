@@ -37,8 +37,9 @@ async function handleSubmit(e: React.FormEvent) {
     });
 
     console.log("Registo bem-sucedido:", result);
+    console.log("ID do owner:", result.ownerid);
 
-    setOwnerId(result.ownerId); 
+    setOwnerId(result.ownerid); 
 
     setSuccess(true);
 

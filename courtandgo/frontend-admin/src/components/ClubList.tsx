@@ -12,14 +12,18 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-export function ClubList({ ownerId }: { ownerId: string | null }) {
+export function ClubList({ ownerId }: { ownerId: number | null }) {
   const [clubs, setClubs] = useState<any[]>([]);
   const navigate = useNavigate();
 
 useEffect(() => {
   if (!ownerId) return;
+  
   getClubsByOwnerId(ownerId)
-    .then(setClubs)
+    .then((data) => {
+      setClubs(data);
+      console.log("Clubs loaded:", data); // aqui sim já tens os dados corretos
+    })
     .catch((error) => {
       console.error("Erro ao carregar clubes:", error);
     });
@@ -43,21 +47,21 @@ useEffect(() => {
                 <Button
                   variant="outlined"
                   size="small"
-                  onClick={() => navigate(`/clubs/edit/${club.clubId}`)}
+                  onClick={() => navigate(`/clubs/edit/${club.id}`)}
                 >
                   Editar Clube
                 </Button>
                 <Button
                   variant="outlined"
                   size="small"
-                  onClick={() => navigate(`/clubs/${club.clubId}/edit-courts`)}
+                  onClick={() => navigate(`/clubs/${club.id}/edit-courts`)}
                 >
                   Editar Courts
                 </Button>
                 <Button
                   variant="contained"
                   size="small"
-                  onClick={() => navigate(`/clubs/${club.clubId}/schedules`)}
+                  onClick={() => navigate(`/clubs/${club.id}/schedules`)}
                 >
                   Editar Horários
                 </Button>

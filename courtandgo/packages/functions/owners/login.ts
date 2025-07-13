@@ -4,8 +4,8 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import { getOwnerByEmail } from "../../core/queries/owner";
 
-const COGNITO_USER_POOL_ID = "eu-west-3_6c1AJ3Oez";
-const COGNITO_CLIENT_ID = "1fh5i2j79qsdbqihk2lmo0q6q6";
+const COGNITO_USER_POOL_ID = "eu-west-3_WHT90YCJ3";
+const COGNITO_CLIENT_ID = "1jqtv9mvvpv0fjfe0o2dbhallc";
 const AWS_REGION = "eu-west-3";
 
 const client = new CognitoIdentityProviderClient({ region: AWS_REGION });
@@ -33,8 +33,6 @@ export async function handler(event) {
     };
 
     const user = await getOwnerByEmail(email);
-
-    console.log(ownersTokens);
 
     return {
       statusCode: 200,

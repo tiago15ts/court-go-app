@@ -84,7 +84,7 @@ export default $config({
     api.route("POST /courts", { handler: "packages/functions/court/create.handler" }); // Create a new court
     api.route("PUT /courts/{id}", { handler: "packages/functions/court/update.handler" }); // Update court details
     api.route("DELETE /courts/{id}", { handler: "packages/functions/court/delete.handler" });
-    api.route("GET /courts/club/{clubID}", { handler: "packages/functions/court/byClubId.handler" }); //getCourtsByClubId
+    api.route("GET /courts/club/{clubId}", { handler: "packages/functions/court/byClubId.handler" }); //getCourtsByClubId
 
 
     // === ClubService ===
@@ -103,9 +103,9 @@ export default $config({
     api.route("PUT /clubs/{id}", { handler: "packages/functions/club/update.handler" }); // Update club details
 
 
-    api.route("POST /clubs/location", { handler: "packages/functions/club/createLocation.handler" }); // Create a new location for a club
-    api.route("PUT /clubs/location/{id}", { handler: "packages/functions/club/updateLocation.handler" }); // Update location details for a club
-    api.route("GET /clubs/{clubId}/location", { handler: "packages/functions/club/getLocationByClubId.handler" }); // Get location by club ID
+    api.route("POST /clubs/location", { handler: "packages/functions/location/create.handler" }); // Create a new location for a club
+    api.route("PUT /clubs/location/{id}", { handler: "packages/functions/location/update.handler" }); // Update location details for a club
+    api.route("GET /clubs/{clubId}/location", { handler: "packages/functions/location/locationByClubId.handler" }); // Get location by club ID
 
     // === OwnerService ===
     api.route("POST /owners/register", { handler: "packages/functions/owners/register.handler" });

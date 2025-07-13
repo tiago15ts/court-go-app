@@ -1,6 +1,6 @@
 const API_URL = process.env.REACT_APP_API_URL;
 
-export async function getClubsByOwnerId(ownerId: string | null) {
+export async function getClubsByOwnerId(ownerId: number | null) {
   const res = await fetch(`${API_URL}/clubs/owner/${ownerId}`);
   return await res.json();
 }

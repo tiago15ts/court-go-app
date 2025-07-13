@@ -24,6 +24,9 @@ export async function createOwner(owner: {
     }
     throw new Error(errorMessage);
   }
-  return await res.json();
+  
+ const responseText = await res.text();             // ← Lê como texto
+  const parsed = JSON.parse(responseText);           // ← Converte string JSON em objeto
+  return parsed.owner;  
 }
 

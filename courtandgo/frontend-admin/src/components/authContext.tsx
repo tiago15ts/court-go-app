@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 type AuthContextType = {
-  ownerId: string | null;
+  ownerId: number | null;
   token: string | null;
-  setOwnerId: (id: string) => void;
+  setOwnerId: (id: number) => void;
   setToken: (token: string) => void;
   logout: () => void;
 };
@@ -13,18 +13,18 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 type AuthProviderProps = { children: ReactNode };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [ownerId, setOwnerIdState] = useState<string | null>(null);
+  const [ownerId, setOwnerIdState] = useState<number | null>(null);
   const [token, setTokenState] = useState<string | null>(null);
 
   useEffect(() => {
     const storedId = localStorage.getItem("ownerId");
     const storedToken = localStorage.getItem("token");
-    if (storedId) setOwnerIdState(storedId);
+    if (storedId) setOwnerIdState(Number(storedId));
     if (storedToken) setTokenState(storedToken);
   }, []);
 
-  const setOwnerId = (id: string) => {
-    localStorage.setItem("ownerId", id);
+  const setOwnerId = (id: number) => {
+    localStorage.setItem("ownerId", id.toString());
     setOwnerIdState(id);
   };
 
@@ -46,6 +46,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     </AuthContext.Provider>
   );
 };
+
 
 export function useAuth() {
   const context = useContext(AuthContext);

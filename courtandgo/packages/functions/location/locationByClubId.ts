@@ -1,6 +1,6 @@
 import { getLocationByClubId } from "../../core/queries/location";
 
-export async function getLocationByClubIdHandler(event: any) {
+export async function handler(event: any) {
   const clubId = parseInt(event.pathParameters.clubId);
   try {
     const location = await getLocationByClubId(clubId);

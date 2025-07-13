@@ -6,8 +6,8 @@ import {
 import { createOwner } from "../../core/queries/owner";
 
 const REGION = "eu-west-3";
-const USER_POOL_ID = "eu-west-3_6c1AJ3Oez";
-const CLIENT_ID = "1fh5i2j79qsdbqihk2lmo0q6q6";
+const USER_POOL_ID = "eu-west-3_WHT90YCJ3";
+const CLIENT_ID = "1jqtv9mvvpv0fjfe0o2dbhallc";
 
 const cognito = new CognitoIdentityProviderClient({ region: REGION });
 
@@ -38,16 +38,14 @@ export async function handler(event: any) {
     );
 
 
-
+/*
     await cognito.send(new AdminConfirmSignUpCommand({
       UserPoolId: USER_POOL_ID,
       Username: email,
     }));
 
+  */
     
-    
-    
-
     const owner = await createOwner({
       email,
       name,
@@ -56,7 +54,7 @@ export async function handler(event: any) {
 
     return {
       statusCode: 201,
-      body: JSON.stringify({ owner, message: "Owner registado com sucesso." }),
+      body: JSON.stringify({ owner }),
     };
   } catch (err: any) {
     console.error("Erro no registo do owner:", err);

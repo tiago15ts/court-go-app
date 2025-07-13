@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { updateClub} from "../api/clubs";
 import { updateLocation } from "../api/location";
-
 import {
   TextField,
   Button,
@@ -11,25 +10,27 @@ import {
   Alert,
 } from "@mui/material";
 
+
 const sportOptions = [
-  { value: "TENNIS", label: "Ténis" },
-  { value: "PADEL", label: "Padel" },
-  { value: "BOTH", label: "Ambos" },
+  { value: "Tennis", label: "Ténis" },
+  { value: "Padel", label: "Padel" },
+  { value: "Both", label: "Ambos" },
 ];
 
 export function UpdateClubForm({ club }: { club: any }) {
   const [name, setName] = useState(club.name);
-  const [sport, setSport] = useState(club.sports || "TENNIS");
+  const [sport, setSport] = useState(club.sportsClub || "Tennis");
   const [numCourts, setNumCourts] = useState(club.nrOfCourts || 1);
 
   // localização
   const [address, setAddress] = useState(club.location?.address || "");
   const [county, setCounty] = useState(club.location?.county || "");
-  const [district, setDistrict] = useState(club.location?.district || "");
+  const [district, setDistrict] = useState(club.location?.district.name || "");
   const [postalCode, setPostalCode] = useState(club.location?.postalCode || "");
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  //console.log("UpdateClubForm props:", club);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -37,23 +38,31 @@ export function UpdateClubForm({ club }: { club: any }) {
     setSuccess(false);
 
     try {
-      // 1. Atualiza localização
-      await updateLocation({
-        locationId: club.location.locationId,
-        address,
-        county,
-        district,
-        postalCode,
+      
+      const locationUpdateResponse = await updateLocation({
+        locationId: club.location.id,
+        address: address,
+        county: county,
+        district: district,
+        postalCode: postalCode,
       });
+      if (!locationUpdateResponse) {
+        throw new Error("Erro ao atualizar localização.");
+      } 
+      console.log("Localização atualizada", locationUpdateResponse);
 
-      // 2. Atualiza clube
-      await updateClub({
-        clubId: club.clubId,
-        name,
+      
+      const clubUpdateResponse = await updateClub({
+        clubId: club.id,
+        name: name,
         sports: sport,
         nrOfCourts: numCourts,
-        locationId: club.location.locationId, // mantém o mesmo
+        locationId: club.location.id,
       });
+      if (!clubUpdateResponse) {
+        throw new Error("Erro ao atualizar clube.");
+      }
+      console.log("Clube atualizado", clubUpdateResponse);
 
       setSuccess(true);
     } catch (err) {

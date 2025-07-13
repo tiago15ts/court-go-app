@@ -1,5 +1,6 @@
 import { getOwnerByEmail } from "../../core/queries/owner";
 
+//no route defined
 export async function handler(event) {
   const body = JSON.parse(event.body || "{}");
   const { email } = body;

@@ -1,6 +1,6 @@
 import { createLocation } from "../../core/queries/location";
 
-export async function createLocationHandler(event: any) {
+export async function handler(event: any) {
   try {
     const locationData = JSON.parse(event.body);
     const newLocation = await createLocation(locationData);

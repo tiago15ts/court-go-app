@@ -5,8 +5,8 @@ export async function getCourtsByClub(clubId: number) {
   const client = await db.connect();
   const res = await client.query(
     `SELECT c.* FROM Court c
-     JOIN Club cl ON c.clubId = cl.clubId
-     WHERE cl.clubId = $1`,
+     JOIN Club cl ON c.clubid = cl.clubid
+     WHERE cl.clubid = $1`,
     [clubId]
   );
   client.release();
@@ -171,7 +171,7 @@ export async function createCourt(court: {
     `INSERT INTO Court (name, clubId, type, surfaceType, capacity, pricePerHour)
      VALUES ($1, $2, $3, $4, $5, $6)
      RETURNING *`,
-    [court.name, court.clubId, court.type, court.surfaceType, court.capacity]
+    [court.name, court.clubId, court.type, court.surfaceType, court.capacity, court.pricePerHour]
   );
   client.release();
   return res.rows[0];

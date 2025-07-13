@@ -1,6 +1,6 @@
 import { updateLocation } from "../../core/queries/location";
 
-export async function updateLocationHandler(event: any) {
+export async function handler(event: any) {
   const locationId = parseInt(event.pathParameters.locationId);
   const locationData = JSON.parse(event.body);
 

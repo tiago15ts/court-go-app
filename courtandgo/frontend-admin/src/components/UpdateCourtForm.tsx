@@ -18,19 +18,19 @@ import { useParams } from "react-router-dom";
 import { getCourtsByClubId, updateCourt } from "../api/courts";
 
 type Court = {
-  courtId: number;
+  id: number;
   name: string;
-  type: string;
+  sportTypeCourt: string;
   surfaceType: string;
   capacity: number;
-  pricePerHour: number;
+  price: number;
+  clubId: number;
 };
 
 const sportOptions = [
   { value: "Tennis", label: "Ténis" },
   { value: "Padel", label: "Padel" },
 ];
-
 
 export function UpdateCourtForm() {
   const { clubId } = useParams<{ clubId: string }>();
@@ -41,7 +41,10 @@ export function UpdateCourtForm() {
   useEffect(() => {
     if (clubId) {
       getCourtsByClubId(Number(clubId))
-        .then(setCourts)
+        .then((data) => {
+          console.log("Courts carregados:", data); // ← ver aqui se `type` e `pricePerHour` existem
+          setCourts(data);
+        })
         .catch(() => setError("Erro ao carregar os courts."));
     }
   }, [clubId]);
@@ -51,7 +54,7 @@ export function UpdateCourtForm() {
     updated[index] = {
       ...updated[index],
       [field]:
-        field === "capacity" || field === "pricePerHour"
+        field === "capacity" || field === "price"
           ? Number(value)
           : value,
     };
@@ -64,10 +67,19 @@ export function UpdateCourtForm() {
     setError(null);
     try {
       for (const court of courts) {
-        await updateCourt(court);
+        console.log("Atualizando court:", court);
+        await updateCourt({
+        courtId: court.id,
+        name: court.name,
+        type: court.sportTypeCourt,
+        surfaceType: court.surfaceType,
+        capacity: court.capacity,
+        pricePerHour: court.price,
+      });
       }
       setSuccess(true);
-    } catch {
+    } catch (err) {
+      console.error("Erro ao guardar alterações:", err);
       setError("Erro ao guardar alterações.");
     }
   }
@@ -84,8 +96,8 @@ export function UpdateCourtForm() {
       {success && <Alert severity="success">Courts atualizados com sucesso!</Alert>}
 
       {courts.map((court, index) => (
-        <Paper key={court.courtId} sx={{ p: 2 }}>
-          <Typography variant="subtitle1">Court {index + 1}</Typography>
+        <Paper key={court.id} sx={{ p: 2 }}>
+          <Typography variant="subtitle1">Court {index + 1} : {court.name}</Typography>
 
           <Stack direction="row" spacing={2} mt={2}>
             <TextField
@@ -96,19 +108,19 @@ export function UpdateCourtForm() {
               required
             />
             <FormControl fullWidth required>
-  <InputLabel>Tipo</InputLabel>
-  <Select
-    label="Tipo"
-    value={court.type}
-    onChange={(e) => handleChange(index, "type", e.target.value)}
-  >
-    {sportOptions.map((option) => (
-      <MenuItem key={option.value} value={option.value}>
-        {option.label}
-      </MenuItem>
-    ))}
-  </Select>
-</FormControl>
+              <InputLabel>Tipo</InputLabel>
+              <Select
+                label="Tipo"
+                value={court.sportTypeCourt}
+                onChange={(e) => handleChange(index, "sportTypeCourt", e.target.value)}
+              >
+                {sportOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
           </Stack>
 
@@ -129,7 +141,7 @@ export function UpdateCourtForm() {
               fullWidth
               required
             />
-            
+
             <FormControl fullWidth sx={{ m: 1 }}>
               <InputLabel>Preço por hora</InputLabel>
               <OutlinedInput
@@ -137,8 +149,8 @@ export function UpdateCourtForm() {
                 type="number"
                 inputMode="decimal"
                 label="Preço por hora"
-                value={court.pricePerHour}
-                onChange={(e) => handleChange(index, "pricePerHour", e.target.value)}
+                value={court.price}
+                onChange={(e) => handleChange(index, "price", e.target.value)}
                 startAdornment={<InputAdornment position="start">€</InputAdornment>}
                 inputProps={{
                   step: "0.01",

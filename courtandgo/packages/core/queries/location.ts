@@ -65,31 +65,63 @@ export async function updateLocation(location: {
   locationId: number;
   address: string;
   county: string;
-  districtId: number;
+  district: string;
   postalCode: string;
   latitude?: number;
   longitude?: number;
 }) {
   const client = await db.connect();
-  const res = await client.query(
-    `UPDATE Location
-     SET address = $1, county = $2, districtId = $3, postalCode = $4,
-         latitude = $5, longitude = $6
-     WHERE locationId = $7
-     RETURNING *`,
-    [
-      location.address,
-      location.county,
-      location.districtId,
-      location.postalCode,
-      location.latitude || null,
-      location.longitude || null,
-      location.locationId,
-    ]
-  );
-  client.release();
-  return res.rows[0];
+  const defaultCountryId = 1000; // portugal
+
+    // 1. Verifica se o distrito já existe
+    const districtRes = await client.query(
+      `SELECT districtId FROM District WHERE LOWER(name) = LOWER($1) LIMIT 1`,
+      [location.district]
+    );
+
+    let districtId: number;
+
+    if (districtRes.rows.length > 0) {
+      districtId = districtRes.rows[0].districtid;
+    } else {
+      // 2. Se não existir, cria o distrito com countryId por defeito
+      const insertDistrictRes = await client.query(
+        `INSERT INTO District (name, countryId)
+         VALUES ($1, $2)
+         RETURNING districtId`,
+        [location.district, defaultCountryId]
+      );
+
+      districtId = insertDistrictRes.rows[0].districtid;
+    }
+
+    // 3. Atualiza a localização com o districtId encontrado/criado
+    const updateRes = await client.query(
+      `UPDATE Location
+       SET 
+         address = $1,
+         county = $2,
+         districtId = $3,
+         postalCode = $4,
+         latitude = $5,
+         longitude = $6
+       WHERE locationId = $7
+       RETURNING *`,
+      [
+        location.address,
+        location.county,
+        districtId,
+        location.postalCode,
+        location.latitude || null,
+        location.longitude || null,
+        location.locationId,
+      ]
+    );
+
+    client.release();
+    return updateRes.rows[0]; 
 }
+
 
 export async function getLocationByClubId(clubId: number) {
   const client = await db.connect();

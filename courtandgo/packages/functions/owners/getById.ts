@@ -1,5 +1,6 @@
 import { getOwnerById } from "../../core/queries/owner";
 
+//no route defined
 export async function handler(event) {
   const { id } = event.pathParameters || {};
 

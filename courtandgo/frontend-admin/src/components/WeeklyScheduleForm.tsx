@@ -62,6 +62,7 @@ export function WeeklyScheduleForm({ clubId }: { clubId: number }) {
 
     try {
       for (const schedule of schedules) {
+        console.log("Saving schedule:", schedule);
         await createWeeklySchedule({
           clubId,
           dayOfWeek: schedule.dayOfWeek,

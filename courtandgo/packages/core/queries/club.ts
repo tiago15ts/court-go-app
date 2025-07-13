@@ -5,23 +5,23 @@ import { mapRowToClubDTO } from "../mappers/clubMapper";
 
 const BASE_CLUB_SELECT = `
   SELECT 
-    c.clubId, c.name AS club_name, c.sports, c.nrOfCourts,
-    l.locationId AS location_id, l.address, l.county, l.postalCode,
+    c.clubid, c.name AS club_name, c.sports, c.nrofcourts,
+    l.locationId AS location_id, l.address, l.county, l.postalcode,
     l.latitude, l.longitude,
     d.districtId AS district_id, d.name AS district_name, d.countryId AS district_country_id,
     co.countryId AS country_id, co.name AS country_name,
-    AVG(cor.pricePerHour) AS averageprice
+    AVG(cor.priceperhour) AS averageprice
   FROM Club c
   JOIN Location l ON c.locationId = l.locationId
   JOIN District d ON l.districtId = d.districtId
   JOIN Country co ON d.countryId = co.countryId
-  LEFT JOIN Court cor ON c.clubId = cor.clubId
+  LEFT JOIN Court cor ON c.clubid = cor.clubid
 `;
 
 const BASE_CLUB_GROUP_BY = `
   GROUP BY 
-    c.clubId, c.name, c.sports, c.nrOfCourts,
-    l.locationId, l.address, l.county, l.postalCode, l.latitude, l.longitude,
+    c.clubid, c.name, c.sports, c.nrofcourts,
+    l.locationId, l.address, l.county, l.postalcode, l.latitude, l.longitude,
     d.districtId, d.name, d.countryId,
     co.countryId, co.name
 `;
@@ -141,7 +141,7 @@ export async function getClubsBySport(sport: string) {
 export async function getClubById(id: number) {
   const client = await db.connect();
   const res = await client.query(
-    `${BASE_CLUB_SELECT} WHERE c.clubId = $1
+    `${BASE_CLUB_SELECT} WHERE c.clubid = $1
     ${BASE_CLUB_GROUP_BY}`,
     [id]
   );
@@ -152,25 +152,54 @@ export async function getClubById(id: number) {
 export async function getClubsByOwnerId(ownerId: number) {
   const client = await db.connect();
   const res = await client.query(
-    `${BASE_CLUB_SELECT} WHERE c.ownerId = $1
-    ${BASE_CLUB_GROUP_BY}`,
+    `
+  SELECT 
+      c.clubid, 
+      c.name AS club_name, 
+      c.sports, 
+      c.nrofcourts,
+      l.locationId AS location_id, 
+      l.address, 
+      l.county, 
+      l.postalcode,
+      l.latitude, 
+      l.longitude,
+      d.districtId AS district_id, 
+      d.name AS district_name, 
+      d.countryId AS district_country_id,
+      co.countryId AS country_id, 
+      co.name AS country_name,
+      AVG(cr.pricePerHour) AS averageprice
+    FROM Club c
+    LEFT JOIN Location l ON c.locationId = l.locationId
+    LEFT JOIN District d ON l.districtId = d.districtId
+    LEFT JOIN Country co ON d.countryId = co.countryId
+    LEFT JOIN Court cr ON c.clubid = cr.clubid
+    WHERE c.ownerid = $1
+    GROUP BY 
+      c.clubid, c.name, c.sports, c.nrofcourts,
+      l.locationId, l.address, l.county, l.postalcode, l.latitude, l.longitude,
+      d.districtId, d.name, d.countryId,
+      co.countryId, co.name
+    `,
     [ownerId]
   );
   client.release();
   return res.rows.map(mapRowToClubDTO);
 }
 
+
 // get clubId by courtId
 export async function getClubIdByCourtId(courtId: number) {
   const client = await db.connect();
   const res = await client.query(
-    `SELECT cl.clubId FROM Club cl
-     JOIN Court c ON cl.clubId = c.clubId
+    `SELECT cl.clubid FROM Club cl
+     JOIN Court c ON cl.clubid = c.clubid
      WHERE c.courtId = $1`,
     [courtId]
   );
   client.release();
-  return res.rows[0]?.clubId || null;
+  return res.rows[0]?.clubid || null;
 }
 
 export async function getClubsFiltered(params: {

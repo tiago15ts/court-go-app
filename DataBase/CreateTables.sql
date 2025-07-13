@@ -99,18 +99,30 @@ CREATE TABLE WeeklySchedule (
     scheduleId SERIAL PRIMARY KEY,
     courtId INT REFERENCES Court(courtId),
     dayOfWeek VARCHAR(50) NOT NULL,
-    startTime TIMESTAMP,
-    endTime TIMESTAMP
+    startTime TIMESTAMP, -- 09:00
+    endTime TIMESTAMP -- 22:00
 );
+
+ALTER TABLE WeeklySchedule
+ALTER COLUMN startTime TYPE time USING startTime::time,
+ALTER COLUMN endTime TYPE time USING endTime::time;
+
 
 CREATE TABLE SpecialSchedule (
     specialId SERIAL PRIMARY KEY,
     courtId INT REFERENCES Court(courtId),
     date DATE NOT NULL, -- por o dia em especifico
-    startTime TIMESTAMP,
-    endTime TIMESTAMP,
+    startTime TIMESTAMP, -- 09:00
+    endTime TIMESTAMP, -- 22:00
     working BOOLEAN NOT NULL -- true = aberto nesse dia, false = fechado (feriado)
 );
+
+ALTER TABLE SpecialSchedule
+  ALTER COLUMN startTime TYPE TIME USING startTime::TIME;
+
+ALTER TABLE SpecialSchedule
+  ALTER COLUMN endTime TYPE TIME USING endTime::TIME;
+
 
 
 CREATE TABLE Tournament (

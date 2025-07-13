@@ -10,7 +10,7 @@ export default function ClubsList() {
 
   return (
     <div>
-      <ClubList ownerId={ownerId} />
+      <ClubList ownerId={Number(ownerId)} />
     </div>
   );
 }

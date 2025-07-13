@@ -32,6 +32,7 @@ export function CreateClubForm({ onClubCreated }: { onClubCreated: (clubId: numb
   const [county, setCounty] = useState("");
   const [district, setDistrict] = useState("");
   const [postalCode, setPostalCode] = useState("");
+  const [country, setCountry] = useState("Portugal");
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,15 +49,33 @@ async function handleSubmit(e: React.FormEvent) {
     setError("Precisa de estar autenticado para criar um clube.");
     return;
   }
-
+  console.log("Dados do clube:", {
+    name,
+    sport,  
+    numCourts,
+    ownerId,
+    address,
+    county,
+    district,
+    postalCode,
+  });
   try {
     // 1. Criar localização real
     const location = await createLocation({
       address,
       county,
       district,
+      country,
       postalCode,
     });
+
+      console.log("Dados para criar clube:", {
+  name,
+  sports: sport,
+  nrOfCourts: numCourts,
+  ownerId,
+  locationId: location.locationid,
+});
 
     // 2. Criar clube real associado à localização e ao owner autenticado
     const club = await createClub({
@@ -64,11 +83,11 @@ async function handleSubmit(e: React.FormEvent) {
       sports: sport,
       nrOfCourts: numCourts,
       ownerId,
-      locationId: location.locationId,
+      locationId: location.locationid,
     });
 
     setSuccess(true);
-    onClubCreated(club.clubId);
+    onClubCreated(club.clubid);
 
     // Limpar campos
     setName("");
@@ -79,7 +98,7 @@ async function handleSubmit(e: React.FormEvent) {
     setDistrict("");
     setPostalCode("");
 
-    setTimeout(() => navigate("/clubs"), 300);
+    //setTimeout(() => navigate("/clubs"), 300);
   } catch (err: any) {
     console.error(err);
     setError(err.message || "Erro ao criar clube ou localização.");

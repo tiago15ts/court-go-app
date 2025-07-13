@@ -6,23 +6,27 @@ import { UpdateClubForm } from "../components/UpdateClubForm";
 import { CircularProgress, Typography, Box } from "@mui/material";
 
 export default function UpdateClubPage() {
-  const { clubId } = useParams<{ clubId: string }>();
+  const { clubId } = useParams();
   const [club, setClub] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchClubAndLocation() {
       try {
+      
         const clubData = await getClubById(Number(clubId));
-
-        // carrega a localização correta com base no locationId
-        const locationData = await getLocationByClubId(clubData.locationId);
+        console.log("Dados do clube obtidos:", clubData);
+        
+        //const locationData = await getLocationByClubId(Number(clubData.location.id));
+        //console.log("Dados da localização obtidos:", locationData);
 
         // junta a localização ao clube antes de passar ao form
-        setClub({
+        /*setClub({
           ...clubData,
           location: locationData,
         });
+        */
+        setClub(clubData);
       } catch (err) {
         console.error("Erro ao obter clube ou localização:", err);
       } finally {

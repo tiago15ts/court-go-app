@@ -25,11 +25,15 @@ async function handleSubmit(e: React.FormEvent) {
 
   try {
     const ownerData = await loginOwner(email, password);
+    
+    if (!ownerData.user.ownerid) {
+  throw new Error("Resposta inválida: Problema no login.");
+}
 
-    setOwnerId(ownerData.ownerId);
-    //setToken(ownerData.token);
-
+    setOwnerId(ownerData.user.ownerid);
+  
     console.log("Login bem sucedido:", ownerData);
+    console.log("ID do proprietário:", ownerData.user.ownerid);
 
     navigate("/dashboard");
   } catch (err: any) {
