@@ -216,7 +216,7 @@ export async function getClubsFiltered(params: {
   let i = 1;
 
   if (params.query) {
-    conditions.push(`cl.name ILIKE $${i++}`);
+    conditions.push(`c.name ILIKE $${i++}`);
     values.push(`%${params.query}%`);
   }
 
@@ -226,7 +226,7 @@ export async function getClubsFiltered(params: {
   }
 
   if (params.district) {
-    conditions.push(`di.name ILIKE $${i++}`);
+    conditions.push(`d.name ILIKE $${i++}`);
     values.push(params.district);
   }
 
@@ -241,7 +241,7 @@ export async function getClubsFiltered(params: {
   }
 
   if (params.sport) {
-    conditions.push(`cl.sports = $${i++}`);
+    conditions.push(`c.sports = $${i++}`);
     values.push(params.sport);
   }
 
@@ -256,7 +256,7 @@ export async function getClubsFiltered(params: {
   return res.rows.map(mapRowToClubDTO);
 }
 
-
+// not in use, no api route and no handler for this function
 export async function getClubNameByCourtId(courtId: number) {
   const client = await db.connect();
   const res = await client.query(

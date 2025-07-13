@@ -53,12 +53,18 @@ export async function createReservation(data: {
   );
   const reservation = mapRowToReservationDTO(res1.rows[0]);
 
-  const playerRes = await client.query('SELECT email, name FROM Player WHERE id = $1', [data.userId]);
+  const playerRes = await client.query('SELECT email, name FROM Player WHERE playerId = $1', [data.userId]);
   const player = playerRes.rows[0];
 
-  const courtRes = await client.query('SELECT clubName FROM Court WHERE id = $1', [data.courtId]);
-  const clubName = courtRes.rows[0]?.clubName ?? 'o clube';
-
+ const courtRes = await client.query(
+    `SELECT c.name AS clubName
+     FROM Court ct
+     JOIN Club c ON ct.clubId = c.clubId
+     WHERE ct.courtId = $1`,
+    [data.courtId]
+  );
+  const clubName = courtRes.rows[0]?.clubname ?? 'o clube';
+  
   scheduleReservationReminder(reservation, player.email, player.name, clubName);
 
   await client.query(
@@ -125,7 +131,10 @@ export async function confirmReservation(id: number) {
     [id]
   );
   client.release();
-  return mapRowToReservationDTO(res.rows[0]);
+  if (res.rows.length === 0) {
+    throw new Error(`Reservation with id ${id} not found`);
+  }
+  return true;
 }
 
 export async function cancelReservation(id: number) {
@@ -142,10 +151,13 @@ export async function cancelReservation(id: number) {
     [id]
   );
   client.release();
-  return mapRowToReservationDTO(res.rows[0]);
+  if (res.rows.length === 0) {
+    throw new Error(`Reservation with id ${id} not found`);
+  }
+  return true;
 }
 
-
+//no api route for this function
 export async function getReservationsByCourtId(courtId: number) {
   const client = await db.connect();
   const res = await client.query(
@@ -156,6 +168,7 @@ export async function getReservationsByCourtId(courtId: number) {
   return res.rows.map(mapRowToReservationDTO);
 }
 
+//no api route for this function
 export async function getReservationsByDateRange(startDate: string, endDate: string) {
   const client = await db.connect();
   const res = await client.query(

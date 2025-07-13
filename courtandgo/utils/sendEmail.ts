@@ -1,33 +1,38 @@
 // utils/email.ts
-import nodemailer from 'nodemailer';
 
-export async function sendEmail(to: string, subject: string, text: string, html?: string) {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail', // ou 'hotmail', ou usa host/port
-    auth: {
-      user: process.env.EMAIL_USER, // ex: courtandgo@gmail.com
-      pass: process.env.EMAIL_PASS
-    }
+
+
+
+export function createReservationEmail(playerName: string, clubName: string, reservation: any, diffText: string) {
+  const startDate = new Date(reservation.startTime);
+const endDate = new Date(reservation.endTime);
+
+  // Formatadores de data
+  const timeFormatter = new Intl.DateTimeFormat('pt-PT', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
   });
 
-  await transporter.sendMail({
-    from: `"Court&Go" <${process.env.EMAIL_USER}>`,
-    to,
-    subject,
-    text,
-    html
+  const dateFormatter = new Intl.DateTimeFormat('pt-PT', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
   });
-}
 
-export function createReservationEmail(playerName: string, clubName: string, reservation: any, diffHours: number) {
+  const formattedStart = `às ${timeFormatter.format(startDate)} de ${dateFormatter.format(startDate)}`;
+  const formattedEnd = `às ${timeFormatter.format(endDate)} de ${dateFormatter.format(endDate)}`;
+
+
+
   return `Olá ${playerName},
 
-A tua reserva no clube "${clubName}" é dentro de ${diffHours.toFixed(1)} horas.
+A tua reserva no clube "${clubName}" é ${diffText}.
 
-Court ID: ${reservation.courtid}
-Início: ${reservation.starttime}
-Fim: ${reservation.endtime}
-Preço estimado: ${reservation.estimatedprice}€
+Court ID: ${reservation.courtId}
+Início: ${formattedStart}
+Fim: ${formattedEnd}
+Preço estimado: ${reservation.estimatedPrice}€
 
 Por favor, confirma a tua reserva na aplicação.
 

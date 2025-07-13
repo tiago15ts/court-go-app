@@ -56,6 +56,7 @@ export async function getCourtsBySport(sport: string) {
   return res.rows.map(mapRowToCourtDTO);
 }
 
+//not in use
 export async function getCourtsFiltered(district: string, sport: string) {
   const client = await db.connect();
   const res = await client.query(
@@ -70,11 +71,12 @@ export async function getCourtsFiltered(district: string, sport: string) {
   return res.rows.map(mapRowToCourtDTO);
 }
 
+//not in use
 export async function getCourtsByOwnerId(ownerId: number) {
   const client = await db.connect();
-  const res = await client.query("SELECT * FROM Court WHERE ownerId = $1", [ownerId]);
+  //const res = await client.query("SELECT * FROM Court WHERE ownerId = $1", [ownerId]);
   client.release();
-  return res.rows.map(mapRowToCourtDTO);
+  return [];
 }
 
 export async function getCourtsByLocationId(locationId: number) {
@@ -90,72 +92,6 @@ export async function getCourtsByName(name: string) {
   client.release();
   return res.rows.map(mapRowToCourtDTO);
 }
-
-export async function getCourtsByCity(city: string) {
-  const client = await db.connect();
-  const res = await client.query(
-    `SELECT c.* FROM Court c
-     JOIN Location l ON c.locationId = l.locationId
-     JOIN City ci ON l.cityId = ci.cityId
-     WHERE ci.name ILIKE $1`,
-    [city]
-  );
-  client.release();
-  return res.rows.map(mapRowToCourtDTO);
-}
-
-export async function getCourtsByCountry(country: string) {
-  const client = await db.connect();
-  const res = await client.query(
-    `SELECT c.* FROM Court c
-     JOIN Location l ON c.locationId = l.locationId
-     JOIN City ci ON l.cityId = ci.cityId
-     JOIN Country co ON ci.countryId = co.countryId
-     WHERE co.name ILIKE $1`,
-    [country]
-  );
-  client.release();
-  return res.rows.map(mapRowToCourtDTO);
-}
-
-export async function getCourtsByRegion(region: string) {
-  const client = await db.connect();
-  const res = await client.query(
-    `SELECT c.* FROM Court c
-     JOIN Location l ON c.locationId = l.locationId
-     JOIN City ci ON l.cityId = ci.cityId
-     JOIN Region r ON ci.regionId = r.regionId
-     WHERE r.name ILIKE $1`,
-    [region]
-  );
-  client.release();
-  return res.rows.map(mapRowToCourtDTO);
-}
-
-export async function getCourtsByPostalCode(postalCode: string) {
-  const client = await db.connect();
-  const res = await client.query(
-    `SELECT c.* FROM Court c
-     JOIN Location l ON c.locationId = l.locationId
-     WHERE l.postalCode ILIKE $1`,
-    [postalCode]
-  );
-  client.release();
-  return res.rows.map(mapRowToCourtDTO);
-}
-
-export async function getCourtsByAddress(address: string) {
-  const client = await db.connect();
-  const res = await client.query(
-    `SELECT c.* FROM Court c
-     JOIN Location l ON c.locationId = l.locationId
-     WHERE l.address ILIKE $1`,
-    [`%${address}%`]
-  );
-  client.release();
-  return res.rows.map(mapRowToCourtDTO);
-}
-
 
 //funcoes exclusivas para admin
 export async function createCourt(court: {

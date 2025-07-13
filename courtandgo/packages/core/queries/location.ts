@@ -27,35 +27,57 @@ export async function createLocation(data: {
   }
 
   // 2. Verifica ou cria o distrito
-  const districtRes = await client.query(
-    `SELECT districtId FROM District WHERE name = $1 AND countryId = $2`,
-    [data.district, countryId]
+// Normalizar o nome do distrito (opcional mas recomendado)
+const rawDistrict = data.district.trim();
+const normalizedDistrict =
+  rawDistrict.charAt(0).toUpperCase() + rawDistrict.slice(1).toLowerCase();
+
+// 1. Tenta encontrar o distrito (case-insensitive)
+const districtRes = await client.query(
+  `SELECT districtId FROM District WHERE name ILIKE $1 AND countryId = $2`,
+  [normalizedDistrict, countryId]
+);
+
+let districtId: number;
+if (districtRes.rowCount > 0) {
+  districtId = districtRes.rows[0].districtid;
+} else {
+  // 2. Inserir o distrito normalizado
+  const insertDistrict = await client.query(
+    `INSERT INTO District (name, countryId) VALUES ($1, $2) RETURNING districtId`,
+    [normalizedDistrict, countryId]
   );
-  let districtId: number;
-  if (districtRes.rowCount > 0) {
-    districtId = districtRes.rows[0].districtid;
-  } else {
-    const insertDistrict = await client.query(
-      `INSERT INTO District (name, countryId) VALUES ($1, $2) RETURNING districtId`,
-      [data.district, countryId]
-    );
-    districtId = insertDistrict.rows[0].districtid;
-  }
+  districtId = insertDistrict.rows[0].districtid;
+}
 
   // 3. Cria a localização
-  const locationRes = await client.query(
-    `INSERT INTO Location (address, county, districtId, postalCode, latitude, longitude)
-     VALUES ($1, $2, $3, $4, $5, $6)
-     RETURNING *`,
-    [
-      data.address,
-      data.county,
-      districtId,
-      data.postalCode,
-      data.latitude || null,
-      data.longitude || null,
-    ]
-  );
+function capitalizeFirst(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+function normalizeTextField(value: string): string {
+  return capitalizeFirst(value.trim());
+}
+
+// Normalizar campos
+const normalizedAddress = data.address.trim();
+const normalizedCounty = normalizeTextField(data.county);
+const normalizedPostalCode = data.postalCode.trim();
+
+const locationRes = await client.query(
+  `INSERT INTO Location (address, county, districtId, postalCode, latitude, longitude)
+   VALUES ($1, $2, $3, $4, $5, $6)
+   RETURNING *`,
+  [
+    normalizedAddress,
+    normalizedCounty,
+    districtId,
+    normalizedPostalCode,
+    data.latitude ?? null,
+    data.longitude ?? null,
+  ]
+);
+
   client.release();
 
   return locationRes.rows[0];
@@ -73,50 +95,68 @@ export async function updateLocation(location: {
   const client = await db.connect();
   const defaultCountryId = 1000; // portugal
 
-    // 1. Verifica se o distrito já existe
-    const districtRes = await client.query(
-      `SELECT districtId FROM District WHERE LOWER(name) = LOWER($1) LIMIT 1`,
-      [location.district]
-    );
+function normalizeDistrictName(name: string): string {
+  const trimmed = name.trim();
+  return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+}
 
-    let districtId: number;
+const normalizedDistrict = normalizeDistrictName(location.district);
 
-    if (districtRes.rows.length > 0) {
-      districtId = districtRes.rows[0].districtid;
-    } else {
-      // 2. Se não existir, cria o distrito com countryId por defeito
-      const insertDistrictRes = await client.query(
-        `INSERT INTO District (name, countryId)
-         VALUES ($1, $2)
-         RETURNING districtId`,
-        [location.district, defaultCountryId]
-      );
+const districtRes = await client.query(
+  `SELECT districtId FROM District WHERE LOWER(name) = LOWER($1) LIMIT 1`,
+  [normalizedDistrict]
+);
 
-      districtId = insertDistrictRes.rows[0].districtid;
-    }
+let districtId: number;
 
-    // 3. Atualiza a localização com o districtId encontrado/criado
-    const updateRes = await client.query(
-      `UPDATE Location
-       SET 
-         address = $1,
-         county = $2,
-         districtId = $3,
-         postalCode = $4,
-         latitude = $5,
-         longitude = $6
-       WHERE locationId = $7
-       RETURNING *`,
-      [
-        location.address,
-        location.county,
-        districtId,
-        location.postalCode,
-        location.latitude || null,
-        location.longitude || null,
-        location.locationId,
-      ]
-    );
+if (districtRes.rows.length > 0) {
+  districtId = districtRes.rows[0].districtid;
+} else {
+  // Criar distrito normalizado com countryId por defeito
+  const insertDistrictRes = await client.query(
+    `INSERT INTO District (name, countryId)
+     VALUES ($1, $2)
+     RETURNING districtId`,
+    [normalizedDistrict, defaultCountryId]
+  );
+
+  districtId = insertDistrictRes.rows[0].districtid;
+}
+function capitalizeFirst(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+function normalizeTextField(value: string): string {
+  return capitalizeFirst(value.trim());
+}
+
+// Normalização dos campos antes do UPDATE
+const normalizedAddress = location.address.trim();
+const normalizedCounty = normalizeTextField(location.county);
+const normalizedPostalCode = location.postalCode.trim();
+
+const updateRes = await client.query(
+  `UPDATE Location
+   SET 
+     address = $1,
+     county = $2,
+     districtId = $3,
+     postalCode = $4,
+     latitude = $5,
+     longitude = $6
+   WHERE locationId = $7
+   RETURNING *`,
+  [
+    normalizedAddress,
+    normalizedCounty,
+    districtId,
+    normalizedPostalCode,
+    location.latitude ?? null,
+    location.longitude ?? null,
+    location.locationId,
+  ]
+);
+
 
     client.release();
     return updateRes.rows[0]; 

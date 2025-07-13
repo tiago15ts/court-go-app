@@ -62,12 +62,13 @@ export default $config({
     api.route("GET /player/{playerId}/reservations", { handler: "packages/functions/reservation/getByPlayer.handler" });
     api.route("POST /reservations", { handler: "packages/functions/reservation/create.handler" }); // Create a new reservation
     api.route("PUT /reservations/{id}", { handler: "packages/functions/reservation/update.handler" }); // Update reservation by ID
-    api.route("DELETE /reservations/{id}/cancel", { handler: "packages/functions/reservation/delete.handler" }); // Cancel reservation by ID
+    api.route("DELETE /reservations/{id}/delete", { handler: "packages/functions/reservation/delete.handler" }); // delete reservation by ID
     api.route("POST /reservations/{id}/confirm", { handler: "packages/functions/reservation/confirm.handler" }); // Confirm reservation by ID
     api.route("GET /reservations/filter", { //confirmar se esta de acordo
       handler: "packages/functions/reservation/getByCourtIdsAndDate.handler",
     });
-    //acho que falta uma rota
+    api.route("POST /reservations/{id}/cancel", { handler: "packages/functions/reservation/cancel.handler" }); // Cancel reservation by ID
+   
 
     api.route("GET /reservations/{id}/ics", {
       handler: "packages/functions/reservation/getICS.handler"
