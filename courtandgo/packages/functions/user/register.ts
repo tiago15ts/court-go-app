@@ -1,6 +1,7 @@
 import {
   CognitoIdentityProviderClient,
   SignUpCommand,
+  InitiateAuthCommand,
   AdminConfirmSignUpCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import { registerUser } from "../../core/queries/user";
@@ -41,7 +42,27 @@ export async function handler(event) {
       UserPoolId: COGNITO_USER_POOL_ID,
       Username: email,
     }));
-    */
+    */  
+    
+
+    const authResponse = await cognito.send(
+      new InitiateAuthCommand({
+        AuthFlow: "USER_PASSWORD_AUTH",
+        ClientId: COGNITO_CLIENT_ID,
+        AuthParameters: {
+          USERNAME: email,
+          PASSWORD: password,
+        },
+      })
+    );
+
+    const tokens = {
+      accessToken: authResponse.AuthenticationResult?.AccessToken,
+      idToken: authResponse.AuthenticationResult?.IdToken,
+      refreshToken: authResponse.AuthenticationResult?.RefreshToken,
+    };
+
+    
 
     const user = await registerUser({
       email: email,

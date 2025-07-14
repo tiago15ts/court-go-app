@@ -4,7 +4,7 @@ import pt.isel.courtandgo.frontend.domain.User
 
 interface UserService{
 
-    suspend fun register(email: String, name: String, countryCode: String, contact: String, /*password: String*/): User
+    suspend fun register(email: String, name: String, countryCode: String, contact: String, password: String): User
 
     suspend fun login(email: String, password: String): User?
 

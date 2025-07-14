@@ -81,7 +81,7 @@ class ReservationsScreenTest {
         override suspend fun updateReservation(reservation: Reservation): Reservation? =
             if (reservation.id == fakeReservation.id) fakeReservation else null
 
-        override suspend fun deleteReservation(id: Int): Boolean =
+        override suspend fun cancelReservation(id: Int): Boolean =
             id == fakeReservation.id
 
         override suspend fun setConfirmedReservation(id: Int): Boolean =

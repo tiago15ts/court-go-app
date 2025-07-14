@@ -38,7 +38,7 @@ class ReservationServiceHttp(private val client : HttpClient) : ReservationServi
 
     override suspend fun getReservationsForPlayer(playerId: Int): List<Reservation> {
         return try {
-            val response = client.get<List<ReservationDTO>>("/reservations/player/$playerId")
+            val response = client.get<List<ReservationDTO>>("/player/$playerId/reservations")
             response.map { it.toDomain() }
         } catch (e: CourtAndGoException) {
             throw NotFoundException("Reservations for player with ID $playerId not found: ${e.message}", e)
@@ -87,9 +87,9 @@ class ReservationServiceHttp(private val client : HttpClient) : ReservationServi
         }
     }
 
-    override suspend fun deleteReservation(id: Int): Boolean {
+    override suspend fun cancelReservation(id: Int): Boolean {
         return try {
-            client.put<Unit>("/reservations/cancel/$id")
+            client.put<Unit>("/reservations/$id/cancel")
             true
         } catch (e: CourtAndGoException) {
             throw BadRequestException(
@@ -100,11 +100,11 @@ class ReservationServiceHttp(private val client : HttpClient) : ReservationServi
 
     override suspend fun setConfirmedReservation(id: Int): Boolean {
         return try {
-            val body = UpdateReservationStatusInput(status = ReservationStatus.Confirmed)
+            //val body = UpdateReservationStatusInput(status = ReservationStatus.Confirmed)
 
-            client.put<Unit>(
+            client.post<Unit>(
                 url = "/reservations/confirm/$id",
-                body = body
+                //body = body
             )
             true
         } catch (e: CourtAndGoException) {

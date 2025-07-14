@@ -30,7 +30,7 @@ fun MainViewController() = ComposeUIViewController {
     val calendarOpener = IosCalendarLinkOpener()
 
     CourtAndGoApp(
-        courtAndGoService = serviceMock,
+        courtAndGoService = serviceHTTP,
         calendarLinkOpener = calendarOpener
     )
     //}

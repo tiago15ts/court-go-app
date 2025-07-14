@@ -1,7 +1,9 @@
 package pt.isel.courtandgo.frontend.service.http
 
 import io.ktor.client.HttpClient
+import io.ktor.http.URLBuilder
 import pt.isel.courtandgo.frontend.domain.Court
+import pt.isel.courtandgo.frontend.domain.SportTypeCourt
 import pt.isel.courtandgo.frontend.service.CourtService
 import pt.isel.courtandgo.frontend.service.http.errors.NotFoundException
 import pt.isel.courtandgo.frontend.service.http.models.court.CourtDTO
@@ -32,9 +34,12 @@ class CourtServiceHttp(private val client: HttpClient): CourtService {
         }
     }
 
-    override suspend fun getCourtsBySportType(sportType: String): List<Court> {
+    override suspend fun getCourtsBySportType(sportType: SportTypeCourt): List<Court> {
         return try {
-            val response = client.get<List<CourtDTO>>("/courts/sport/$sportType")
+            val url = URLBuilder("/courts/sport").apply {
+                parameters.append("sportType", sportType.name)
+            }.buildString()
+            val response = client.get<List<CourtDTO>>(url)
             response.map { it.toDomain() }
         } catch (e: CourtAndGoException) {
             throw NotFoundException(

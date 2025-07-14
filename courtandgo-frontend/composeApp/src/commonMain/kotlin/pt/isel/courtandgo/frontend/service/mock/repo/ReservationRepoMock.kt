@@ -38,7 +38,7 @@ class ReservationRepoMock {
         } else null
     }
 
-    fun deleteReservation(id: Int): Boolean {
+    fun cancelReservation(id: Int): Boolean {
         val index = reservations.indexOfFirst { it.id == id }
         return if (index != -1) {
             val existing = reservations[index]

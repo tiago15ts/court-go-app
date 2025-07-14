@@ -10,7 +10,7 @@ interface ReservationService {
     suspend fun getReservationsForPlayer(playerId: Int): List<Reservation>
     suspend fun createReservation(reservation: Reservation): Reservation
     suspend fun updateReservation(reservation: Reservation): Reservation?
-    suspend fun deleteReservation(id: Int): Boolean
+    suspend fun cancelReservation(id: Int): Boolean
     suspend fun setConfirmedReservation(id: Int): Boolean
 
     /*suspend fun getReservationsForClubOnDate(

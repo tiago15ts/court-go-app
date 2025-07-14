@@ -8,13 +8,14 @@ import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
+import io.ktor.http.URLBuilder
 import io.ktor.http.HttpHeaders
 import pt.isel.courtandgo.frontend.service.http.models.Problem
 import pt.isel.courtandgo.frontend.service.http.models.ProblemDTO
 
 
 const val MEDIA_TYPE = "application/json"
-val BASE_URL = "/api"
+val BASE_URL = "https://xt3ptyfk0d.execute-api.eu-west-3.amazonaws.com"
 const val TOKEN_TYPE = "Bearer"
 const val ERROR_MEDIA_TYPE = "application/problem+json"
 const val SCHEME = "bearer"
@@ -26,6 +27,7 @@ open class CourtAndGoException(message: String?, cause: Throwable? = null) : Exc
 suspend inline fun <reified T : Any> HttpClient.get(
     url: String,
     token: String = ""
+
 ): T {
     val response = get(BASE_URL + url) {
         if (token.isNotEmpty()) header("Authorization", "$TOKEN_TYPE $token")

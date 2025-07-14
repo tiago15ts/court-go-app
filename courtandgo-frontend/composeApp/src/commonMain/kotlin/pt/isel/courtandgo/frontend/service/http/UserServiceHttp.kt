@@ -22,14 +22,14 @@ class UserServiceHttp(private val client: HttpClient) : UserService {
         name: String,
         countryCode: String,
         contact: String,
-        //password: String
+        password: String
     ): User {
         val userInput = UserRegisterInput(
             email = email,
             name = name,
             countryCode = countryCode,
             contact = contact,
-            //password = password
+            password = password
         )
         return try {
             val dto = client.post<UserDTO>("/user/register", body = userInput)
@@ -79,7 +79,7 @@ class UserServiceHttp(private val client: HttpClient) : UserService {
         }
     }
 
-    override suspend fun updateUser(user: User): User {
+    override suspend fun updateUser(user: User): User { //todo token needed here
         return try {
             val updateUserInput = UpdateUserInput(
                 user.name,
@@ -91,7 +91,8 @@ class UserServiceHttp(private val client: HttpClient) : UserService {
                 user.height,
                 //user.location
             )
-            val dto = client.put<UserDTO>("/user/${user.id}", body = updateUserInput)
+
+            val dto = client.put<UserDTO>("/user/${user.id}", body = updateUserInput, token = "")
             dto.toUser()
         } catch (e: CourtAndGoException) {
             throw UpdateUserException("Erro ao atualizar utilizador: ${e.message}", e)
@@ -109,10 +110,10 @@ class UserServiceHttp(private val client: HttpClient) : UserService {
             name = name,
             countryCode = countryCode,
             contact = contact,
-            //password = "" // Password is not used for OAuth registration
+            password = "" // Password is not used for OAuth registration
         )
         return try {
-            val dto = client.post<UserDTO>("/user/oauth-register", body = userInput)
+            val dto = client.post<UserDTO>("/user/oauthregister", body = userInput)
             dto.toUser()
         } catch (e: CourtAndGoException) {
             throw RegistrationException("Erro ao registar utilizador OAuth: ${e.message}", e)

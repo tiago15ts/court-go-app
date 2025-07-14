@@ -54,6 +54,6 @@ class CourtRepoMock {
     }
 
     fun getCourtsBySportType(sportType: String): List<Court> {
-        return courts.filter { it.sportTypeCourt.toString() == sportType }
+        return courts.filter { it.sportTypeCourt.name == sportType }
     }
 }

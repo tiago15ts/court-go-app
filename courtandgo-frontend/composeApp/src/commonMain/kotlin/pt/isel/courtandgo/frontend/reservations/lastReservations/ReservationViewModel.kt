@@ -98,7 +98,7 @@ class ReservationViewModel(
         viewModelScope.launch {
             _uiState.value = ReservationUiState.Loading
             try {
-                reservationService.deleteReservation(reservation.id)
+                reservationService.cancelReservation(reservation.id)
                 scheduler.cancelReservationReminder(reservation.id.toString())
                 loadReservations(reservation.playerId)
                 _uiState.value = ReservationUiState.Success

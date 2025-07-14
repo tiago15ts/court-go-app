@@ -1,7 +1,6 @@
 package pt.isel.courtandgo.frontend.service.mock
 
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalTime
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.service.ReservationService
 import pt.isel.courtandgo.frontend.service.mock.repo.ReservationRepoMock
@@ -28,8 +27,8 @@ class MockReservationService(private val repoMock: ReservationRepoMock) : Reserv
         return repoMock.updateReservation(reservation)
     }
 
-    override suspend fun deleteReservation(id: Int): Boolean {
-        return repoMock.deleteReservation(id)
+    override suspend fun cancelReservation(id: Int): Boolean {
+        return repoMock.cancelReservation(id)
     }
 
     override suspend fun setConfirmedReservation(id: Int): Boolean {

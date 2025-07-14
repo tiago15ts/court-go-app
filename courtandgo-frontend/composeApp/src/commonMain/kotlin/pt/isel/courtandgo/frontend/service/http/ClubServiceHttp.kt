@@ -1,6 +1,7 @@
 package pt.isel.courtandgo.frontend.service.http
 
 import io.ktor.client.HttpClient
+import io.ktor.http.URLBuilder
 import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.domain.SportTypeCourt
 import pt.isel.courtandgo.frontend.domain.SportsClub
@@ -24,7 +25,11 @@ class ClubServiceHttp(private val client: HttpClient) : ClubService {
 
     override suspend fun getClubsByDistrict(district: String): List<Club> {
         return try {
-            val response = client.get<List<ClubDTO>>("/clubs/district/$district")
+            val url = URLBuilder("/clubs/district").apply {
+                parameters.append("district", district)
+            }.buildString()
+            val response = client.get<List<ClubDTO>>(url)
+
             response.map { it.toDomain() }
         } catch (e: CourtAndGoException) {
             throw InternalServerErrorException("Failed to fetch clubs by district: ${e.message}", e)
@@ -33,7 +38,10 @@ class ClubServiceHttp(private val client: HttpClient) : ClubService {
 
     override suspend fun getClubsByCounty(county: String): List<Club> {
         return try {
-            val response = client.get<List<ClubDTO>>("/clubs/county/$county")
+            val url = URLBuilder("/clubs/county").apply {
+                parameters.append("county", county)
+            }.buildString()
+            val response = client.get<List<ClubDTO>>(url)
             response.map { it.toDomain() }
         } catch (e: CourtAndGoException) {
             throw InternalServerErrorException("Failed to fetch clubs by county: ${e.message}", e)
@@ -42,7 +50,10 @@ class ClubServiceHttp(private val client: HttpClient) : ClubService {
 
     override suspend fun getClubsByCountry(country: String): List<Club> {
         return try {
-            val response = client.get<List<ClubDTO>>("/clubs/country/$country")
+            val url = URLBuilder("/clubs/country").apply {
+                parameters.append("country", country)
+            }.buildString()
+            val response = client.get<List<ClubDTO>>(url)
             response.map { it.toDomain() }
         } catch (e: CourtAndGoException) {
             throw InternalServerErrorException("Failed to fetch clubs by country: ${e.message}", e)
@@ -51,7 +62,10 @@ class ClubServiceHttp(private val client: HttpClient) : ClubService {
 
     override suspend fun getClubsByPostalCode(postalCode: String): List<Club> {
         return try {
-            val response = client.get<List<ClubDTO>>("/clubs/postal/$postalCode")
+            val url = URLBuilder("/clubs/postal").apply {
+                parameters.append("postalCode", postalCode)
+            }.buildString()
+            val response = client.get<List<ClubDTO>>(url)
             response.map { it.toDomain() }
         } catch (e: CourtAndGoException) {
             throw InternalServerErrorException("Failed to fetch clubs by postal code: ${e.message}", e)
@@ -60,7 +74,10 @@ class ClubServiceHttp(private val client: HttpClient) : ClubService {
 
     override suspend fun getClubsByName(name: String): List<Club> {
         return try {
-            val response = client.get<List<ClubDTO>>("/clubs/name/$name")
+            val url = URLBuilder("/clubs/name").apply {
+                parameters.append("name", name)
+            }.buildString()
+            val response = client.get<List<ClubDTO>>(url)
             response.map { it.toDomain() }
         } catch (e: CourtAndGoException) {
             throw InternalServerErrorException("Failed to fetch clubs by name: ${e.message}", e)
@@ -69,7 +86,10 @@ class ClubServiceHttp(private val client: HttpClient) : ClubService {
 
     override suspend fun getClubsBySport(sport: SportsClub): List<Club> {
         return try {
-            val response = client.get<List<ClubDTO>>("/clubs/sport/${sport.name}")
+            val url = URLBuilder("/clubs/sport").apply {
+                parameters.append("sport", sport.name)
+            }.buildString()
+            val response = client.get<List<ClubDTO>>(url)
             response.map { it.toDomain() }
         } catch (e: CourtAndGoException) {
             throw InternalServerErrorException("Failed to fetch clubs by sport: ${e.message}", e)

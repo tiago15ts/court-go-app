@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
             val serviceHTTP = CourtAndGoServiceHttp(httpClient)
 
             val calendarOpener = AndroidCalendarLinkOpener(this)
-                CourtAndGoApp(courtAndGoService = serviceMock,
+                CourtAndGoApp(courtAndGoService = serviceHTTP,
                     calendarLinkOpener = calendarOpener)
             //}
         }

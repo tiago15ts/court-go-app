@@ -10,12 +10,19 @@ import { updateUser } from "../../core/queries/user";
 const client = new CognitoIdentityProviderClient({ region: "eu-west-3" });
 
 export async function handler(event) {
-  const token = event.headers?.Authorization?.replace("Bearer ", "");
+  const authHeader = event.headers?.authorization || event.headers?.Authorization;
+  if (!authHeader?.startsWith("Bearer ")) {
+    return { statusCode: 401, body: "Missing or malformed token" };
+  }
+  const token = authHeader.replace("Bearer ", "");
+
   if (!token) {
     return { statusCode: 401, body: JSON.stringify({ error: "Token inválido ou ausente." }) };
   }
 
   const body = JSON.parse(event.body || "{}");
+
+  const { id } = event.pathParameters || {};
 
   const {
     name,
@@ -25,7 +32,6 @@ export async function handler(event) {
     weight,
     height,
     gender,
-    playerId,
   } = body;
 
   try {
@@ -36,7 +42,7 @@ export async function handler(event) {
       cognitoAttributes.push({ Name: "name", Value: String(name) });
     }
     if (phone) {
-      cognitoAttributes.push({ Name: "phone_number", Value: String(phone) });
+      cognitoAttributes.push({ Name: "phone_number", Value: String(countryId + phone) });
     }
 
 
@@ -58,15 +64,12 @@ export async function handler(event) {
       weight,
       height,
       gender,
-      playerId,
+      playerId: id,
     });
 
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        message: "Perfil atualizado com sucesso.",
-        user: updatedUser,
-      }),
+      body: JSON.stringify({updatedUser}),
     };
   } catch (e) {
     console.error("Erro ao atualizar perfil:", e);
