@@ -14,6 +14,9 @@ export async function handler(event) {
 
   return {
     statusCode: user ? 200 : 404,
+      headers: {
+    "Content-Type": "application/json"
+  },
     body: JSON.stringify(user || { error: "User by email not found" }),
   };
 }

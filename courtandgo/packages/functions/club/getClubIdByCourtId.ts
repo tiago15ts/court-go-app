@@ -5,6 +5,9 @@ export async function handler(event) {
   const clubId = await getClubIdByCourtId(Number(courtId));
   return {
     statusCode: 200,
+        headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({ clubId }),
   };
 }

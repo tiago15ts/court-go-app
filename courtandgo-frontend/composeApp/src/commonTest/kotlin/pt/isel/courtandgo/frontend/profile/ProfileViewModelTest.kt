@@ -6,7 +6,6 @@ import kotlinx.coroutines.test.runTest
 import pt.isel.courtandgo.frontend.domain.User
 import pt.isel.courtandgo.frontend.repository.AuthRepositoryImpl
 import pt.isel.courtandgo.frontend.service.mock.CourtAndGoServiceMock
-import pt.isel.courtandgo.frontend.service.mock.repo.UserRepoMock
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -26,7 +25,7 @@ class ProfileViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `load user test`() = runTest {
-        viewModel.loadUser(User(1, "Joao", "joao@email.com", "123456789", "123456789"))
+        viewModel.loadUser(User(1, "Joao", "joao@email.com",  "123456789", "123456789"))
 
         advanceUntilIdle()
 

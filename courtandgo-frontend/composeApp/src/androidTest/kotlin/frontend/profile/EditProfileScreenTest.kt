@@ -16,8 +16,6 @@ import pt.isel.courtandgo.frontend.profile.editProfile.EditProfileScreen
 import pt.isel.courtandgo.frontend.repository.AuthRepository
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.delay
-import org.junit.Assert.assertEquals
-
 
 
 class EditProfileScreenTest {
@@ -27,13 +25,13 @@ class EditProfileScreenTest {
 
     private val fakeUser = User(
         id = 1,
-        name = "João Silva",
         email = "joao@example.com",
+        name = "João Silva",
         countryCode = "+351",
         phone = "912345678",
         //location = "Lisboa",
-        birthDate = "1990-01-01",
         gender = "Masculino",
+        birthDate = "1990-01-01",
         weight = 75.0,
         height = 180.0
     )

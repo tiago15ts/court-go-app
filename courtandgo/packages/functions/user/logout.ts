@@ -19,6 +19,9 @@ export async function handler(event) {
   } catch (e) {
     return {
       statusCode: 500,
+        headers: {
+    "Content-Type": "application/json"
+  },
       body: JSON.stringify({ error: "Erro ao efetuar logout." }),
     };
   }

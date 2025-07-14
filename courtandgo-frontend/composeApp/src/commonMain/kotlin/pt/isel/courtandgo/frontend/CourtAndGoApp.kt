@@ -39,6 +39,8 @@ import pt.isel.courtandgo.frontend.reservations.receiptReservation.ReceiptReserv
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.CourtAvailabilityViewModel
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.SelectedClubScreen
 import pt.isel.courtandgo.frontend.service.CourtAndGoService
+import pt.isel.courtandgo.frontend.service.ReservationService
+import pt.isel.courtandgo.frontend.service.http.ReservationServiceHttp
 import pt.isel.courtandgo.frontend.service.mock.MockClubService
 import pt.isel.courtandgo.frontend.service.mock.MockCourtService
 import pt.isel.courtandgo.frontend.service.mock.MockReservationService
@@ -59,6 +61,8 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
     val profileViewModel = remember { ProfileViewModel(AuthRepositoryImpl(courtAndGoService)) }
 
     val scheduleServiceShared = remember { MockScheduleCourtService(ScheduleCourtRepoMock()) }
+
+
     val reservationServiceShared = remember { MockReservationService(ReservationRepoMock()) }
 
     val searchClubViewModel = remember { SearchClubViewModel(
@@ -85,6 +89,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
 
     val authState by authViewModel.uiState.collectAsState()
     val currentUser = (authState as? AuthUiState.Success)?.user
+    //val currentUser = profileViewModel.user
 
     val isAuthenticated = when (screen.value) {
         is Screen.Login,
@@ -232,7 +237,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
                                 screen.value = Screen.ConfirmReservation(
                                     clubInfo = (screen.value as Screen.SelectedClub).club,
                                     courtInfo = (screen.value as Screen.SelectedClub).court,
-                                    playerId = currentUser?.id ?: 0, //todo fix this nullablecase
+                                    playerId = currentUser?.id ?: 0,
                                     startDateTime = dateTime
                                 )
                             }

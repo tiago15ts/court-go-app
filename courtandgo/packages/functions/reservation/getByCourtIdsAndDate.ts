@@ -15,6 +15,9 @@ export async function handler(event) {
   if (!courtIds.length || !date) {
     return {
       statusCode: 400,
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({ message: "Missing or invalid courtIds or date" }),
     };
   }
@@ -23,6 +26,9 @@ export async function handler(event) {
 
   return {
     statusCode: 200,
+        headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(reservations),
   };
 }

@@ -5,6 +5,9 @@ export async function handler(event) {
   const clubs = await getClubsByPostalCode(postalCode);
   return {
     statusCode: 200,
+        headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(clubs),
   };
 }

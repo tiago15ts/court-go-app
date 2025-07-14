@@ -9,10 +9,6 @@ declare module "sst" {
       "type": "sst.aws.ApiGatewayV2"
       "url": string
     }
-    "CourtAndGoAdminSite": {
-      "type": "sst.aws.React"
-      "url": string
-    }
     "CourtAndGoDB": {
       "database": string
       "host": string

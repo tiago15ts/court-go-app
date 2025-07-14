@@ -17,6 +17,7 @@ import pt.isel.courtandgo.frontend.service.http.utils.post
 import pt.isel.courtandgo.frontend.service.http.utils.put
 
 class UserServiceHttp(private val client: HttpClient) : UserService {
+
     override suspend fun register(
         email: String,
         name: String,
@@ -33,6 +34,7 @@ class UserServiceHttp(private val client: HttpClient) : UserService {
         )
         return try {
             val dto = client.post<UserDTO>("/user/register", body = userInput)
+            println("User registered: ${dto.toUser()}")
             dto.toUser()
         } catch (e: CourtAndGoException) {
             throw RegistrationException("Erro ao registar utilizador: ${e.message}", e)

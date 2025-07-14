@@ -6,6 +6,9 @@ export async function handler(event) {
   const schedules = await getWeeklySchedulesForCourt(Number(courtId));
   return {
     statusCode: 200,
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(schedules),
   };
 }

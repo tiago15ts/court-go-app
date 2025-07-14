@@ -69,12 +69,18 @@ export async function handler(event) {
 
     return {
       statusCode: 200,
+        headers: {
+    "Content-Type": "application/json"
+  },
       body: JSON.stringify({updatedUser}),
     };
   } catch (e) {
     console.error("Erro ao atualizar perfil:", e);
     return {
       statusCode: 500,
+        headers: {
+    "Content-Type": "application/json"
+  },
       body: JSON.stringify({ error: "Erro ao atualizar perfil." }),
     };
   }

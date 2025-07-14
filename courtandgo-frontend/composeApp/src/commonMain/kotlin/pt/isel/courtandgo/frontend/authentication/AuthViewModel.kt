@@ -92,7 +92,7 @@ class AuthViewModel(
         countryCode: String,
         phone: String,
         password: String,
-        onSuccess: () -> Unit
+        //onSuccess: () -> Unit
     ) {
         viewModelScope.launch {
             _uiState.value = AuthUiState.Loading
@@ -105,7 +105,7 @@ class AuthViewModel(
                     password
                 )
                 _uiState.value = AuthUiState.Success(user)
-                onSuccess()
+                //onSuccess()
             } catch (e: CourtAndGoException) {
                 _uiState.value = AuthUiState.Error(e.message ?: "Erro ao registar")
             } catch (e: Exception) {

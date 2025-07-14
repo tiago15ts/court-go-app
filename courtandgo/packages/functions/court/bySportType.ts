@@ -5,6 +5,9 @@ export async function handler(event) {
   const courts = await getCourtsBySportType(sport);
   return {
     statusCode: 200,
+        headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(courts),
   };
 }

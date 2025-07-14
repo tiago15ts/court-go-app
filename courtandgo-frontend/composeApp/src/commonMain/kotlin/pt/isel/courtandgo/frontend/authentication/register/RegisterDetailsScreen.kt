@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pt.isel.courtandgo.frontend.authentication.AuthUiState
 import pt.isel.courtandgo.frontend.authentication.AuthViewModel
 import pt.isel.courtandgo.frontend.authentication.countryPhoneCode
 import pt.isel.courtandgo.frontend.authentication.isValidName
@@ -25,6 +26,15 @@ fun RegisterDetailsScreen(
     onRegisterSuccess: () -> Unit,
     onNavigateBack: () -> Unit = { }
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(uiState) {
+        if (uiState is AuthUiState.Success) {
+            println("✅ Navegação após sucesso")
+            onRegisterSuccess()
+        }
+    }
+
     var name by remember { mutableStateOf("") }
     var countryCode by remember { mutableStateOf("+351") }
     var phone by remember { mutableStateOf("") }
@@ -124,6 +134,12 @@ fun RegisterDetailsScreen(
 
             Spacer(Modifier.height(24.dp))
 
+            when (uiState) {
+                is AuthUiState.Loading -> CircularProgressIndicator()
+                is AuthUiState.Error -> Text("❌ ${(uiState as AuthUiState.Error).message}")
+                else -> Unit
+            }
+
             Button(
                 onClick = {
                     viewModel.registerWithEmail(
@@ -131,8 +147,7 @@ fun RegisterDetailsScreen(
                         email = email,
                         password = password,
                         countryCode = countryCode,
-                        phone = phone,
-                        onSuccess = onRegisterSuccess
+                        phone = phone
                     )
                 },
                 enabled = allValid,

@@ -6,6 +6,9 @@ export async function handler(event) {
 
   return {
     statusCode: success ? 200 : 404,
+        headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({ success }),
   };
 }

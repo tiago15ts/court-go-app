@@ -5,6 +5,9 @@ export async function handler(event) {
   const club = await getClubById(Number(id));
   return {
     statusCode: club ? 200 : 404,
+        headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(club || { error: "Club not found" }),
   };
 }

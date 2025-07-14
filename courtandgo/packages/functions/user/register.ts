@@ -3,6 +3,7 @@ import {
   SignUpCommand,
   InitiateAuthCommand,
   AdminConfirmSignUpCommand,
+  AdminCreateUserCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import { registerUser } from "../../core/queries/user";
 
@@ -24,6 +25,8 @@ export async function handler(event) {
   }
 
   try {
+    
+    
     const command = new SignUpCommand({
       ClientId: COGNITO_CLIENT_ID!,
       Username: email,
@@ -36,6 +39,7 @@ export async function handler(event) {
     });
 
     await cognito.send(command);
+    
 
     /*
     await cognito.send(new AdminConfirmSignUpCommand({
@@ -44,7 +48,8 @@ export async function handler(event) {
     }));
     */  
     
-
+/*
+//isto nao funciona porque a confirmacao do utilizador tem de ser feita manualmente
     const authResponse = await cognito.send(
       new InitiateAuthCommand({
         AuthFlow: "USER_PASSWORD_AUTH",
@@ -61,8 +66,7 @@ export async function handler(event) {
       idToken: authResponse.AuthenticationResult?.IdToken,
       refreshToken: authResponse.AuthenticationResult?.RefreshToken,
     };
-
-    
+    */
 
     const user = await registerUser({
       email: email,
@@ -72,10 +76,15 @@ export async function handler(event) {
     });
 
     return {
-      statusCode: 200,
-      body: JSON.stringify({ user }),
-    };
+  statusCode: 200,
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(user),
+};
+
   } catch (err) {
+     console.error("Erro no handler:", err);
     return {
       statusCode: 400,
       body: JSON.stringify({ error: err.message }),
