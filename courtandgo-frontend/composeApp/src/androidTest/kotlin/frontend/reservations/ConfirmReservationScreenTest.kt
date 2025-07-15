@@ -31,20 +31,20 @@ class ConfirmReservationScreenTest {
 
     private fun fakeConfirmReservationViewModel() : ConfirmReservationViewModel {
         return ConfirmReservationViewModel(
-            reservationService = MockReservationService(ReservationRepoMock()),
-            courtService = MockCourtService(CourtRepoMock()),
+            reservationRepo = MockReservationService(ReservationRepoMock()),
+            courtRepo = MockCourtService(CourtRepoMock()),
         )
     }
 
     private fun fakeAvailabilityViewModel() : CourtAvailabilityViewModel {
         return CourtAvailabilityViewModel(
-            scheduleService = MockScheduleCourtService(
+            scheduleRepo = MockScheduleCourtService(
                 ScheduleCourtRepoMock()
             ),
-            reservationService = MockReservationService(
+            reservationRepo = MockReservationService(
                 ReservationRepoMock()
             ),
-            courtService = MockCourtService(CourtRepoMock())
+            courtRepo = MockCourtService(CourtRepoMock())
         )
     }
 

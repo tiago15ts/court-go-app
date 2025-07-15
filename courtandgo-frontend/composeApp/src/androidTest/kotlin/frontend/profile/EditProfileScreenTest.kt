@@ -13,7 +13,7 @@ import pt.isel.courtandgo.frontend.domain.User
 import pt.isel.courtandgo.frontend.profile.ProfileUiState
 import pt.isel.courtandgo.frontend.profile.ProfileViewModel
 import pt.isel.courtandgo.frontend.profile.editProfile.EditProfileScreen
-import pt.isel.courtandgo.frontend.repository.AuthRepository
+import pt.isel.courtandgo.frontend.repository.interfaces.AuthRepository
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.delay
 

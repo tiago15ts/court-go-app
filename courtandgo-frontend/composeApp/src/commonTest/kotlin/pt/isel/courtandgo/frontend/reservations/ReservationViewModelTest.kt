@@ -22,9 +22,9 @@ class ReservationViewModelTest {
     fun setup() {
         // Initialize the ReservationViewModel with mock services
         viewModel = ReservationViewModel(
-            reservationService = MockReservationService(ReservationRepoMock()),
-            clubService = MockClubService(ClubRepoMock()),
-            courtService = MockCourtService(CourtRepoMock())
+            reservationRepo = MockReservationService(ReservationRepoMock()),
+            clubRepo = MockClubService(ClubRepoMock()),
+            courtRepo = MockCourtService(CourtRepoMock())
         )
     }
 

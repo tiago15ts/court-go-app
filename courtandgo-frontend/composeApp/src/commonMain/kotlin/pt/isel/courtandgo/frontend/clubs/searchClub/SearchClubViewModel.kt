@@ -11,12 +11,11 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.domain.Court
-import pt.isel.courtandgo.frontend.domain.SportTypeCourt
 import pt.isel.courtandgo.frontend.domain.SportsClub
+import pt.isel.courtandgo.frontend.repository.interfaces.ClubRepository
+import pt.isel.courtandgo.frontend.repository.interfaces.CourtRepository
+import pt.isel.courtandgo.frontend.repository.interfaces.ScheduleRepository
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.getDefaultSlotsForCourt
-import pt.isel.courtandgo.frontend.service.ClubService
-import pt.isel.courtandgo.frontend.service.CourtService
-import pt.isel.courtandgo.frontend.service.ScheduleCourtsService
 import pt.isel.courtandgo.frontend.service.http.utils.CourtAndGoException
 import pt.isel.courtandgo.frontend.utils.dateUtils.currentDate
 
@@ -29,9 +28,9 @@ sealed class ClubSearchUiState {
 
 
 class SearchClubViewModel(
-    private val clubService: ClubService,
-    private val scheduleService : ScheduleCourtsService,
-    private val courtService: CourtService
+    private val clubRepository: ClubRepository,
+    private val scheduleRepo: ScheduleRepository,
+    private val courtRepository: CourtRepository
 ) : ViewModel() {
 
     private val _clubs = MutableStateFlow<List<Club>>(emptyList())
@@ -95,9 +94,9 @@ class SearchClubViewModel(
     fun fetchClubs() {
         viewModelScope.launch {
             _uiState.value = ClubSearchUiState.Loading
-            delay(500)
+            delay(300)
             try {
-                val result = clubService.getClubsFiltered(
+                val result = clubRepository.getClubsFiltered(
                     query = _query.value,
                     county = _selectedCounty.value,
                     district = _selectedDistrict.value,
@@ -123,7 +122,7 @@ class SearchClubViewModel(
         viewModelScope.launch {
             val courtsList = _clubs.value
             val updated = courtsList.associate { club ->
-                val times = getDefaultSlotsForCourt(scheduleService, club.id, date)
+                val times = getDefaultSlotsForCourt(scheduleRepo, club.id, date)
                 club.id to times
             }
             _clubHours.value = updated
@@ -131,12 +130,12 @@ class SearchClubViewModel(
     }
 
     suspend fun getCourtsForClub(clubId: Int): List<Court> {
-        return courtService.getCourtsByClubId(clubId)
+        return courtRepository.getCourtsByClubId(clubId)
     }
 
     suspend fun getClubByCourtId(courtId: Int): Club? {
-        val court = courtService.getCourtById(courtId)
-        return court?.let { clubService.getClubById(it.clubId) }
+        val court = courtRepository.getCourtById(courtId)
+        return court?.let { clubRepository.getClubById(it.clubId) }
     }
 
 

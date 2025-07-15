@@ -1,4 +1,4 @@
-package pt.isel.courtandgo.frontend.repository
+package pt.isel.courtandgo.frontend.repository.interfaces
 
 import pt.isel.courtandgo.frontend.domain.User
 

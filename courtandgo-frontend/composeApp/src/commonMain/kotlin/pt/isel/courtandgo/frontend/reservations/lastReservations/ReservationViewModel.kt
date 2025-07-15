@@ -17,9 +17,9 @@ import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.domain.ReservationStatus
 import pt.isel.courtandgo.frontend.notifications.provideNotificationScheduler
-import pt.isel.courtandgo.frontend.service.ClubService
-import pt.isel.courtandgo.frontend.service.CourtService
-import pt.isel.courtandgo.frontend.service.ReservationService
+import pt.isel.courtandgo.frontend.repository.interfaces.ClubRepository
+import pt.isel.courtandgo.frontend.repository.interfaces.CourtRepository
+import pt.isel.courtandgo.frontend.repository.interfaces.ReservationRepository
 import pt.isel.courtandgo.frontend.service.http.utils.CourtAndGoException
 
 sealed class ReservationUiState {
@@ -31,9 +31,9 @@ sealed class ReservationUiState {
 
 
 class ReservationViewModel(
-    private val reservationService: ReservationService,
-    private val clubService: ClubService,
-    private val courtService: CourtService
+    private val reservationRepo: ReservationRepository,
+    private val clubRepo: ClubRepository,
+    private val courtRepo: CourtRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<ReservationUiState>(ReservationUiState.Idle)
@@ -51,9 +51,9 @@ class ReservationViewModel(
     fun loadReservations(playerId: Int) {
         viewModelScope.launch {
             _uiState.value = ReservationUiState.Loading
-            delay(500)
+            delay(300)
             try {
-                val all = reservationService.getReservationsForPlayer(playerId)
+                val all = reservationRepo.getReservationsForPlayer(playerId)
                 val now = Clock.System.now()
                 val zone = TimeZone.currentSystemDefault()
 
@@ -71,11 +71,11 @@ class ReservationViewModel(
                     }
                     .sortedByDescending { it.startTime.toInstant(zone) }
 
-                val clubs = clubService.getAllClubs()
+                val clubs = clubRepo.getAllClubs()
                 val courtIdToClubName = mutableMapOf<Int, String>()
 
                 clubs.forEach { club ->
-                    val courts = courtService.getCourtsByClubId(club.id)
+                    val courts = courtRepo.getCourtsByClubId(club.id)
                     courts.forEach { court ->
                         courtIdToClubName[court.id] = club.name
                     }
@@ -98,7 +98,7 @@ class ReservationViewModel(
         viewModelScope.launch {
             _uiState.value = ReservationUiState.Loading
             try {
-                reservationService.cancelReservation(reservation.id)
+                reservationRepo.cancelReservation(reservation.id)
                 scheduler.cancelReservationReminder(reservation.id.toString())
                 loadReservations(reservation.playerId)
                 _uiState.value = ReservationUiState.Success
@@ -111,11 +111,11 @@ class ReservationViewModel(
     }
 
     suspend fun getClubInfoByCourtId(courtId: Int): Club? {
-        val clubId = clubService.getClubIdByCourtId(courtId)
-        return clubService.getClubById(clubId)
+        val clubId = clubRepo.getClubIdByCourtId(courtId)
+        return clubRepo.getClubById(clubId)
     }
 
     suspend fun getCourtInfoByCourtId(courtId: Int): Court {
-        return courtService.getCourtById(courtId) ?: throw IllegalArgumentException("Court não encontrado com ID: $courtId")
+        return courtRepo.getCourtById(courtId) ?: throw IllegalArgumentException("Court não encontrado com ID: $courtId")
     }
 }

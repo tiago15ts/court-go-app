@@ -9,6 +9,6 @@ export async function handler(event) {
         headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ success }),
+    body: JSON.stringify(success),
   };
 }

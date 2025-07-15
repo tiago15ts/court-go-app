@@ -16,6 +16,6 @@ data class UserDTO(
     val height : Double?
 
 ) {
-    fun toUser() = User(id, name, email, countryCode, phone, gender, birthDate, weight, height)
+    fun toUser() = User(id, email, name, countryCode, phone, gender, birthDate, weight, height)
 }
 

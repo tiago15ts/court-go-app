@@ -23,8 +23,8 @@ class ConfirmReservationViewModelTest {
     @BeforeTest
     fun setup() {
         viewModel = ConfirmReservationViewModel(
-            reservationService = MockReservationService(ReservationRepoMock()),
-            courtService = MockCourtService(CourtRepoMock())
+            reservationRepo = MockReservationService(ReservationRepoMock()),
+            courtRepo = MockCourtService(CourtRepoMock())
         )
     }
 
@@ -32,8 +32,8 @@ class ConfirmReservationViewModelTest {
     @Test
     fun emitsIdleState_afterResetUiStateCalled() = runTest {
         val viewModel = ConfirmReservationViewModel(
-            reservationService = MockReservationService(ReservationRepoMock()),
-            courtService = MockCourtService(CourtRepoMock())
+            reservationRepo = MockReservationService(ReservationRepoMock()),
+            courtRepo = MockCourtService(CourtRepoMock())
         )
 
         viewModel.placeReservation(

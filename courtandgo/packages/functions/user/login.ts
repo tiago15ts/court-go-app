@@ -28,8 +28,8 @@ export async function handler(event) {
     
     const tokens = {
       accessToken: response.AuthenticationResult?.AccessToken,
-      idToken: response.AuthenticationResult?.IdToken,
-      refreshToken: response.AuthenticationResult?.RefreshToken,
+      //idToken: response.AuthenticationResult?.IdToken,
+      //refreshToken: response.AuthenticationResult?.RefreshToken,
     };
 
     const user = await getUserByEmail(email);
@@ -41,9 +41,7 @@ export async function handler(event) {
         headers: {
     "Content-Type": "application/json"
   },
-      body: JSON.stringify({
-        user
-      }),
+      body: JSON.stringify(user),
     };
   } catch (err) {
     console.error("Erro login:", err);

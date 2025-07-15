@@ -13,7 +13,7 @@ data class ClubDTO(
     val location: LocationDTO,
     val sportsClub: SportsClub,
     val nrOfCourts: Int,
-    val averagePrice: Double
+    val averagePrice: Double?
 ) {
     fun toDomain(): Club = Club(
         id = id,
@@ -21,7 +21,7 @@ data class ClubDTO(
         location = location.toDomain(),
         sportsClub = sportsClub,
         nrOfCourts = nrOfCourts,
-        averagePrice = averagePrice
+        averagePrice = averagePrice ?: 0.0
     )
 
     companion object {

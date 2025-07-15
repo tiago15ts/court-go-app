@@ -50,6 +50,9 @@ fun RegisterDetailsScreen(
 
     val scrollState = rememberScrollState()
 
+    val isNameValid = isValidName(name)
+    val isPhoneValid = isValidPhoneNumber(phone, countryCode)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -91,6 +94,9 @@ fun RegisterDetailsScreen(
                 placeholder = { Text("primeiro e último nome") },
                 modifier = Modifier.fillMaxWidth()
             )
+            if (!isNameValid && name.isNotBlank()) {
+                Text("❌ Nome inválido", color = Color.Red, fontSize = 12.sp)
+            }
 
             Spacer(Modifier.height(16.dp))
 
@@ -112,6 +118,9 @@ fun RegisterDetailsScreen(
                     placeholder = { Text("912345678") },
                     modifier = Modifier.weight(3f)
                 )
+            }
+            if (!isPhoneValid && phone.isNotBlank()) {
+                Text("❌ Número de telefone inválido", color = Color.Red, fontSize = 12.sp)
             }
 
             Spacer(Modifier.height(16.dp))

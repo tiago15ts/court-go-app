@@ -11,11 +11,12 @@ data class LocationDTO(
     val district: DistrictDTO,
     val country: CountryDTO,
     val postalCode: String,
-    val latitude: Double,
-    val longitude: Double
+    val latitude: String?,
+    val longitude: String?
 ) {
     fun toDomain(): Location = Location(
-        id, address, county, district.toDomain(), country.toDomain(), postalCode, latitude, longitude
+        id, address, county, district.toDomain(), country.toDomain(), postalCode,
+        latitude?.toDoubleOrNull() ?: 0.0, longitude?.toDoubleOrNull() ?: 0.0
     )
 
     companion object {
@@ -26,8 +27,8 @@ data class LocationDTO(
             district = DistrictDTO.fromDomain(location.district),
             country = CountryDTO.fromDomain(location.country),
             postalCode = location.postalCode,
-            latitude = location.latitude,
-            longitude = location.longitude
+            latitude = location.latitude.toString(),
+            longitude = location.longitude.toString()
         )
     }
 }

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import pt.isel.courtandgo.frontend.domain.User
-import pt.isel.courtandgo.frontend.repository.AuthRepository
+import pt.isel.courtandgo.frontend.repository.interfaces.AuthRepository
 import pt.isel.courtandgo.frontend.service.http.utils.CourtAndGoException
 
 

@@ -10,8 +10,8 @@ import kotlinx.datetime.*
 import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.notifications.scheduleReservationNotification
-import pt.isel.courtandgo.frontend.service.CourtService
-import pt.isel.courtandgo.frontend.service.ReservationService
+import pt.isel.courtandgo.frontend.repository.interfaces.CourtRepository
+import pt.isel.courtandgo.frontend.repository.interfaces.ReservationRepository
 import pt.isel.courtandgo.frontend.service.http.utils.CourtAndGoException
 import kotlin.time.Duration.Companion.minutes
 
@@ -25,8 +25,8 @@ sealed class ConfirmReservationUiState {
 
 
 class ConfirmReservationViewModel(
-    private val reservationService: ReservationService,
-    private val courtService: CourtService
+    private val reservationRepo: ReservationRepository,
+    private val courtRepo: CourtRepository
 ) : ViewModel() {
 
     private val _uiState = mutableStateOf<ConfirmReservationUiState>(ConfirmReservationUiState.Idle)
@@ -73,7 +73,7 @@ class ConfirmReservationViewModel(
         viewModelScope.launch {
             _uiState.value = ConfirmReservationUiState.Loading
             try {
-                val created = reservationService.createReservation(reservation)
+                val created = reservationRepo.createReservation(reservation)
                 _uiState.value = ConfirmReservationUiState.Success(created)
 
                 // Agendar a notificação 24h antes (ou mais próximo possível)
@@ -95,7 +95,7 @@ class ConfirmReservationViewModel(
         viewModelScope.launch {
             _uiState.value = ConfirmReservationUiState.Loading
             try {
-                reservationService.setConfirmedReservation(reservation.id)
+                reservationRepo.setConfirmedReservation(reservation.id)
                 //_reservationConfirmed.value = reservation
                 _uiState.value = ConfirmReservationUiState.Success(reservation)
             } catch (e: CourtAndGoException) {
@@ -110,7 +110,7 @@ class ConfirmReservationViewModel(
     fun loadCourts(clubId: Int, availableCourtsAtTime: Set<Int>) {
         viewModelScope.launch {
             try{
-            _courts.value = courtService.getCourtsByClubId(clubId)
+            _courts.value = courtRepo.getCourtsByClubId(clubId)
             // Selecionar o primeiro court disponível nesse horário
             _selectedCourtId.value = _courts.value.firstOrNull { it.id in availableCourtsAtTime }?.id
         } catch (e: CourtAndGoException) {

@@ -96,9 +96,9 @@ class ReservationsScreenTest {
 
     private fun fakeReservationsViewModel(): ReservationViewModel {
         return ReservationViewModel(
-            reservationService = fakeReservationService,
-            clubService = MockClubService(ClubRepoMock()),
-            courtService = MockCourtService(CourtRepoMock())
+            reservationRepo = fakeReservationService,
+            clubRepo = MockClubService(ClubRepoMock()),
+            courtRepo = MockCourtService(CourtRepoMock())
         )
     }
 

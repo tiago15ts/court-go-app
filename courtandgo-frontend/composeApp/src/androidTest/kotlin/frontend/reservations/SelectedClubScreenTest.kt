@@ -75,13 +75,13 @@ class SelectedClubScreenTest {
 
     private fun fakeAvailabilityViewModel() : CourtAvailabilityViewModel {
         return CourtAvailabilityViewModel(
-            scheduleService = MockScheduleCourtService(
+            scheduleRepo = MockScheduleCourtService(
                 ScheduleCourtRepoMock()
             ),
-            reservationService = MockReservationService(
+            reservationRepo = MockReservationService(
                 ReservationRepoMock()
             ),
-            courtService = MockCourtService(CourtRepoMock())
+            courtRepo = MockCourtService(CourtRepoMock())
         )
     }
 

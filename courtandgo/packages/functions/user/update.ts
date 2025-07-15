@@ -72,7 +72,7 @@ export async function handler(event) {
         headers: {
     "Content-Type": "application/json"
   },
-      body: JSON.stringify({updatedUser}),
+      body: JSON.stringify(updatedUser),
     };
   } catch (e) {
     console.error("Erro ao atualizar perfil:", e);

@@ -1,6 +1,7 @@
 package pt.isel.courtandgo.frontend.repository
 
 import pt.isel.courtandgo.frontend.domain.User
+import pt.isel.courtandgo.frontend.repository.interfaces.AuthRepository
 import pt.isel.courtandgo.frontend.service.CourtAndGoService
 
 class AuthRepositoryImpl(

@@ -34,6 +34,8 @@ suspend inline fun <reified T : Any> HttpClient.get(
         header("Content-Type", MEDIA_TYPE)
         header("Accept", "$MEDIA_TYPE, $ERROR_MEDIA_TYPE")
     }
+    println( "Response status: ${response.status.value}")
+    println("Response body: ${response.body<String>()}")
     return response.processResponse()
 }
 
@@ -48,7 +50,10 @@ suspend inline fun <reified T : Any> HttpClient.post(
         header("Content-Type", MEDIA_TYPE)
         header("Accept", "$MEDIA_TYPE, $ERROR_MEDIA_TYPE")
         if (body != null) setBody(body)
+
     }
+    //println( "Response status: ${response.status.value}")
+    //println("Response body: ${response.body<String>()}")
     return response.processResponse()
 }
 

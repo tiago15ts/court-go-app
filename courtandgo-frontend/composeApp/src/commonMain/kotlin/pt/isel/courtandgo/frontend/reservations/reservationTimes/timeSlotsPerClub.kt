@@ -4,15 +4,15 @@ import kotlinx.datetime.*
 import pt.isel.courtandgo.frontend.utils.dateUtils.plusMinutes
 import pt.isel.courtandgo.frontend.domain.SpecialSchedule
 import pt.isel.courtandgo.frontend.domain.WeeklySchedule
-import pt.isel.courtandgo.frontend.service.ScheduleCourtsService
+import pt.isel.courtandgo.frontend.repository.interfaces.ScheduleRepository
 
 suspend fun getDefaultSlotsForCourt(
-    service: ScheduleCourtsService,
+    repo: ScheduleRepository,
     courtId: Int,
     date: LocalDate
 ): List<LocalTime> {
-    val weekly = service.getWeeklySchedulesForCourt(courtId)
-    val special = service.getSpecialSchedulesForCourt(courtId)
+    val weekly = repo.getWeeklySchedulesForCourt(courtId)
+    val special = repo.getSpecialSchedulesForCourt(courtId)
 
     val specialForDate = special.find { it.date == date }
     val schedule = specialForDate ?: weekly.find { it.weekDay.equals(date.dayOfWeek.name, ignoreCase = true) }

@@ -144,8 +144,10 @@ class ClubServiceHttp(private val client: HttpClient) : ClubService {
 
             val queryString = parameters.joinToString("&")
             val url = "/clubs/filter?$queryString"
+            println("➡️ URL final: $url")
 
             val response = client.get<List<ClubDTO>>(url)
+            println("Response: $response")
             response.map { it.toDomain() }
 
         } catch (e: CourtAndGoException) {

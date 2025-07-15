@@ -30,6 +30,10 @@ import pt.isel.courtandgo.frontend.profile.ProfileScreen
 import pt.isel.courtandgo.frontend.profile.ProfileViewModel
 import pt.isel.courtandgo.frontend.profile.editProfile.EditProfileScreen
 import pt.isel.courtandgo.frontend.repository.AuthRepositoryImpl
+import pt.isel.courtandgo.frontend.repository.ClubRepositoryImpl
+import pt.isel.courtandgo.frontend.repository.CourtRepositoryImpl
+import pt.isel.courtandgo.frontend.repository.ReservationRepositoryImpl
+import pt.isel.courtandgo.frontend.repository.ScheduleRepositoryImpl
 import pt.isel.courtandgo.frontend.reservations.confirmReservation.ConfirmReservationScreen
 import pt.isel.courtandgo.frontend.reservations.confirmReservation.ConfirmReservationViewModel
 import pt.isel.courtandgo.frontend.reservations.lastReservations.ReservationViewModel
@@ -39,16 +43,6 @@ import pt.isel.courtandgo.frontend.reservations.receiptReservation.ReceiptReserv
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.CourtAvailabilityViewModel
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.SelectedClubScreen
 import pt.isel.courtandgo.frontend.service.CourtAndGoService
-import pt.isel.courtandgo.frontend.service.ReservationService
-import pt.isel.courtandgo.frontend.service.http.ReservationServiceHttp
-import pt.isel.courtandgo.frontend.service.mock.MockClubService
-import pt.isel.courtandgo.frontend.service.mock.MockCourtService
-import pt.isel.courtandgo.frontend.service.mock.MockReservationService
-import pt.isel.courtandgo.frontend.service.mock.MockScheduleCourtService
-import pt.isel.courtandgo.frontend.service.mock.repo.ClubRepoMock
-import pt.isel.courtandgo.frontend.service.mock.repo.CourtRepoMock
-import pt.isel.courtandgo.frontend.service.mock.repo.ReservationRepoMock
-import pt.isel.courtandgo.frontend.service.mock.repo.ScheduleCourtRepoMock
 import pt.isel.courtandgo.frontend.utils.addEventToCalendar.CalendarLinkOpener
 
 
@@ -60,32 +54,67 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
     val authViewModel = remember { AuthViewModel(AuthRepositoryImpl(courtAndGoService)) }
     val profileViewModel = remember { ProfileViewModel(AuthRepositoryImpl(courtAndGoService)) }
 
-    val scheduleServiceShared = remember { MockScheduleCourtService(ScheduleCourtRepoMock()) }
+    //val scheduleServiceShared = remember { MockScheduleCourtService(ScheduleCourtRepoMock()) }
+    val scheduleShared = remember { ScheduleRepositoryImpl(courtAndGoService) }
 
+    //val reservationServiceShared = remember { MockReservationService(ReservationRepoMock()) }
+    val reservationShared = remember { ReservationRepositoryImpl(courtAndGoService) }
 
-    val reservationServiceShared = remember { MockReservationService(ReservationRepoMock()) }
+    val searchClubViewModel= remember { SearchClubViewModel(
+        ClubRepositoryImpl(courtAndGoService),
+        scheduleShared,
+        CourtRepositoryImpl(courtAndGoService)
+    ) }
 
+    val reservationVm = remember {
+        ReservationViewModel(reservationShared,
+            ClubRepositoryImpl(courtAndGoService),
+            CourtRepositoryImpl(courtAndGoService)
+        )
+    }
+
+    val confirmationVm = remember {
+        ConfirmReservationViewModel(reservationShared, CourtRepositoryImpl(courtAndGoService))
+    }
+
+    val courtAvailabilityViewModel = remember { CourtAvailabilityViewModel(
+        scheduleShared,
+        reservationShared,
+        CourtRepositoryImpl(courtAndGoService)
+    ) }
+
+    val notificationVm = remember {
+        NotificationSettingsViewModel()
+    }
+
+/*
     val searchClubViewModel = remember { SearchClubViewModel(
         MockClubService(ClubRepoMock()),
         scheduleServiceShared,
         MockCourtService(CourtRepoMock())
     ) }
+
+
     val reservationVm = remember {
         ReservationViewModel(reservationServiceShared, MockClubService(ClubRepoMock()),
             MockCourtService(CourtRepoMock())
         )
     }
-    val notificationVm = remember {
-        NotificationSettingsViewModel()
-    }
+
+
+
     val confirmationVm = remember {
         ConfirmReservationViewModel(reservationServiceShared, MockCourtService(CourtRepoMock()))
     }
+
+
     val courtAvailabilityViewModel = remember { CourtAvailabilityViewModel(
         scheduleServiceShared,
         reservationServiceShared,
         MockCourtService(CourtRepoMock())
     ) }
+
+ */
 
     val authState by authViewModel.uiState.collectAsState()
     val currentUser = (authState as? AuthUiState.Success)?.user

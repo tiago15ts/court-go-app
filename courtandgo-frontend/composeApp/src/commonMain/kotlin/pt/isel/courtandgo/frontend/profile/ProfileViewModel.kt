@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import pt.isel.courtandgo.frontend.domain.User
-import pt.isel.courtandgo.frontend.repository.AuthRepository
+import pt.isel.courtandgo.frontend.repository.interfaces.AuthRepository
 
 sealed class ProfileUiState {
     object Idle : ProfileUiState()
