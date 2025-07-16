@@ -7,6 +7,7 @@ import CreateClub from "./pages/CreateClub";
 import ClubsList from "./pages/ClubsList";
 import UpdateClubPage from "./pages/UpdateClubPage";
 import UpdateCourtsPage from "./pages/UpdateCourtsPage";
+import CreateCourtsPage from "./pages/CreateCourtsPage";
 
 function App() {
   return (
@@ -22,7 +23,8 @@ function App() {
         <Route path="/clubs/edit/:clubId" element={<UpdateClubPage />} />
         <Route path="/clubs/:clubId/schedules" element={<ScheduleEditor />} />
         <Route path="/clubs/:clubId/edit-courts" element={<UpdateCourtsPage />} />
-
+        <Route path="/clubs/:clubId/create-courts" element={<CreateCourtsPage />} />
+    
       </Routes>
     </Router>
   );

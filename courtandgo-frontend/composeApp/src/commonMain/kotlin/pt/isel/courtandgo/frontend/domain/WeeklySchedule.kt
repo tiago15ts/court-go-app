@@ -5,6 +5,6 @@ data class WeeklySchedule(
     val scheduleId: Int,
     val courtId: Int,
     val weekDay: String,             // ex: "MONDAY", "TUESDAY"
-    val startTime: LocalTime,
-    val endTime: LocalTime
+    val startTime: LocalTime?,
+    val endTime: LocalTime?
 )

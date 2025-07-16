@@ -30,7 +30,7 @@ sealed class ClubSearchUiState {
 class SearchClubViewModel(
     private val clubRepository: ClubRepository,
     private val scheduleRepo: ScheduleRepository,
-    private val courtRepository: CourtRepository
+    private val courtRepository: CourtRepository,
 ) : ViewModel() {
 
     private val _clubs = MutableStateFlow<List<Club>>(emptyList())
@@ -94,7 +94,6 @@ class SearchClubViewModel(
     fun fetchClubs() {
         viewModelScope.launch {
             _uiState.value = ClubSearchUiState.Loading
-            delay(300)
             try {
                 val result = clubRepository.getClubsFiltered(
                     query = _query.value,
@@ -120,14 +119,37 @@ class SearchClubViewModel(
 
     private fun loadTimesForAllClubs(date: LocalDate) {
         viewModelScope.launch {
-            val courtsList = _clubs.value
-            val updated = courtsList.associate { club ->
-                val times = getDefaultSlotsForCourt(scheduleRepo, club.id, date)
-                club.id to times
+            try {
+                val clubs = _clubs.value
+                val result = mutableMapOf<Int, List<LocalTime>>()
+
+                for (club in clubs) {
+                    try {
+
+                        val courts = courtRepository.getCourtsByClubId(club.id)
+                        val times = courts.flatMap { court ->
+                            try {
+                                getDefaultSlotsForCourt(scheduleRepo, court.id, date)
+                            } catch (e: CourtAndGoException) {
+                                println("Erro ao carregar horários para o court ${court.id} do (clube ${club.name}): ${e.message}")
+                                emptyList()
+                            }
+                        }
+                        result[club.id] = times.distinct()
+                    } catch (e: Exception) {
+                        println("Erro ao obter courts para o clube ${club.name}: ${e.message}")
+                        result[club.id] = emptyList()
+                    }
+                }
+                _clubHours.value = result
+
+            } catch (e: Exception) {
+                _clubHours.value = emptyMap()
+                println("Erro inesperado ao carregar horários de todos os clubes: ${e.message}")
             }
-            _clubHours.value = updated
         }
     }
+
 
     suspend fun getCourtsForClub(clubId: Int): List<Court> {
         return courtRepository.getCourtsByClubId(clubId)

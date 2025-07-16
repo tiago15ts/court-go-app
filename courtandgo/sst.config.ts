@@ -113,7 +113,7 @@ export default $config({
     api.route("POST /owners/login", { handler: "packages/functions/owners/login.handler" });
 
 
-/*
+
     const site = new sst.aws.React("CourtAndGoAdminSite", {
       path: "frontend-admin",
       buildCommand: "npm run build",
@@ -122,7 +122,7 @@ export default $config({
       //vpc: vpc,
 
     });
-    */
+    
 
     return {
       host: database.host,

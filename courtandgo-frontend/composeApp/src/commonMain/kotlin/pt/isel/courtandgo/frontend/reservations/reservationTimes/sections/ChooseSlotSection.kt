@@ -1,5 +1,6 @@
 package pt.isel.courtandgo.frontend.reservations.reservationTimes.sections
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -46,72 +48,90 @@ fun ChooseSlotSection(
     val onlyAvailable = remember { mutableStateOf(true) }
 
     LaunchedEffect(selectedDate.value) {
-        viewModel.loadAvailableSlots(courtInfo.id, selectedDate.value)
+        viewModel.loadAvailableSlots(clubInfo.id, selectedDate.value)
     }
 
-    when (uiState) {
-        is CourtAvailabilityUiState.Loading -> {
-            Text(
-                text = "Carregando disponibilidade...",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(16.dp)
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        DatePickerRow(selectedDate.value) { selectedDate.value = it }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+            Text("Mostrar apenas as horas disponíveis", modifier = Modifier.weight(1f))
+            Switch(
+                checked = onlyAvailable.value,
+                onCheckedChange = { onlyAvailable.value = it }
             )
         }
 
-        is CourtAvailabilityUiState.Error -> {
-            Text(
-                text = "Erro: ${uiState.message}",
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(16.dp)
-            )
-        }
-
-        is CourtAvailabilityUiState.Success -> {
-
-            val allTimes = uiState.availableSlots.values.flatten().distinct().sorted()
-
-            val filteredTimes = if (selectedDate.value == currentDate) {
-                allTimes.filter { it > currentTime }
-            } else {
-                allTimes
-            }
-
-            val defaultTimes = uiState.defaultTimes.sorted()
-
-            val filteredDefaultTimes = if (selectedDate.value == currentDate) {
-                defaultTimes.filter { it > currentTime }
-            } else {
-                defaultTimes
-            }
-
-            val timesToShow = if (onlyAvailable.value) {
-                filteredTimes
-            } else {
-                defaultTimes
-            }
-
-
-            val isToday = selectedDate.value == currentDate
-            val noAvailableTimes = filteredTimes.isEmpty()
-
-            Column(modifier = Modifier.fillMaxSize()) {
-                DatePickerRow(selectedDate.value) { selectedDate.value = it }
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        when (uiState) {
+            is CourtAvailabilityUiState.Loading -> {
+                Text(
+                    text = "Carregando disponibilidade...",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(16.dp)
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Text("Mostrar apenas as horas disponíveis", modifier = Modifier.weight(1f))
-                    Switch(
-                        checked = onlyAvailable.value,
-                        onCheckedChange = { onlyAvailable.value = it }
+                    CircularProgressIndicator()
+                }
+            }
+
+            is CourtAvailabilityUiState.Error -> {
+                Text(
+                    text = "Erro: ${uiState.message}",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+
+            is CourtAvailabilityUiState.Success -> {
+
+                val allTimes = uiState.availableSlots.values.flatten().distinct().sorted()
+
+                val filteredTimes = if (selectedDate.value == currentDate) {
+                    allTimes.filter { it > currentTime }
+                } else {
+                    allTimes
+                }
+
+                val defaultTimes = uiState.defaultTimes.sorted()
+
+                val filteredDefaultTimes = if (selectedDate.value == currentDate) {
+                    defaultTimes.filter { it > currentTime }
+                } else {
+                    defaultTimes
+                }
+
+                val timesToShow = if (onlyAvailable.value) {
+                    filteredTimes
+                } else {
+                    defaultTimes
+                }
+
+                val isToday = selectedDate.value == currentDate
+                val noAvailableTimesToday = onlyAvailable.value && isToday && filteredTimes.isEmpty()
+                val isClubClosed = defaultTimes.isEmpty()
+
+                if (noAvailableTimesToday) {
+                    Text(
+                        text = "⛔ Já não há horários disponíveis para hoje.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     )
                 }
 
-                if (onlyAvailable.value && isToday && noAvailableTimes) {
+                if (isClubClosed) {
                     Text(
-                        text = "⛔ Já não há horários disponíveis para hoje.",
+                        text = "🏴 Clube fechado neste dia.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.error,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)

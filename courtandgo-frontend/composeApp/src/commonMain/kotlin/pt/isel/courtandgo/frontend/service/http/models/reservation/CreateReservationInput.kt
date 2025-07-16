@@ -6,9 +6,9 @@ import pt.isel.courtandgo.frontend.domain.ReservationStatus
 @Serializable
 data class CreateReservationInput(
     val courtId: Int,
-    val playerId: Int,
+    val userId: Int,
     val startTime: String,
     val endTime: String,
     val estimatedPrice: Double,
-    val status: ReservationStatus = ReservationStatus.Pending
+    val status: ReservationStatus
 )

@@ -9,10 +9,14 @@ val nowTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()
 
 fun LocalTime.plusMinutes(minutes: Int): LocalTime {
     val totalMinutes = this.hour * 60 + this.minute + minutes
-    val newHour = totalMinutes / 60
-    val newMinute = totalMinutes % 60
-    return LocalTime(newHour, newMinute)
+    if (totalMinutes >= 24 * 60) {
+        throw IllegalArgumentException("LocalTime cannot exceed 23:59")
+    }
+    val hours = totalMinutes / 60
+    val mins = totalMinutes % 60
+    return LocalTime(hours, mins)
 }
+
 
 val currentDate = nowTime.date //localDate
 val currentTime = nowTime.time //localTime

@@ -44,6 +44,13 @@ class CourtAvailabilityViewModel(
             try {
                 val courts = courtRepo.getCourtsByClubId(clubId)
                 val courtIds = courts.map { it.id }
+                if (courts.isEmpty()) {
+                    _uiState.value = CourtAvailabilityUiState.Success(
+                        availableSlots = emptyMap(),
+                        defaultTimes = emptyList()
+                    )
+                    return@launch
+                }
 
                 val timeSlotsByCourt = courtIds.associateWith {
                     getDefaultSlotsForCourt(scheduleRepo, it, date)

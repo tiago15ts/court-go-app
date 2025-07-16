@@ -9,15 +9,15 @@ data class WeeklyScheduleDTO(
     val scheduleId: Int,
     val courtId: Int,
     val weekDay: String,       // tipo String, ex: "MONDAY"
-    val startTime: String,     // formato ex: "09:00"
-    val endTime: String        // formato ex: "11:00"
+    val startTime: String?,     // formato ex: "09:00"
+    val endTime: String?        // formato ex: "11:00"
 ) {
     fun toDomain(): WeeklySchedule = WeeklySchedule(
         scheduleId = scheduleId,
         courtId = courtId,
         weekDay = weekDay,
-        startTime = LocalTime.parse(startTime),
-        endTime = LocalTime.parse(endTime)
+        startTime = startTime?.let { LocalTime.parse(it) },
+        endTime = endTime?.let { LocalTime.parse(it) }
     )
 
     companion object {
@@ -25,8 +25,8 @@ data class WeeklyScheduleDTO(
             scheduleId = ws.scheduleId,
             courtId = ws.courtId,
             weekDay = ws.weekDay,
-            startTime = ws.startTime.toString(),  // usa ISO-8601, ex: "09:00"
-            endTime = ws.endTime.toString()
+            startTime = ws.startTime?.toString(), //ex: "09:00"
+            endTime = ws.endTime?.toString()
         )
     }
 }

@@ -61,7 +61,7 @@ class ConfirmReservationViewModel(
         val estimatedPrice = calculatePrice(duration, pricePerHour)
 
         val reservation = Reservation(
-            id = 0, // será gerado no mock
+            id = 0, // será gerado automaticamenta pelo backend
             playerId = playerId,
             courtId = courtId,
             startTime = startDateTime,
@@ -95,6 +95,7 @@ class ConfirmReservationViewModel(
         viewModelScope.launch {
             _uiState.value = ConfirmReservationUiState.Loading
             try {
+                println(reservation.id)
                 reservationRepo.setConfirmedReservation(reservation.id)
                 //_reservationConfirmed.value = reservation
                 _uiState.value = ConfirmReservationUiState.Success(reservation)

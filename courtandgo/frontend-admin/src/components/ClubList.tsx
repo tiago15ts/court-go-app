@@ -16,21 +16,21 @@ export function ClubList({ ownerId }: { ownerId: number | null }) {
   const [clubs, setClubs] = useState<any[]>([]);
   const navigate = useNavigate();
 
-useEffect(() => {
-  if (!ownerId) return;
-  
-  getClubsByOwnerId(ownerId)
-    .then((data) => {
-      setClubs(data);
-      console.log("Clubs loaded:", data); // aqui sim já tens os dados corretos
-    })
-    .catch((error) => {
-      console.error("Erro ao carregar clubes:", error);
-    });
-}, [ownerId]);
+  useEffect(() => {
+    if (!ownerId) return;
+
+    getClubsByOwnerId(ownerId)
+      .then((data) => {
+        setClubs(data);
+        console.log("Clubs loaded:", data); // aqui sim já tens os dados corretos
+      })
+      .catch((error) => {
+        console.error("Erro ao carregar clubes:", error);
+      });
+  }, [ownerId]);
 
   return (
-    <Box sx={{ maxWidth: 600, marginTop: 3 }}>
+    <Box sx={{ maxWidth: 800, marginTop: 3 }}>
       <Typography variant="h6" gutterBottom>
         Lista de Clubes
       </Typography>
@@ -64,6 +64,13 @@ useEffect(() => {
                   onClick={() => navigate(`/clubs/${club.id}/schedules`)}
                 >
                   Editar Horários
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => navigate(`/clubs/${club.id}/create-courts`)}
+                >
+                  Adicionar Courts
                 </Button>
               </Stack>
             </ListItem>

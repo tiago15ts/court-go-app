@@ -117,7 +117,7 @@ fun ReservationDetailsScreen(
                     onClick = {
                         isConfirming.value = true
                         coroutineScope.launch {
-                            delay(700)
+                            delay(200)
                             onConfirmReservation(reservation)
                             isConfirming.value = false
                         }
@@ -161,7 +161,7 @@ fun ReservationDetailsScreen(
                     onClick = {
                         isCancelling.value = true
                         coroutineScope.launch {
-                            delay(700)
+                            delay(100)
                             onCancelReservation(reservation)
                             isCancelling.value = false
                         }

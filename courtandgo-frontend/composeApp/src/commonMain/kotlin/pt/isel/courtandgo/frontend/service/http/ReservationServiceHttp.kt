@@ -2,8 +2,8 @@ package pt.isel.courtandgo.frontend.service.http
 
 import io.ktor.client.HttpClient
 import kotlinx.datetime.LocalDate
+import kotlinx.serialization.json.Json
 import pt.isel.courtandgo.frontend.domain.Reservation
-import pt.isel.courtandgo.frontend.domain.ReservationStatus
 import pt.isel.courtandgo.frontend.service.ReservationService
 import pt.isel.courtandgo.frontend.service.http.errors.BadRequestException
 import pt.isel.courtandgo.frontend.service.http.errors.NotFoundException
@@ -11,7 +11,6 @@ import pt.isel.courtandgo.frontend.service.http.errors.UpdateReservationExceptio
 import pt.isel.courtandgo.frontend.service.http.models.reservation.CreateReservationInput
 import pt.isel.courtandgo.frontend.service.http.models.reservation.ReservationDTO
 import pt.isel.courtandgo.frontend.service.http.models.reservation.UpdateReservationInput
-import pt.isel.courtandgo.frontend.service.http.models.reservation.UpdateReservationStatusInput
 import pt.isel.courtandgo.frontend.service.http.utils.CourtAndGoException
 import pt.isel.courtandgo.frontend.service.http.utils.get
 import pt.isel.courtandgo.frontend.service.http.utils.post
@@ -49,7 +48,7 @@ class ReservationServiceHttp(private val client : HttpClient) : ReservationServi
         return try {
             val input = CreateReservationInput(
                 courtId = reservation.courtId,
-                playerId = reservation.playerId,
+                userId = reservation.playerId,
                 startTime = reservation.startTime.toString(),
                 endTime = reservation.endTime.toString(),
                 estimatedPrice = reservation.estimatedPrice,
@@ -89,24 +88,21 @@ class ReservationServiceHttp(private val client : HttpClient) : ReservationServi
 
     override suspend fun cancelReservation(id: Int): Boolean {
         return try {
-            client.put<Unit>("/reservations/$id/cancel")
-            true
+            val response = client.put<Boolean>("/reservations/$id/cancel")
+            response
         } catch (e: CourtAndGoException) {
             throw BadRequestException(
-                "Error deleting reservation with ID $id: ${e.message}", e
+                "Error cancelling reservation with ID $id: ${e.message}", e
             )
         }
     }
 
     override suspend fun setConfirmedReservation(id: Int): Boolean {
         return try {
-            //val body = UpdateReservationStatusInput(status = ReservationStatus.Confirmed)
-
-            client.post<Unit>(
-                url = "/reservations/confirm/$id",
-                //body = body
+            val response = client.post<Boolean>(
+                url = "/reservations/$id/confirm",
             )
-            true
+            response
         } catch (e: CourtAndGoException) {
             throw BadRequestException(
                 "Error confirming reservation with ID $id: ${e.message}", e

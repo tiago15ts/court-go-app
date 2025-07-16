@@ -7,7 +7,7 @@ fun formatLocationForDisplay(location: Location): String {
         append(location.address)
         if (location.postalCode.isNotBlank()) append(", ${location.postalCode}")
         if (location.county.isNotBlank()) append(", ${location.county}")
-        if (location.district.name.isNotBlank()) append(", ${location.district}")
-        if (location.country.name.isNotBlank()) append(", ${location.country}")
+        if (location.district.name.isNotBlank()) append(", ${location.district.name}")
+        if (location.country.name.isNotBlank()) append(", ${location.country.name}")
     }
 }
