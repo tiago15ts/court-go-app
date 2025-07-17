@@ -74,7 +74,8 @@ CREATE TABLE Player (
     lastMatchResult VARCHAR(10),
     plays VARCHAR(50),
     phone VARCHAR(20),
-    last10Record VARCHAR(50)
+    last10Record VARCHAR(50),
+    emailNotifications BOOLEAN DEFAULT true
 );
 
 
