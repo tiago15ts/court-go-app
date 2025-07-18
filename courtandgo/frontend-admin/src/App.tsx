@@ -8,6 +8,7 @@ import ClubsList from "./pages/ClubsList";
 import UpdateClubPage from "./pages/UpdateClubPage";
 import UpdateCourtsPage from "./pages/UpdateCourtsPage";
 import CreateCourtsPage from "./pages/CreateCourtsPage";
+import { RequireAuth } from "./pages/RequireAuth";  
 
 function App() {
   return (
@@ -17,14 +18,15 @@ function App() {
         <Route path="/" element={<Navigate to="/register" />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/clubs/create" element={<CreateClub />} />
-        <Route path="/clubs" element={<ClubsList />} />
-        <Route path="/clubs/edit/:clubId" element={<UpdateClubPage />} />
-        <Route path="/clubs/:clubId/schedules" element={<ScheduleEditor />} />
-        <Route path="/clubs/:clubId/edit-courts" element={<UpdateCourtsPage />} />
-        <Route path="/clubs/:clubId/create-courts" element={<CreateCourtsPage />} />
-    
+
+        <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
+        <Route path="/clubs/create" element={<RequireAuth><CreateClub /></RequireAuth>} />
+        <Route path="/clubs" element={<RequireAuth><ClubsList /></RequireAuth>} />
+        <Route path="/clubs/edit/:clubId" element={<RequireAuth><UpdateClubPage /></RequireAuth>} />
+        <Route path="/clubs/:clubId/schedules" element={<RequireAuth><ScheduleEditor /></RequireAuth>} />
+        <Route path="/clubs/:clubId/edit-courts" element={<RequireAuth><UpdateCourtsPage /></RequireAuth>} />
+        <Route path="/clubs/:clubId/create-courts" element={<RequireAuth><CreateCourtsPage /></RequireAuth>} />
+
       </Routes>
     </Router>
   );

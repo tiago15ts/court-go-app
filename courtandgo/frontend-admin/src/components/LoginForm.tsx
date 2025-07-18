@@ -16,30 +16,35 @@ export function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const navigate = useNavigate();
 
-async function handleSubmit(e: React.FormEvent) {
-  e.preventDefault();
-  setError(null);
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setIsLoading(true);
 
-  try {
-    const ownerData = await loginOwner(email, password);
-    
-    if (!ownerData.user.ownerid) {
-  throw new Error("Resposta inválida: Problema no login.");
-}
+    try {
+      const ownerData = await loginOwner(email, password);
 
-    setOwnerId(ownerData.user.ownerid);
-  
-    console.log("Login bem sucedido:", ownerData);
-    console.log("ID do proprietário:", ownerData.user.ownerid);
+      if (!ownerData.user.ownerid) {
+        throw new Error("Resposta inválida: Problema no login.");
+      }
 
-    navigate("/dashboard");
-  } catch (err: any) {
-    setError(err.message || "Email ou palavra-passe inválidos.");
+      setOwnerId(ownerData.user.ownerid);
+
+      console.log("Login bem sucedido:", ownerData);
+      console.log("ID do proprietário:", ownerData.user.ownerid);
+
+      navigate("/dashboard");
+    } catch (err: any) {
+      setError(err.message || "Email ou palavra-passe inválidos.");
+    } finally {
+      setIsLoading(false);
+    }
   }
-}
 
 
   return (
@@ -75,8 +80,8 @@ async function handleSubmit(e: React.FormEvent) {
         required
       />
 
-      <Button type="submit" variant="contained">
-        Entrar
+      <Button type="submit" variant="contained" disabled={isLoading}>
+        {isLoading ? "A autenticar..." : "Entrar"}
       </Button>
 
       <Stack direction="row" justifyContent="center">
