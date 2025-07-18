@@ -59,7 +59,7 @@ class AuthViewModel(
             _uiState.value = AuthUiState.Loading
             try {
                 val user = authRepository.loginWithEmail(email, password)
-                authRepository.setToken(user.toString()) //todo fix this
+                authRepository.setToken(TokenHolder.accessToken)
                 _uiState.value = AuthUiState.Success(user)
                 onSuccess()
             } catch (e: CourtAndGoException) {
@@ -75,6 +75,7 @@ class AuthViewModel(
         viewModelScope.launch {
             _uiState.value = AuthUiState.Loading
             try {
+                TokenHolder.accessToken = tokenId
                 val user = authRepository.authenticateGoogle(tokenId, name, email)
                 _uiState.value = AuthUiState.Success(user)
                 onSuccess()

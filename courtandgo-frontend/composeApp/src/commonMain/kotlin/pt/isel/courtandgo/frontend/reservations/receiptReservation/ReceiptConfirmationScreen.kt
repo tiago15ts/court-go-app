@@ -29,6 +29,7 @@ import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.reservations.components.InfoRow
+import pt.isel.courtandgo.frontend.reservations.utils.getCourtImage
 import pt.isel.courtandgo.frontend.utils.addEventToCalendar.CalendarDropdown
 import pt.isel.courtandgo.frontend.utils.addEventToCalendar.googleCalendar.AddToCalendarButton
 import pt.isel.courtandgo.frontend.utils.addEventToCalendar.CalendarLinkOpener
@@ -44,6 +45,7 @@ fun ReceiptReservationScreen(
     calendarOpener: CalendarLinkOpener
 ) {
     val scrollState = rememberScrollState()
+    val image = getCourtImage(courtInfo)
 
     Column(
         modifier = Modifier
@@ -54,7 +56,7 @@ fun ReceiptReservationScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Image(
-            painter = painterResource(Res.drawable.courts),
+            painter = painterResource(image),
             contentDescription = "Courts image",
             contentScale = ContentScale.Crop,
             modifier = Modifier

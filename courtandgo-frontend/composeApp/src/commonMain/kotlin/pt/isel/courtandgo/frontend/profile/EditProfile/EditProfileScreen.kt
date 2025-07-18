@@ -157,6 +157,7 @@ fun EditProfileScreen(
                             optionsList = countryPhoneCode,
                             selectedOption = user1.countryCode,
                             onOptionSelected = { newCountryCode ->
+                                println("Selected countryCode: $newCountryCode")
                                 viewModel.updateField { it.copy(countryCode = newCountryCode) }
                             },
                         )
@@ -191,11 +192,10 @@ fun EditProfileScreen(
                      */
                 }
 
-
                 DatePickerComponent(
                     initialDate = user?.birthDate ?: "",
                     title = "Data de nascimento",
-                    description = "Selecione a sua data de nascimento",
+                    description = "Altere aqui a sua data de nascimento",
                     pastDates = true,
                     onDateChange = { newBirthDate ->
                         viewModel.updateField { it.copy(birthDate = newBirthDate) }
@@ -220,14 +220,20 @@ fun EditProfileScreen(
                     "Peso",
                     (user?.weight ?: "").toString(), singleLine = false
                 ) { newWeight ->
-                    viewModel.updateField { it.copy(weight = newWeight.toDouble()) }
+                    newWeight.toDoubleOrNull()?.let { validWeight ->
+                        viewModel.updateField {
+                            println("Updating user.weight to: $validWeight")
+                            it.copy(weight = validWeight) }
+                    }
                 }
 
                 CustomTextField(
                     "Altura",
                     (user?.height ?: "").toString(), singleLine = false
                 ) { newHeight ->
-                    viewModel.updateField { it.copy(height = newHeight.toDouble()) }
+                    newHeight.toDoubleOrNull()?.let { validHeight ->
+                        viewModel.updateField { it.copy(height = validHeight) }
+                    }
                 }
 
 

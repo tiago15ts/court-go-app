@@ -1,30 +1,36 @@
 package pt.isel.courtandgo.frontend.notifications
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import pt.isel.courtandgo.frontend.domain.Reservation
-import pt.isel.courtandgo.frontend.domain.ReservationStatus
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import pt.isel.courtandgo.frontend.domain.User
+import pt.isel.courtandgo.frontend.repository.interfaces.AuthRepository
 
-class NotificationSettingsViewModel : ViewModel() {
+open class NotificationSettingsViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
-    private val _notificationsEnabled = mutableStateOf(true)
-    val notificationsEnabled: State<Boolean> = _notificationsEnabled
+    private val _emailNotificationsEnabled = MutableStateFlow(true)
+    val emailNotificationsEnabled: StateFlow<Boolean> = _emailNotificationsEnabled
 
-    fun setNotificationsEnabled(enabled: Boolean, reservations: List<Reservation>) {
-        _notificationsEnabled.value = enabled
+    private val _user = MutableStateFlow<User?>(null)
+    open val user: StateFlow<User?> = _user.asStateFlow()
 
-        val scheduler = provideNotificationScheduler()
+    open fun loadUser(user: User) {
+        _user.value = user
+    }
 
-        if (!enabled) {
-            reservations
-                .filter { it.status != ReservationStatus.Cancelled }
-                .forEach { scheduler.cancelReservationReminder(it.id.toString()) }
-        } else {
-            reservations
-                .filter { it.status != ReservationStatus.Cancelled }
-                .forEach { scheduleReservationNotification(it) }
+    fun setEmailNotificationsEnabled(enabled: Boolean) {
+        _emailNotificationsEnabled.value = enabled
+        viewModelScope.launch {
+            try {
+                _user.value?.let { authRepository.emailNotifications(it.id, enabled) }
+            } catch (e: Exception) {
+                // Tratar erro ao atualizar as configurações
+            }
         }
     }
+
 }
 

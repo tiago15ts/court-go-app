@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import pt.isel.courtandgo.frontend.authentication.AuthUiState
 import pt.isel.courtandgo.frontend.authentication.AuthViewModel
+import pt.isel.courtandgo.frontend.authentication.TokenHolder
 import pt.isel.courtandgo.frontend.authentication.login.LoginScreen
 import pt.isel.courtandgo.frontend.authentication.register.RegisterDetailsScreen
 import pt.isel.courtandgo.frontend.authentication.register.RegisterFirstScreen
@@ -54,10 +55,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
     val authViewModel = remember { AuthViewModel(AuthRepositoryImpl(courtAndGoService)) }
     val profileViewModel = remember { ProfileViewModel(AuthRepositoryImpl(courtAndGoService)) }
 
-    //val scheduleServiceShared = remember { MockScheduleCourtService(ScheduleCourtRepoMock()) }
     val scheduleShared = remember { ScheduleRepositoryImpl(courtAndGoService) }
-
-    //val reservationServiceShared = remember { MockReservationService(ReservationRepoMock()) }
     val reservationShared = remember { ReservationRepositoryImpl(courtAndGoService) }
 
     val searchClubViewModel= remember { SearchClubViewModel(
@@ -84,37 +82,8 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
     ) }
 
     val notificationVm = remember {
-        NotificationSettingsViewModel()
+        NotificationSettingsViewModel(AuthRepositoryImpl(courtAndGoService))
     }
-
-/*
-    val searchClubViewModel = remember { SearchClubViewModel(
-        MockClubService(ClubRepoMock()),
-        scheduleServiceShared,
-        MockCourtService(CourtRepoMock())
-    ) }
-
-
-    val reservationVm = remember {
-        ReservationViewModel(reservationServiceShared, MockClubService(ClubRepoMock()),
-            MockCourtService(CourtRepoMock())
-        )
-    }
-
-
-
-    val confirmationVm = remember {
-        ConfirmReservationViewModel(reservationServiceShared, MockCourtService(CourtRepoMock()))
-    }
-
-
-    val courtAvailabilityViewModel = remember { CourtAvailabilityViewModel(
-        scheduleServiceShared,
-        reservationServiceShared,
-        MockCourtService(CourtRepoMock())
-    ) }
-
- */
 
     val authState by authViewModel.uiState.collectAsState()
     val currentUser = (authState as? AuthUiState.Success)?.user
@@ -137,8 +106,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
                     onContinueWithEmail = { email ->
                         screen.value = Screen.RegisterDetails(email)
                     },
-                    onGoogleRegister = { tokenId ->
-                        // autentica com courtAndGoService.userService.loginComGoogle(...)
+                    onGoogleRegister = {
                         screen.value = Screen.Home
                     },
                     onAlreadyHaveAccount = {
@@ -207,7 +175,11 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
                         }
                     )
 
-                    Screen.Notifications -> EditNotificationsScreen(notificationVm)
+                    Screen.Notifications -> currentUser?.let {
+                        EditNotificationsScreen(notificationVm,
+                            it
+                        )
+                    }
 
                     is Screen.SearchClub -> SearchClubScreen(
                         viewModel = searchClubViewModel,
@@ -313,7 +285,7 @@ fun CourtAndGoApp(courtAndGoService: CourtAndGoService, calendarLinkOpener: Cale
                     is Screen.ReceiptReservation -> ReceiptReservationScreen(
                         reservation = (screen.value as Screen.ReceiptReservation).reservation,
                         clubInfo = (screen.value as Screen.ReceiptReservation).clubInfo,
-                        courtInfo = (screen.value as Screen.ReceiptReservation).courtInfo,
+                        courtInfo = confirmationVm.selectedCourt.value!!, // court info is already set in ConfirmReservationScreen
                         calendarOpener = calendarLinkOpener,
                     )
                     else -> {}

@@ -7,8 +7,8 @@ import androidx.core.net.toUri
 
 class AndroidAuthManager(private val context: Context) : AuthManager {
 
-    private val clientId = "1fh5i2j79qsdbqihk2lmo0q6q6" //client id from aws cognito user pool
-    private val domain = "eu-west-36c1aj3oez.auth.eu-west-3.amazoncognito.com"
+    private val clientId = "1jqtv9mvvpv0fjfe0o2dbhallc" //client id from aws cognito user pool
+    private val domain = "eu-west-3wht90ycj3.auth.eu-west-3.amazoncognito.com"
     private val redirectUri = "courtandgo://callback"
     private var token: String? = null
 

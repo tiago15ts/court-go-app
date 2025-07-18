@@ -4,12 +4,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UpdateUserInput(
-    val newName: String?,
-    val newCountryCode: String?,
-    val newContact: String?,
-    val newGender : String?,
-    val newBirthDate: String?,
-    val newWeight : Double?,
-    val newHeight : Double?,
+    val email: String?,
+    val name: String?,
+    val countryCode: String?,
+    val phone: String?,
+    val gender : String?,
+    val birthdate: String?,
+    val weight : Double?,
+    val height : Double?,
     //val newLocation : String?
 )

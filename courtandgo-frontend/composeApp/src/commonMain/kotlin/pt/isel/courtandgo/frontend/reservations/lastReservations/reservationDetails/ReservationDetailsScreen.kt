@@ -17,7 +17,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,9 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.raedghazal.kotlinx_datetime_ext.plus
-import courtandgo_frontend.composeapp.generated.resources.Res
-import courtandgo_frontend.composeapp.generated.resources.courts
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
 import org.jetbrains.compose.resources.painterResource
@@ -36,6 +32,7 @@ import pt.isel.courtandgo.frontend.domain.Club
 import pt.isel.courtandgo.frontend.domain.Court
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.domain.ReservationStatus
+import pt.isel.courtandgo.frontend.reservations.utils.getCourtImage
 import pt.isel.courtandgo.frontend.ui.greenConfirmation
 import pt.isel.courtandgo.frontend.utils.addEventToCalendar.CalendarDropdown
 import pt.isel.courtandgo.frontend.utils.addEventToCalendar.googleCalendar.AddToCalendarButton
@@ -71,6 +68,8 @@ fun ReservationDetailsScreen(
 
     val scrollState = rememberScrollState()
 
+    val image = getCourtImage(courtInfo)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -84,7 +83,7 @@ fun ReservationDetailsScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Image(
-            painter = painterResource(Res.drawable.courts),
+            painter = painterResource(image),
             contentDescription = "Courts image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -117,7 +116,6 @@ fun ReservationDetailsScreen(
                     onClick = {
                         isConfirming.value = true
                         coroutineScope.launch {
-                            delay(200)
                             onConfirmReservation(reservation)
                             isConfirming.value = false
                         }
@@ -161,7 +159,6 @@ fun ReservationDetailsScreen(
                     onClick = {
                         isCancelling.value = true
                         coroutineScope.launch {
-                            delay(100)
                             onCancelReservation(reservation)
                             isCancelling.value = false
                         }

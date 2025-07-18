@@ -16,6 +16,10 @@ interface AuthRepository {
 
     suspend fun updateUser(user: User): User
 
+    suspend fun updateUserGoogle(user: User): User
+
+    suspend fun emailNotifications(id: Int, enabled: Boolean): Boolean
+
     fun setToken(token: String)
     fun getToken(): String?
 

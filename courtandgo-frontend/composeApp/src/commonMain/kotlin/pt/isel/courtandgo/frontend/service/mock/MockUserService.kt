@@ -38,6 +38,10 @@ class MockUserService(private val repoMock: UserRepoMock) : UserService {
         return repoMock.updateUser(user)
     }
 
+    override suspend fun updateUserGoogle(user: User): User {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun oauthRegister(
         email: String,
         name: String,
@@ -45,6 +49,10 @@ class MockUserService(private val repoMock: UserRepoMock) : UserService {
         contact: String
     ): User {
         return repoMock.oauthRegister(email, name, countryCode, contact)
+    }
+
+    override suspend fun emailNotifications(id: Int, enabled: Boolean): Boolean {
+        return true
     }
 
 

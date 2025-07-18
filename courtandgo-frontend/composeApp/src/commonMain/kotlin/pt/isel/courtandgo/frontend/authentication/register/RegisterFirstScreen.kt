@@ -29,6 +29,7 @@ import com.mmk.kmpauth.google.GoogleButtonUiContainer
 import com.mmk.kmpauth.uihelper.google.GoogleSignInButton
 import pt.isel.courtandgo.frontend.authentication.AuthConstants
 import pt.isel.courtandgo.frontend.authentication.AuthViewModel
+import pt.isel.courtandgo.frontend.authentication.GoogleUser
 import pt.isel.courtandgo.frontend.authentication.isValidEmail
 
 @Composable
@@ -125,11 +126,12 @@ fun RegisterFirstScreen(
                             name = googleUser.displayName,
                             email = googleUser.email ?: "Atualize o seu email"
                         ) {
+                            GoogleUser.userFromGoogle = true
                             onGoogleRegister(googleUser.idToken)
-                            println(googleUser.idToken)
                         }
                     } else {
                         viewModel.setError("Falha ao registar-se com a conta Google.")
+                        println("Erro ao obter dados do utilizador Google.")
                     }
                 }
             ) {

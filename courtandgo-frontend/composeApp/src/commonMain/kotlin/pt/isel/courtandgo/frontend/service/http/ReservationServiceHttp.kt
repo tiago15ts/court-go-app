@@ -88,7 +88,7 @@ class ReservationServiceHttp(private val client : HttpClient) : ReservationServi
 
     override suspend fun cancelReservation(id: Int): Boolean {
         return try {
-            val response = client.put<Boolean>("/reservations/$id/cancel")
+            val response = client.post<Boolean>("/reservations/$id/cancel")
             response
         } catch (e: CourtAndGoException) {
             throw BadRequestException(

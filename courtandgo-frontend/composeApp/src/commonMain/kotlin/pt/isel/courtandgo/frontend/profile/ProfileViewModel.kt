@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import pt.isel.courtandgo.frontend.authentication.GoogleUser
 import pt.isel.courtandgo.frontend.domain.User
 import pt.isel.courtandgo.frontend.repository.interfaces.AuthRepository
 
@@ -40,7 +41,11 @@ open class ProfileViewModel(
         _uiState.value = ProfileUiState.Loading
         viewModelScope.launch {
             try {
-                val updatedUser = authRepository.updateUser(current)
+                val updatedUser = if (!GoogleUser.userFromGoogle) {
+                    authRepository.updateUser(current)
+                } else {
+                    authRepository.updateUserGoogle(current)
+                }
                 _user.value = updatedUser
                 _uiState.value = ProfileUiState.Success
 

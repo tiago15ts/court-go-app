@@ -34,6 +34,13 @@ const sportOptions = [
   { value: "Padel", label: "Padel" },
 ];
 
+const surfaceOptions = [
+  { value: "Terra Batida", label: "Terra Batida" },
+  { value: "Piso Duro", label: "Piso Duro" },
+  { value: "Relva", label: "Relva" },
+];
+
+
 export function CreateCourtsForm({ clubId }: CreateCourtsFormProps) {
   const [courts, setCourts] = useState<Omit<Court, "courtId" | "clubId">[]>([
     { name: "", type: "", surfaceType: "", capacity: 0, pricePerHour: 0 },
@@ -64,7 +71,7 @@ export function CreateCourtsForm({ clubId }: CreateCourtsFormProps) {
     ]);
   }
 
- async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setSuccess(false);
@@ -124,14 +131,26 @@ export function CreateCourtsForm({ clubId }: CreateCourtsFormProps) {
           </Stack>
 
           <Stack spacing={2} direction="row" mt={2}>
-            <TextField
-              label="Tipo de Piso"
-              value={court.surfaceType}
-              onChange={(e) =>
-                handleChange(index, "surfaceType", e.target.value)
-              }
-              fullWidth
-            />
+            <FormControl fullWidth disabled={court.type === "Padel"}>
+              <InputLabel>Tipo de Piso</InputLabel>
+              <Select
+                label="Tipo de Piso"
+                value={court.surfaceType}
+                onChange={(e) => handleChange(index, "surfaceType", e.target.value)}
+              >
+                {surfaceOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+              {court.type === "Padel" && (
+                <Typography variant="caption" color="text.secondary" sx={{ mt: 1 }}>
+                  Não precisa de escolher tipo de piso para campos de Padel.
+                </Typography>
+              )}
+            </FormControl>
+
             <TextField
               label="Capacidade"
               type="number"

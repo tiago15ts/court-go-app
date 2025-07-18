@@ -7,14 +7,20 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import pt.isel.courtandgo.frontend.domain.User
 
 @Composable
 fun EditNotificationsScreen(
-    viewModel: NotificationSettingsViewModel
+    viewModel: NotificationSettingsViewModel,
+    currentUser: User
 ) {
-    val pushNotificationsEnabled by viewModel.notificationsEnabled
-    //val emailNotificationsEnabled by viewModel.emailNotificationsEnabled
-    //val smsNotificationsEnabled by viewModel.smsNotificationsEnabled
+
+    LaunchedEffect(currentUser) {
+        viewModel.loadUser(currentUser)
+    }
+
+    val emailNotificationsEnabled by viewModel.emailNotificationsEnabled.collectAsState()
+
 
     Column(
         modifier = Modifier
@@ -37,18 +43,19 @@ fun EditNotificationsScreen(
         // Switch de notificações por Email
         NotificationSettingItem(
             label = "Notificações por Email",
-            checked = false,
-            onToggle = { /*viewModel.setEmailNotificationsEnabled(it)*/ },
+            checked = emailNotificationsEnabled,
+            onToggle = { viewModel.setEmailNotificationsEnabled(it) },
 
         )
 
-        // Switch de notificações por SMS
+        /*
         NotificationSettingItem(
             label = "Notificações por SMS",
             checked = false,
             onToggle = { /*viewModel.setSmsNotificationsEnabled(it)*/ },
 
         )
+         */
 
         Spacer(modifier = Modifier.height(8.dp))
 

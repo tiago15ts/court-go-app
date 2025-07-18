@@ -24,27 +24,20 @@ export async function handler(event) {
 
   const { id } = event.pathParameters || {};
 
-  const {
-    name,
-    phone,
-    countryId,
-    birthdate,
-    weight,
-    height,
-    gender,
-  } = body;
+  if (!id) {
+    return { statusCode: 400, body: JSON.stringify({ error: "ID do utilizador é obrigatório." }) };
+  }
 
   try {
     // 1. Atualizar atributos no Cognito (apenas os suportados por Cognito)
     const cognitoAttributes: { Name: string; Value: string }[] = [];
 
-    if (name) {
-      cognitoAttributes.push({ Name: "name", Value: String(name) });
+    if (body.name) {
+      cognitoAttributes.push({ Name: "name", Value: String(body.name) });
     }
-    if (phone) {
-      cognitoAttributes.push({ Name: "phone_number", Value: String(countryId + phone) });
+    if (body.phone) {
+      cognitoAttributes.push({ Name: "phone_number", Value: String(body.countryCode + body.phone) });
     }
-
 
     if (cognitoAttributes.length > 0) {
       await client.send(
@@ -54,18 +47,21 @@ export async function handler(event) {
         })
       );
     }
+    console.log("code: ", body.countryCode);
 
     // 2. Atualizar dados na BD local
     const updatedUser = await updateUser({
-      name,
-      phone,
-      countryId,
-      birthdate,
-      weight,
-      height,
-      gender,
-      playerId: id,
+      id: id,
+      email: body.email,
+      name: body.name,
+      countryCode: body.countryCode,
+      phone: body.phone,
+      gender: body.gender,
+      birthdate: body.birthdate,
+      weight: body.weight,
+      height: body.height,
     });
+
 
     return {
       statusCode: 200,

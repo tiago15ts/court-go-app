@@ -1,5 +1,6 @@
 package pt.isel.courtandgo.frontend.clubs.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -7,7 +8,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -15,18 +18,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalTime
-import pt.isel.courtandgo.frontend.utils.dateUtils.formatTimeToHHmm
-import androidx.compose.foundation.Image
 import org.jetbrains.compose.resources.painterResource
-import courtandgo_frontend.composeapp.generated.resources.Res
-import courtandgo_frontend.composeapp.generated.resources.courts
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.height
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.draw.clip
+import pt.isel.courtandgo.frontend.domain.SportsClub
+import pt.isel.courtandgo.frontend.utils.dateUtils.formatTimeToHHmm
 
 
 @Composable
@@ -36,8 +35,12 @@ fun ClubCard(
     district: String,
     price: String,
     hours: List<LocalTime>,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    sportsClub: SportsClub
 ) {
+
+    val image = getRandomImageForSportType(sportsClub)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -48,7 +51,7 @@ fun ClubCard(
 
             Row {
                 Image(
-                    painter = painterResource(Res.drawable.courts),
+                    painter = painterResource(image),
                     contentDescription = "Court image",
                     modifier = Modifier
                         .width(80.dp)

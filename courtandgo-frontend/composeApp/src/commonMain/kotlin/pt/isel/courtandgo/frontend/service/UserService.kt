@@ -16,5 +16,9 @@ interface UserService{
 
     suspend fun updateUser(user: User): User
 
+    suspend fun updateUserGoogle(user: User): User
+
     suspend fun oauthRegister(email: String, name: String, countryCode: String, contact: String): User
+
+    suspend fun emailNotifications(id: Int, enabled: Boolean): Boolean
 }

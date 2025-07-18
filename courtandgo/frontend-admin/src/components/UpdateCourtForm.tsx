@@ -27,6 +27,13 @@ type Court = {
   clubId: number;
 };
 
+const surfaceOptions = [
+  { value: "Terra Batida", label: "Terra Batida" },
+  { value: "Piso Duro", label: "Piso Duro" },
+  { value: "Relva", label: "Relva" },
+];
+
+
 const sportOptions = [
   { value: "Tennis", label: "Ténis" },
   { value: "Padel", label: "Padel" },
@@ -69,13 +76,13 @@ export function UpdateCourtForm() {
       for (const court of courts) {
         console.log("Atualizando court:", court);
         await updateCourt({
-        courtId: court.id,
-        name: court.name,
-        type: court.sportTypeCourt,
-        surfaceType: court.surfaceType,
-        capacity: court.capacity,
-        pricePerHour: court.price,
-      });
+          courtId: court.id,
+          name: court.name,
+          type: court.sportTypeCourt,
+          surfaceType: court.surfaceType,
+          capacity: court.capacity,
+          pricePerHour: court.price,
+        });
       }
       setSuccess(true);
     } catch (err) {
@@ -125,14 +132,26 @@ export function UpdateCourtForm() {
           </Stack>
 
           <Stack direction="row" spacing={2} mt={2}>
-            <TextField
-              label="Tipo de Piso"
-              value={court.surfaceType}
-              onChange={(e) =>
-                handleChange(index, "surfaceType", e.target.value)
-              }
-              fullWidth
-            />
+            <FormControl fullWidth disabled={court.sportTypeCourt === "Padel"}>
+              <InputLabel>Tipo de Piso</InputLabel>
+              <Select
+                label="Tipo de Piso"
+                value={court.surfaceType}
+                onChange={(e) => handleChange(index, "surfaceType", e.target.value)}
+              >
+                {surfaceOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+              {court.sportTypeCourt === "Padel" && (
+                <Typography variant="caption" color="text.secondary" sx={{ mt: 1 }}>
+                  Não precisa de escolher tipo de piso para campos de Padel.
+                </Typography>
+              )}
+            </FormControl>
+
             <TextField
               label="Capacidade"
               type="number"

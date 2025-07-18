@@ -15,7 +15,7 @@ import pt.isel.courtandgo.frontend.service.http.models.ProblemDTO
 
 
 const val MEDIA_TYPE = "application/json"
-val BASE_URL = "https://xt3ptyfk0d.execute-api.eu-west-3.amazonaws.com"
+val BASE_URL = "https://b6qelwvee9.execute-api.eu-west-3.amazonaws.com"
 const val TOKEN_TYPE = "Bearer"
 const val ERROR_MEDIA_TYPE = "application/problem+json"
 const val SCHEME = "bearer"

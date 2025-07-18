@@ -45,6 +45,8 @@ export default $config({
     api.route("PUT /user/{id}", { handler: "packages/functions/user/update.handler" });
     api.route("POST /user/oauthregister", { handler: "packages/functions/user/oauthregister.handler" });
     api.route("GET /user", { handler: "packages/functions/user/getAll.handler" });
+    api.route("PUT /user/emailnotification/{id}", {handler: "packages/functions/user/emailNotification.handler" });
+    api.route("PUT /user/google/{id}", { handler: "packages/functions/user/updateFromGoogle.handler" });
 
     // === ScheduleCourtsService ===
     api.route("GET /schedule/weekly/{courtId}", { handler: "packages/functions/schedule/weekly.handler" });
@@ -123,7 +125,6 @@ export default $config({
 
     });
     
-
     return {
       host: database.host,
       port: database.port,

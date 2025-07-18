@@ -41,7 +41,7 @@ export async function handler(event) {
         headers: {
     "Content-Type": "application/json"
   },
-      body: JSON.stringify(user),
+      body: JSON.stringify({ user, accessToken: tokens.accessToken }),
     };
   } catch (err) {
     console.error("Erro login:", err);

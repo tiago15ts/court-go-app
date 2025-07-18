@@ -17,6 +17,7 @@ import com.mmk.kmpauth.uihelper.google.GoogleSignInButton
 import pt.isel.courtandgo.frontend.authentication.AuthConstants
 import pt.isel.courtandgo.frontend.authentication.AuthUiState
 import pt.isel.courtandgo.frontend.authentication.AuthViewModel
+import pt.isel.courtandgo.frontend.authentication.GoogleUser
 import pt.isel.courtandgo.frontend.authentication.isValidEmail
 import pt.isel.courtandgo.frontend.components.SnackbarError
 
@@ -172,6 +173,7 @@ fun LoginScreen(
                                     name = googleUser.displayName,
                                     email = googleUser.email ?: "Atualize o seu email",
                                 ) {
+                                    GoogleUser.userFromGoogle = true
                                     onLoginSuccess()
                                 }
                             }  else {

@@ -9,15 +9,20 @@ fun LocalDate.formatToDisplay(): String {
 }
 
 fun parseDisplayDate(dateString: String): LocalDate? {
-    val parts = dateString.split("/")
-    return if (parts.size == 3) {
+    return try {
+        LocalDate.parse(dateString) // "yyyy-MM-dd"
+    } catch (e1: Exception) {
         try {
-            val day = parts[0].toInt()
-            val month = parts[1].toInt()
-            val year = parts[2].toInt()
-            LocalDate(year, month, day)
-        } catch (e: Exception) {
+            val parts = dateString.split("/")
+            if (parts.size == 3) {
+                val day = parts[0].toInt()
+                val month = parts[1].toInt()
+                val year = parts[2].toInt()
+                LocalDate(year, month, day)
+            } else null
+        } catch (e2: Exception) {
             null
         }
-    } else null
+    }
 }
+

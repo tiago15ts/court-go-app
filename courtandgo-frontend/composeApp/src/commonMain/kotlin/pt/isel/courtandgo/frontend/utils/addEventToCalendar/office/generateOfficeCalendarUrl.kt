@@ -11,8 +11,8 @@ fun generateOfficeCalendarUrl(
     startTime: LocalDateTime,
     endTime: LocalDateTime
 ): String {
-    val start = formatToDisplay(startTime)
-    val end = formatToDisplay(endTime)
+    val start = startTime.toString()
+    val end = endTime.toString()
 
     return buildString {
         append("https://outlook.office.com/calendar/0/deeplink/compose?")

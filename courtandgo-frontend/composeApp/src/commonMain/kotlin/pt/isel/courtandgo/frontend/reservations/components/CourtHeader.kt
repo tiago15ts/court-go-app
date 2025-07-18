@@ -19,19 +19,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import courtandgo_frontend.composeapp.generated.resources.Res
-import courtandgo_frontend.composeapp.generated.resources.courts
 import org.jetbrains.compose.resources.painterResource
+import pt.isel.courtandgo.frontend.domain.Court
+import pt.isel.courtandgo.frontend.reservations.utils.getCourtImage
 
 @Composable
-fun CourtHeader(courtName: String, location: String, onBack: () -> Unit) {
+fun CourtHeader(court: Court, clubName: String, location: String, onBack: () -> Unit) {
+    val image = getCourtImage(court)
     Box (
         modifier = Modifier
             .fillMaxWidth()
             .height(180.dp)
     ){
         Image(
-            painter = painterResource(Res.drawable.courts),
+            painter = painterResource(image),
             contentDescription = "Courts image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -43,7 +44,7 @@ fun CourtHeader(courtName: String, location: String, onBack: () -> Unit) {
         Column(modifier = Modifier
             .align(Alignment.BottomStart)
             .padding(16.dp)) {
-            Text(courtName, style = MaterialTheme.typography.displayMedium, color = Color.White)
+            Text(clubName, style = MaterialTheme.typography.displayMedium, color = Color.White)
             Text(location, style = MaterialTheme.typography.bodyMedium, color = Color.White)
         }
     }

@@ -14,7 +14,7 @@ export async function getAllReservations() {
 }
 
 export async function getReservationById(id: number) {
-  const client = await db.connect();  
+  const client = await db.connect();
   const query = `
     SELECT * FROM Reservation
     WHERE reservationId = $1
@@ -56,7 +56,7 @@ export async function createReservation(data: {
   const playerRes = await client.query('SELECT email, name FROM Player WHERE playerId = $1', [data.userId]);
   const player = playerRes.rows[0];
 
- const courtRes = await client.query(
+  const courtRes = await client.query(
     `SELECT c.name AS clubName
      FROM Court ct
      JOIN Club c ON ct.clubId = c.clubId
@@ -64,8 +64,16 @@ export async function createReservation(data: {
     [data.courtId]
   );
   const clubName = courtRes.rows[0]?.clubname ?? 'o clube';
-  
-  scheduleReservationReminder(reservation, player.email, player.name, clubName);
+
+  const prefRes = await client.query(
+    'SELECT emailnotifications FROM Player WHERE playerId = $1',
+    [data.userId]
+  );
+  const emailEnabled = prefRes.rows[0]?.emailnotifications;
+
+  if (emailEnabled) {
+    scheduleReservationReminder(reservation, player.email, player.name, clubName);
+  }
 
   await client.query(
     `INSERT INTO Player_Reservation (reservationId, playerId, status)

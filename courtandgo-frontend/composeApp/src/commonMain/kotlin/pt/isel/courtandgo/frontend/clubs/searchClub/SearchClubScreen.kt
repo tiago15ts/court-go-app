@@ -38,8 +38,13 @@ fun SearchClubScreen(
     val uiState by viewModel.uiState.collectAsState()
 
 
+    val alreadyFetched = remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
-        viewModel.fetchClubs()
+        if (!alreadyFetched.value) {
+            viewModel.fetchClubs()
+            alreadyFetched.value = true
+        }
     }
 
     val clubHours by viewModel.clubHours.collectAsState()
@@ -145,7 +150,8 @@ fun SearchClubScreen(
                         district = club.location.district.name,
                         price = club.averagePrice.toString(),
                         hours = filteredHours,
-                        onClick = { onClubClick(club) }
+                        onClick = { onClubClick(club) },
+                        sportsClub = club.sportsClub
                     )
                 }
 

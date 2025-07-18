@@ -49,6 +49,11 @@ class ConfirmReservationViewModel(
         _selectedCourtId.value = courtId
     }
 
+    val selectedCourt: State<Court?> = derivedStateOf {
+        val id = _selectedCourtId.value
+        _courts.value.firstOrNull { it.id == id }
+    }
+
     fun placeReservation(
         playerId: Int,
         courtId: Int,
@@ -95,7 +100,6 @@ class ConfirmReservationViewModel(
         viewModelScope.launch {
             _uiState.value = ConfirmReservationUiState.Loading
             try {
-                println(reservation.id)
                 reservationRepo.setConfirmedReservation(reservation.id)
                 //_reservationConfirmed.value = reservation
                 _uiState.value = ConfirmReservationUiState.Success(reservation)
@@ -113,7 +117,9 @@ class ConfirmReservationViewModel(
             try{
             _courts.value = courtRepo.getCourtsByClubId(clubId)
             // Selecionar o primeiro court disponível nesse horário
-            _selectedCourtId.value = _courts.value.firstOrNull { it.id in availableCourtsAtTime }?.id
+                if (_selectedCourtId.value == null) {
+                    _selectedCourtId.value = _courts.value.firstOrNull { it.id in availableCourtsAtTime }?.id
+                }
         } catch (e: CourtAndGoException) {
                 _uiState.value = ConfirmReservationUiState.Error(e.message ?: "Erro ao carregar courts.")
             } catch (e: Exception) {

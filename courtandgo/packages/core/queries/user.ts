@@ -35,10 +35,24 @@ export async function registerUser(user: {
 export async function updateUser(user: any) {
   const client = await db.connect();
   const res = await client.query(
-    `UPDATE Player SET name = $1, phone = $2, countryId = $3, birthdate = $5, weight = $6, height = $7, gender = $8
-     WHERE playerId = $4 RETURNING *`,
-    [user.name, user.phone, user.countryId, user.playerId, user.birthdate, user.weight, user.height, user.gender]
+    `UPDATE Player
+     SET name = $1, phone = $2, countryId = $3, birthdate = $4, weight = $5, height = $6, gender = $7
+     WHERE playerId = $8
+     RETURNING *`,
+    [
+      user.name,
+      user.phone,
+      user.countryCode,
+      user.birthdate,
+      user.weight,
+      user.height,
+      user.gender,
+      user.id
+    ]
   );
+  if (res.rows.length === 0) {
+    throw new Error(`No user found with playerId ${user.id}`);
+  }
   client.release();
   return mapRowToUserDTO(res.rows[0]);
 }
@@ -56,18 +70,13 @@ export async function getAllUsers() {
   client.release();
   return res.rows.map(mapRowToUserDTO);
 }
-/*
-export async function getUserReservations(userId: number) {
+
+export async function emailNotifications(id: number, enabled: boolean) {
   const client = await db.connect();
   const res = await client.query(
-    `SELECT r.reservationId, r.courtId, r.startTime, r.endTime, c.name AS courtName
-     FROM Reservation r
-     JOIN Court c ON r.courtId = c.courtId
-     WHERE r.playerId = $1`,
-    [userId]
+    `UPDATE Player SET emailNotifications = $1 WHERE playerId = $2`,
+    [enabled, id]
   );
   client.release();
-  return res.rows;
+  return res.rowCount > 0;
 }
-  */
-

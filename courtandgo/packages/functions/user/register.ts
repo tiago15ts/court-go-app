@@ -40,16 +40,11 @@ export async function handler(event) {
 
     await cognito.send(command);
     
-
-    /*
     await cognito.send(new AdminConfirmSignUpCommand({
       UserPoolId: COGNITO_USER_POOL_ID,
       Username: email,
     }));
-    */  
-    
-/*
-//isto nao funciona porque a confirmacao do utilizador tem de ser feita manualmente
+     
     const authResponse = await cognito.send(
       new InitiateAuthCommand({
         AuthFlow: "USER_PASSWORD_AUTH",
@@ -63,10 +58,11 @@ export async function handler(event) {
 
     const tokens = {
       accessToken: authResponse.AuthenticationResult?.AccessToken,
-      idToken: authResponse.AuthenticationResult?.IdToken,
-      refreshToken: authResponse.AuthenticationResult?.RefreshToken,
+      //idToken: authResponse.AuthenticationResult?.IdToken,
+      //refreshToken: authResponse.AuthenticationResult?.RefreshToken,
     };
-    */
+    console.log("Tokens obtidos:", tokens);
+    
 
     const user = await registerUser({
       email: email,
@@ -80,7 +76,7 @@ export async function handler(event) {
   headers: {
     "Content-Type": "application/json"
   },
-  body: JSON.stringify(user),
+  body: JSON.stringify({ user, accessToken: tokens.accessToken }),
 };
 
   } catch (err) {

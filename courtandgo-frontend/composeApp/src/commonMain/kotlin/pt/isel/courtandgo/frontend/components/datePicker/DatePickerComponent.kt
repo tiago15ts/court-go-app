@@ -41,7 +41,7 @@ fun DatePickerComponent(initialDate: String,
             title = title,
             description = description,
             date = selectedDate?.formatToDisplay().orEmpty(),
-            buttonText = "Escolher data",
+            buttonText = "Mudar data",
             onClick = { showDatePicker = true }
         )
     }
@@ -145,6 +145,14 @@ private fun DatePickerCard(
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.onSurface
             )
+            if (date.isNotEmpty()) {
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = "Sua data: $date",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
             Spacer(Modifier.height(8.dp))
             Text(
                 text = description,
@@ -163,14 +171,7 @@ private fun DatePickerCard(
             ) {
                 Text(buttonText, fontSize = 14.sp)
             }
-            if (date.isNotEmpty()) {
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    text = "Sua data: $date",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
+
         }
     }
 }

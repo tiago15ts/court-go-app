@@ -27,7 +27,7 @@ class AuthRepositoryImpl(
                 email = email,
                 name = name,
                 countryCode = "+351",
-                contact = "Atualize o seu contacto"
+                contact = "Atualizar telefone"
             )
 
         return user
@@ -50,8 +50,16 @@ class AuthRepositoryImpl(
         return user
     }
 
+    override suspend fun emailNotifications(id: Int, enabled: Boolean): Boolean {
+        return courtAndGoService.userService.emailNotifications(id, enabled)
+    }
+
     override suspend fun updateUser(user: User): User {
         return courtAndGoService.userService.updateUser(user)
+    }
+
+    override suspend fun updateUserGoogle(user: User): User {
+        return courtAndGoService.userService.updateUserGoogle(user)
     }
 
     override fun setToken(token: String) {

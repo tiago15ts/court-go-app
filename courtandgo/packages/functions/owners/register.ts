@@ -38,13 +38,13 @@ export async function handler(event: any) {
     );
 
 
-/*
+
     await cognito.send(new AdminConfirmSignUpCommand({
       UserPoolId: USER_POOL_ID,
       Username: email,
     }));
 
-  */
+  
     
     const owner = await createOwner({
       email,
