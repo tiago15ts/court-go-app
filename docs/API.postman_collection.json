@@ -1,0 +1,1158 @@
+{
+	"info": {
+		"_postman_id": "235d23f3-2fb9-411c-95ef-ebb111d66bff",
+		"name": "API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18382834",
+		"_collection_link": "https://courtandgo.postman.co/courtandgo/workspace/court-go-app/collection/18382834-235d23f3-2fb9-411c-95ef-ebb111d66bff?action=share&source=collection_link&creator=18382834"
+	},
+	"item": [
+		{
+			"name": "player",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"trying1231231@example.com\",\r\n  \"password\": \"YourPassword123!\",\r\n  \"name\": \"confirmpls\",\r\n  \"countryCode\": \"+351\",\r\n  \"contact\": \"912345678\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/register",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"trying@example.com\",\r\n  \"password\": \"YourPassword123!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAifQ.pAOK6Rx4o1XXJJVy2dpYR9D8foXnfLdOX7mmm5k39svT5I2X918qm3ZmjhRVKeoEt_f2GqIGCRSlHVB59hm-GP2bdG1BTuwiZMPp5obTgtDB6DO10xX-X0W5AXcn2Bqn0UjEJsWId5S7cNoD97R_s5Z3jnqG73WJ_oTQR069XjXLwhT6JBvSIg8Z2oG1q3Ja9eUvMrUUXlq1LHVw9IDhuGdatc-I8cQiDRUv1aACsxmEguehc75NcoI5nIyGdGLBslYDa-I-HmlEkpZmUqh-ZpHRL84ok2KKPlEcV-pq9GUmhUOG94sJnNEtQQKxAo-O_JJjgYdOsP6Hewo3ngNLpw.Gh_T9CzaGD8AfRe9.VEapXUYd-j0DmZ8y9_R3--FJg1SoLLiLom4dD-MMzFLu7EW37KfvoQsyJxzx_2HpCjkZKPamoNqcq_PSEbt9Cw7HvQLUGxojX7xXO_SD1R3TIazr-YD0zHTdPd0SvcOtynN36ogS1Ya66OtGGulFpemn8Jf_yiU9bki7VZgrhYe3Goc1iSKIk81BtslKIvyYmqO2sSZZDhmwe7zz3Jd4wgRPmiJ3dlf36cDs52U8BL8wsCKzJxIOiiqWvLjuui5-MD7LLQcT6eATC0ffasHQrx5599Hr1FH50ejRc-cou49p-5N6xEGXR9isC1rXGgcUwQEoh_NzvyY3rPpGu7YUipNYfQ6SFGK-LcjZHz-wdTqLKTjwduTQEE-NDFLlHH5AtZPJ0RaroFYoIMDT4iPHVHVcvmAssKNZrFXWCn_kZzthm5p-TuIIT9T7a5ifewOuCZ2SllANnKNBvuJPbsdPMkr1DcgPRNOL_ILPAqZeJHpN_sTph5xJUhtkY1ph8n1CdwZ_Y6DocjYcPlxDRO40HopkjpovYY4qcekoV5vycnCUaeauOKoW0tF6mOfibBppc9MXf2jBkYLK4lSVnSefgvygmIu1oYIhygpyRmQ74YSSIbKTDsGT42ALDEurtNoRQYgw-WiXztutRf3RyDhlZEnwYGFb5Shk1PLU4n71Ve9Q6kKbe5DAPUSIS5xw_gC7g2v58yDki1tpijrBZOlfaVzymg-j5koe0WRSi6u1uE9cSpnESeGqaeNgVx2AJF2PZbs5hl3ZG1BBWePMjociRjGm1VkLfqaYgZaM_EfF3a8UfBLYxOlhJMafpnQSiTOyCugk5l2W7b9thC1hAtjnR79Uy2UQ6kr9himi59_Q3oUyjlxiSds9Y74dmec7Zq0nW13NUNB3O-NTKal5Zox8C2xSicuRSUdA64Hge29jRlQQKCEI_8Elhb0SShV-zOmaW06zIY7v03jTU1-4pR1yYrx483Ko9K00Q_JE6OK5pHaxl4Zx0gK5T6eht0gBwzXcf3KNKEzPV10UObwIKbaL4RJST5XudPf4VvYmOUVzhVo337ENXd4kxEMFT6wNiy5hA0OfUA0R-8z_04pTVWSgv48fUo0xGmcEg0g4ja28jMxoHoKy1_L3jppAZVxKK53ZMPmamDkHpQCVubudLALVfxwZLRS80bMCBsEh7Stc5xwEDJHnvs18p5rn2Ga0GbnJEPgATC1i7Nuv2VA0UikvjJ8glKs4pvoj9_yj-MBBFFmqVxyqvXaq3mW8w6n4oSMNmoJME3eACEVPaKjOfAgSg_ZBKAWy1OCw3WJU5-peglBsp22Uv9bp76VH8pKIVQ.QGKk0jrl4885dwc2Rk7IVg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/user/logout",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/user/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getByEmail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/user/email/user@example.com",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"email",
+								"user@example.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/user",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJraWQiOiJ1bWtyekk5QXI5MloxVE1kMzZLQzJ0cWpYUHhNUUlNTVVhZWIzWENaQ2hvPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJlMWQ5MjA3ZS04MDcxLTcwMTctODI4YS02NTAyM2EyOWFmY2QiLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuZXUtd2VzdC0zLmFtYXpvbmF3cy5jb21cL2V1LXdlc3QtM19XSFQ5MFlDSjMiLCJjbGllbnRfaWQiOiIxanF0djltdnZwdjBmamZlMG8yZGJoYWxsYyIsIm9yaWdpbl9qdGkiOiJmNDFlNDdmZC1jZTQzLTRkNGUtODBhNC02OGYyNTUyZDgxNWYiLCJldmVudF9pZCI6IjliNGZlOTNmLWJmNTYtNDFlZi05ODRlLTQ5YWEyMzRlZDQzNCIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE3NTI0NTcxOTgsImV4cCI6MTc1MjQ2NDM5OCwiaWF0IjoxNzUyNDU3MTk4LCJqdGkiOiJjMDUyN2EyOC01OWViLTQxZTEtYTc2ZS02YjEyYjQyZmEwY2QiLCJ1c2VybmFtZSI6ImUxZDkyMDdlLTgwNzEtNzAxNy04MjhhLTY1MDIzYTI5YWZjZCJ9.iR5kNUYNDxBnGkcf1PpEdqufDYO1Jw72Nv-hx4xtlhG2ZFuZthKSE3bx_uWftnLTOx_O8ANyueEZ5QzuY1s8DJOYq16fBh8tyLfrgFQaCYtdUHDEfK0cl9CWlYw5cJsg8UqlhZIEi6ANRCsd3Z_Bo3pBXMSDAXGR1IKrFEw7Yb9HwAp38SIZ36l-FP2Ee-XHR-eGGU25d5Zin1MiKSiwa30ZT9zf6NQtx-xce-HIylydz55SjGpZrpYdBE9YfHr3lDrI22nwjf0tCZ0cOD7VPWTb2pn6UDcS-vhAR3dIv-oDSmg7tGJ343bfVuJ4fe_KlfpL38MPi5wi0PFUEs78Sw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Novo Nomee\",\r\n  \"phone\": \"99999999\",\r\n  \"countryId\": \"+352\",\r\n  \"birthdate\": \"1990-01-01\",\r\n  \"weight\": 70,\r\n  \"height\": 1.75,\r\n  \"gender\": \"Masculino\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/5",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EmailNotifications",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"enabled\": false \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/emailnotification/5",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"emailnotification",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "oauthRegister",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"ola@gmail.com\",\r\n  \"password\": \"\",\r\n  \"name\": \"ola adeus\",\r\n  \"countryCode\": \"+351\",\r\n  \"contact\": \"Atualizar Telefone\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/oauthregister",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"oauthregister"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "club",
+			"item": [
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/clubs",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"clubs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateClub",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"clubId\": 6,\r\n  \"name\": \"Clube Atualizado\",\r\n  \"nrOfCourts\": 5,\r\n  \"locationId\": 1000,\r\n  \"sports\": \"Padel\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/clubs/6",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"clubs",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getClubsByDistrict",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/clubs/district?district=lisboa",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"clubs",
+								"district"
+							],
+							"query": [
+								{
+									"key": "district",
+									"value": "lisboa"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getByCounty",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/clubs/county?county=MELINDES",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"clubs",
+								"county"
+							],
+							"query": [
+								{
+									"key": "county",
+									"value": "MELINDES"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getByCountry",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/clubs/country?country=portugal",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"clubs",
+								"country"
+							],
+							"query": [
+								{
+									"key": "country",
+									"value": "portugal"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getByPostalCode",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/clubs/postal?postalCode=1000-001",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"clubs",
+								"postal"
+							],
+							"query": [
+								{
+									"key": "postalCode",
+									"value": "1000-001"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getClubsByName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/clubs/name?name=clube",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"clubs",
+								"name"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "clube"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getClubsBySport",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/clubs/sport?sport=Padel",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"clubs",
+								"sport"
+							],
+							"query": [
+								{
+									"key": "sport",
+									"value": "Padel",
+									"description": "Tennis, Padel or Both"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getClubById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/clubs/9",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"clubs",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getClubByOwnerId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/clubs/owner/13",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"clubs",
+								"owner",
+								"13"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getClubIdByCourtId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/clubs/court/4",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"clubs",
+								"court",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getClubsFiltered",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/clubs/filter",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"clubs",
+								"filter"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "county",
+									"value": "carrasca",
+									"disabled": true
+								},
+								{
+									"key": "district",
+									"value": "Lisboa",
+									"disabled": true
+								},
+								{
+									"key": "country",
+									"value": "Portugal",
+									"disabled": true
+								},
+								{
+									"key": "postalCode",
+									"value": "1250-096",
+									"disabled": true
+								},
+								{
+									"key": "sport",
+									"value": "Tennis",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createClub",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "court",
+			"item": [
+				{
+					"name": "CreateCourt",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Court do club 6\",\r\n  \"clubId\": 6,\r\n  \"type\": \"Padel\",\r\n  \"surfaceType\": \"Relva sintética\",\r\n  \"capacity\": 4,\r\n  \"pricePerHour\": 25.00\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/courts",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"courts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateCourt",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"courtId\": 1,\r\n  \"name\": \"Court Central\",\r\n  \"type\": \"Tennis\",\r\n  \"surfaceType\": \"Clay\",\r\n  \"capacity\": 4,\r\n  \"pricePerHour\": 30.5\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/courts/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"courts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCourtByClubId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/courts/club/6",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"courts",
+								"club",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCourtById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://xt3ptyfk0d.execute-api.eu-west-3.amazonaws.com/courts/6",
+							"protocol": "https",
+							"host": [
+								"xt3ptyfk0d",
+								"execute-api",
+								"eu-west-3",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"courts",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCourtsBySportType",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/courts/sport?sport=Padel",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"courts",
+								"sport"
+							],
+							"query": [
+								{
+									"key": "sport",
+									"value": "Padel",
+									"description": "Tennis or Padel"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "location",
+			"item": [
+				{
+					"name": "createLoc",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"address\": \"Avenida da legiao \",\r\n  \"county\": \"pedrogao\",\r\n  \"district\": \"LEIRIA\",\r\n  \"country\": \"Portugal\",\r\n  \"postalCode\": \"2630-096\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/clubs/location",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"clubs",
+								"location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateLoc",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"locationId\": 5,\r\n  \"address\": \"rua da bola\",\r\n  \"county\": \"viana do castelo\",\r\n  \"district\": \"Porto\",\r\n  \"postalCode\": \"16545-001\",\r\n  \"latitude\": 38.736946,\r\n  \"longitude\": -9.142685\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/clubs/location/5",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"clubs",
+								"location",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetLocByClubId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/clubs/9/location",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"clubs",
+								"9",
+								"location"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "owners",
+			"item": [
+				{
+					"name": "register owner",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"saf@email.pt\",\r\n  \"password\": \"PasswordSegura123!\",\r\n  \"name\": \"Utilizador Teste\",\r\n  \"phone\": \"+351912345678\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/owners/register",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"owners",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Owner",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"saf@email.pt\",\r\n  \"password\": \"PasswordSegura123!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/owners/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"owners",
+								"login"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": "the user has to be confirmed in aws cognito",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "reservation",
+			"item": [
+				{
+					"name": "createReservation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"courtId\": 5,\r\n  \"userId\": 4,\r\n  \"startTime\": \"2025-07-27 21:00:00\",\r\n  \"endTime\": \"2025-07-27 22:00:00\",\r\n  \"estimatedPrice\": 15,\r\n  \"status\": \"Pending\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/reservations",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"reservations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateReservation",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"reservationId\": 1,\r\n  \"startTime\": \"2025-07-15 18:00:00\",\r\n  \"endTime\": \"2025-07-15 19:00:00\",\r\n  \"estimatedPrice\": 20.0,\r\n  \"status\": \"Confirmed\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/reservations/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"reservations",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteReserv",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/reservations/3/delete",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"reservations",
+								"3",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ConfirmReserv",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/reservations/25/confirm",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"reservations",
+								"25",
+								"confirm"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CancelReserv",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/reservations/10/cancel",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"reservations",
+								"10",
+								"cancel"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllReserv",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"courtId\": 4,\r\n  \"userId\": 4,\r\n  \"startTime\": \"2025-07-13 21:00:00\",\r\n  \"endTime\": \"2025-07-13 22:00:00\",\r\n  \"estimatedPrice\": 15,\r\n  \"status\": \"Pending\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{baseURL}}/reservations",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"reservations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getResrvById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"courtId\": 4,\r\n  \"userId\": 4,\r\n  \"startTime\": \"2025-07-13 21:00:00\",\r\n  \"endTime\": \"2025-07-13 22:00:00\",\r\n  \"estimatedPrice\": 15,\r\n  \"status\": \"Pending\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{baseURL}}/reservations/4",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"reservations",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getReservByPlayerId",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"courtId\": 4,\r\n  \"userId\": 4,\r\n  \"startTime\": \"2025-07-13 21:00:00\",\r\n  \"endTime\": \"2025-07-13 22:00:00\",\r\n  \"estimatedPrice\": 15,\r\n  \"status\": \"Pending\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{baseURL}}/player/4/reservations",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"player",
+								"4",
+								"reservations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getReservsByCourtIdsAndDate",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"courtId\": 4,\r\n  \"userId\": 4,\r\n  \"startTime\": \"2025-07-13 21:00:00\",\r\n  \"endTime\": \"2025-07-13 22:00:00\",\r\n  \"estimatedPrice\": 15,\r\n  \"status\": \"Pending\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{baseURL}}/reservations/filter?courtIds=&date=2025-07-15",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"reservations",
+								"filter"
+							],
+							"query": [
+								{
+									"key": "courtIds",
+									"value": ""
+								},
+								{
+									"key": "date",
+									"value": "2025-07-15"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "schedule",
+			"item": [
+				{
+					"name": "createWeeklySchedule",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"clubId\": 2,\r\n  \"dayOfWeek\": \"Monday\",\r\n  \"startTime\": \"09:00\",\r\n  \"endTime\": \"11:00\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/schedule/weekly",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"schedule",
+								"weekly"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateSpecialSchedule",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"clubId\": 2,\r\n  \"date\": \"2025-07-16\",\r\n  \"startTime\": \"09:00:00\",\r\n  \"endTime\": \"18:00:00\",\r\n  \"working\": true\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/schedule/special",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"schedule",
+								"special"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getWeeklyScheduleForCourt",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/schedule/weekly/7",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"schedule",
+								"weekly",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getSpecialScheduleForCourt",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/schedule/special/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"schedule",
+								"special",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "https://b6qelwvee9.execute-api.eu-west-3.amazonaws.com",
+			"type": "default"
+		}
+	]
+}
