@@ -1,0 +1,102 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" version="28.0.6" pages="2">
+  <diagram name="Página-1" id="_cJ42rb-G4C67H44L4f9">
+    <mxGraphModel dx="815" dy="449" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="dV62UJxsDbHq9_iBhBNi-1" value="API Gateway V2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#9AB8FC;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="240" y="160" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dV62UJxsDbHq9_iBhBNi-2" value="AWS Lambda Functions" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#BBD1FC;strokeColor=#6c8ebf;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="240" y="220" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dV62UJxsDbHq9_iBhBNi-3" value="Core Layer (Queries)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#C3DDFC;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="240" y="280" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dV62UJxsDbHq9_iBhBNi-4" value="PostgreSQL DataBase" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="240" y="340" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dV62UJxsDbHq9_iBhBNi-5" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="510" y="189.66" as="sourcePoint" />
+            <mxPoint x="470" y="189.66" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dV62UJxsDbHq9_iBhBNi-7" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="510" y="249.66" as="sourcePoint" />
+            <mxPoint x="470" y="249.66" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dV62UJxsDbHq9_iBhBNi-8" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="510" y="309.65999999999997" as="sourcePoint" />
+            <mxPoint x="470" y="309.65999999999997" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dV62UJxsDbHq9_iBhBNi-9" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="510" y="369.65999999999997" as="sourcePoint" />
+            <mxPoint x="470" y="369.65999999999997" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dV62UJxsDbHq9_iBhBNi-10" value="Ponto de Entrada" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="520" y="175" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="dV62UJxsDbHq9_iBhBNi-11" value="Lógica de Negócio" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="520" y="235" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="dV62UJxsDbHq9_iBhBNi-12" value="Acesso a dados" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="520" y="295" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="dV62UJxsDbHq9_iBhBNi-13" value="Persistência" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="520" y="355" width="80" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="BS2QD1Fr0u7NVL1FHLOc" name="Página-2">
+    <mxGraphModel dx="983" dy="541" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="HhCfQzBOFf22QgaQlmD7-1" value="Presentation Layer&lt;div&gt;(Ecrãs, ViewModels&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F88C84;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="80" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HhCfQzBOFf22QgaQlmD7-2" value="Domain Layer&lt;div&gt;(Repos, Entities)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8B1B1;strokeColor=#b85450;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="60" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HhCfQzBOFf22QgaQlmD7-3" value="Data Layer&lt;div&gt;(Services, DTOs, HTTP, Mocks&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="HhCfQzBOFf22QgaQlmD7-5" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="29.659999999999997" as="sourcePoint" />
+            <mxPoint x="310" y="29.659999999999997" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HhCfQzBOFf22QgaQlmD7-6" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="89.66" as="sourcePoint" />
+            <mxPoint x="310" y="89.66" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HhCfQzBOFf22QgaQlmD7-7" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="149.65999999999997" as="sourcePoint" />
+            <mxPoint x="310" y="149.65999999999997" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="HhCfQzBOFf22QgaQlmD7-9" value="UI (Jetpack Compose)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="360" y="15" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HhCfQzBOFf22QgaQlmD7-10" value="Entidades Centrais de Negócio" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="360" y="75" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="HhCfQzBOFf22QgaQlmD7-11" value="Dados e Serviços" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="360" y="135" width="100" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

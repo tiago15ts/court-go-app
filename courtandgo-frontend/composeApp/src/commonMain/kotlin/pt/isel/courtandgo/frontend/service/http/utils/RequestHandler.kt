@@ -8,18 +8,10 @@ import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
-import io.ktor.http.URLBuilder
 import io.ktor.http.HttpHeaders
+import pt.isel.courtandgo.frontend.ApiConfig
 import pt.isel.courtandgo.frontend.service.http.models.Problem
 import pt.isel.courtandgo.frontend.service.http.models.ProblemDTO
-
-
-const val MEDIA_TYPE = "application/json"
-val BASE_URL = "https://b6qelwvee9.execute-api.eu-west-3.amazonaws.com"
-const val TOKEN_TYPE = "Bearer"
-const val ERROR_MEDIA_TYPE = "application/problem+json"
-const val SCHEME = "bearer"
-const val NAME_WWW_AUTHENTICATE_HEADER = "WWW-Authenticate"
 
 open class CourtAndGoException(message: String?, cause: Throwable? = null) : Exception(message, cause)
 
@@ -29,10 +21,10 @@ suspend inline fun <reified T : Any> HttpClient.get(
     token: String = ""
 
 ): T {
-    val response = get(BASE_URL + url) {
-        if (token.isNotEmpty()) header("Authorization", "$TOKEN_TYPE $token")
-        header("Content-Type", MEDIA_TYPE)
-        header("Accept", "$MEDIA_TYPE, $ERROR_MEDIA_TYPE")
+    val response = get(ApiConfig.BASE_URL + url) {
+        if (token.isNotEmpty()) header("Authorization", "${ApiConfig.TOKEN_TYPE} $token")
+        header("Content-Type", ApiConfig.MEDIA_TYPE)
+        header("Accept", "${ApiConfig.MEDIA_TYPE}, ${ApiConfig.ERROR_MEDIA_TYPE}")
     }
     //println("url: $url")
     //println( "Response status: ${response.status.value}")
@@ -46,10 +38,10 @@ suspend inline fun <reified T : Any> HttpClient.post(
     token: String = "",
     body: Any? = null
 ): T {
-    val response = post(BASE_URL + url) {
-        if (token.isNotEmpty()) header("Authorization", "$TOKEN_TYPE $token")
-        header("Content-Type", MEDIA_TYPE)
-        header("Accept", "$MEDIA_TYPE, $ERROR_MEDIA_TYPE")
+    val response = post(ApiConfig.BASE_URL + url) {
+        if (token.isNotEmpty()) header("Authorization", "${ApiConfig.TOKEN_TYPE} $token")
+        header("Content-Type", ApiConfig.MEDIA_TYPE)
+        header("Accept", "${ApiConfig.MEDIA_TYPE}, ${ApiConfig.ERROR_MEDIA_TYPE}")
         if (body != null) setBody(body)
 
     }
@@ -64,10 +56,10 @@ suspend inline fun <reified T : Any> HttpClient.put(
     token: String = "",
     body: Any? = null
 ): T {
-    val response = put(BASE_URL + url) {
-        if (token.isNotEmpty()) header("Authorization", "$TOKEN_TYPE $token")
-        header("Content-Type", MEDIA_TYPE)
-        header("Accept", "$MEDIA_TYPE, $ERROR_MEDIA_TYPE")
+    val response = put(ApiConfig.BASE_URL + url) {
+        if (token.isNotEmpty()) header("Authorization", "${ApiConfig.TOKEN_TYPE} $token")
+        header("Content-Type", ApiConfig.MEDIA_TYPE)
+        header("Accept", "${ApiConfig.MEDIA_TYPE}, ${ApiConfig.ERROR_MEDIA_TYPE}")
         if (body != null) setBody(body)
     }
     return response.processResponse()
@@ -81,18 +73,18 @@ suspend inline fun <reified T : Any> HttpResponse.processResponse(): T {
             throw CourtAndGoException("Expected body but got empty response")
         }
 
-        if (this.headers[NAME_WWW_AUTHENTICATE_HEADER] != null)
+        if (this.headers[ApiConfig.NAME_WWW_AUTHENTICATE_HEADER] != null)
             throw CourtAndGoException("Failed to authenticate")
 
         val contentType = this.headers[HttpHeaders.ContentType] ?: ""
 
         return when {
-            contentType.startsWith(ERROR_MEDIA_TYPE) -> {
+            contentType.startsWith(ApiConfig.ERROR_MEDIA_TYPE) -> {
                 val problem: Problem = this.body<ProblemDTO>().toProblem()
                 throw CourtAndGoException(fetchErrorFile(problem.uri))
             }
 
-            contentType.startsWith(MEDIA_TYPE) -> {
+            contentType.startsWith(ApiConfig.MEDIA_TYPE) -> {
                 this.body()
             }
 

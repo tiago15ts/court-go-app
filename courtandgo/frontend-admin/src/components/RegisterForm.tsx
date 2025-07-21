@@ -125,16 +125,6 @@ export function RegisterForm() {
             </Button>
           </Typography>
         </Stack>
-
-        {process.env.NODE_ENV === "development" && (
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={() => navigate("/dashboard")}
-          >
-            Aceder diretamente ao Dashboard (Dev)
-          </Button>
-        )}
       </Box>
     </>
   );
