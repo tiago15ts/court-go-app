@@ -36,13 +36,50 @@ export default $config({
     const api = new sst.aws.ApiGatewayV2("CourtAndGoAPI", {
       link: [database],
     });
+    
+    // Define Cognito permissions for Lambda functions
+    const cognitoPermissions = [
+      {
+        actions: [
+          "cognito-idp:AdminConfirmSignUp",
+          "cognito-idp:AdminCreateUser",
+          "cognito-idp:AdminGetUser",
+          "cognito-idp:AdminDeleteUser",
+          "cognito-idp:AdminUpdateUserAttributes",
+          "cognito-idp:AdminSetUserPassword",
+          "cognito-idp:SignUp",
+          "cognito-idp:InitiateAuth",
+          "cognito-idp:RespondToAuthChallenge",
+          "cognito-idp:GetUser",
+          "cognito-idp:UpdateUserAttributes",
+          "cognito-idp:GlobalSignOut",
+          "cognito-idp:ChangePassword",
+          "cognito-idp:ForgotPassword",
+          "cognito-idp:ConfirmForgotPassword"
+        ],
+        resources: ["arn:aws:cognito-idp:eu-west-3:*:userpool/eu-west-3_WHT90YCJ3"]
+      }
+    ];
+
     // === UserService ===
-    api.route("POST /user/register", { handler: "packages/functions/user/register.handler" });
-    api.route("POST /user/login", { handler: "packages/functions/user/login.handler" });
-    api.route("POST /user/logout", { handler: "packages/functions/user/logout.handler" });
+    api.route("POST /user/register", { 
+      handler: "packages/functions/user/register.handler",
+      permissions: cognitoPermissions
+    });
+    api.route("POST /user/login", { 
+      handler: "packages/functions/user/login.handler",
+      permissions: cognitoPermissions
+    });
+    api.route("POST /user/logout", { 
+      handler: "packages/functions/user/logout.handler",
+      permissions: cognitoPermissions
+    });
     api.route("GET /user/{id}", { handler: "packages/functions/user/getById.handler" });
     api.route("GET /user/email/{email}", { handler: "packages/functions/user/getByEmail.handler" });
-    api.route("PUT /user/{id}", { handler: "packages/functions/user/update.handler" });
+    api.route("PUT /user/{id}", { 
+      handler: "packages/functions/user/update.handler",
+      permissions: cognitoPermissions
+    });
     api.route("POST /user/oauthregister", { handler: "packages/functions/user/oauthregister.handler" });
     api.route("GET /user", { handler: "packages/functions/user/getAll.handler" });
     api.route("PUT /user/emailnotification/{id}", {handler: "packages/functions/user/emailNotification.handler" });
@@ -111,8 +148,14 @@ export default $config({
     api.route("GET /clubs/{clubId}/location", { handler: "packages/functions/location/locationByClubId.handler" }); // Get location by club ID
 
     // === OwnerService ===
-    api.route("POST /owners/register", { handler: "packages/functions/owners/register.handler" });
-    api.route("POST /owners/login", { handler: "packages/functions/owners/login.handler" });
+    api.route("POST /owners/register", { 
+      handler: "packages/functions/owners/register.handler",
+      permissions: cognitoPermissions
+    });
+    api.route("POST /owners/login", { 
+      handler: "packages/functions/owners/login.handler",
+      permissions: cognitoPermissions
+    });
 
 
 

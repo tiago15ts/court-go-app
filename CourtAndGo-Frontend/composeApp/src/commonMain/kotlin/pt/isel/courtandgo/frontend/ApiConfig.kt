@@ -11,7 +11,7 @@ package pt.isel.courtandgo.frontend
  */
 object ApiConfig {
     // TODO: ALTERE ESTA URL PARA O SEU URL
-    const val BASE_URL = "https://b6qelwvee9.execute-api.eu-west-3.amazonaws.com"
+    const val BASE_URL = "https://newxkt95sc.execute-api.eu-west-3.amazonaws.com"
     
     // Configurações HTTP
     const val MEDIA_TYPE = "application/json"

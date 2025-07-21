@@ -44,6 +44,19 @@ O **CourtAndGo** é uma aplicação completa para gestão e reserva de campos de
 - **AWS Cognito** - Gestão de identidades
 - **SST Framework** - Infrastructure as Code
 
+## Como Começar
+
+Para iniciar o projeto, siga os passos abaixo:
+
+No pgAdmin, crie uma base de dados chamada `local` ou o nome que desejar, e altere esse nome no ficheiro `sst.config.ts` caso necessário.
+
+Vá para a diretoria /courtandgo e execute o comando:
+
+```bash
+npm install
+```
+em seguida siga os passos deste ficheiro:
+- [Configurar API Mobile](docs/infoG15.pdf)
 
 ## 📁 Estrutura do Projeto
 
