@@ -13,6 +13,10 @@ import org.junit.Test
 import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubScreen
 import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubViewModel
 import pt.isel.courtandgo.frontend.domain.SportsClub
+import pt.isel.courtandgo.frontend.repository.ClubRepositoryImpl
+import pt.isel.courtandgo.frontend.repository.CourtRepositoryImpl
+import pt.isel.courtandgo.frontend.repository.ScheduleRepositoryImpl
+import pt.isel.courtandgo.frontend.service.mock.CourtAndGoServiceMock
 import pt.isel.courtandgo.frontend.service.mock.MockClubService
 import pt.isel.courtandgo.frontend.service.mock.MockCourtService
 import pt.isel.courtandgo.frontend.service.mock.MockScheduleCourtService
@@ -25,10 +29,11 @@ class SearchClubScreenTests {
     val composeTestRule = createComposeRule()
 
     private fun fakeSearchClubViewModel() : SearchClubViewModel {
+        val serviceMock = CourtAndGoServiceMock()
         return SearchClubViewModel(
-            clubRepository =  MockClubService(ClubRepoMock()),
-            scheduleRepo = MockScheduleCourtService(ScheduleCourtRepoMock()),
-            courtRepository = MockCourtService(CourtRepoMock())
+            clubRepository =  ClubRepositoryImpl(serviceMock),
+            scheduleRepo = ScheduleRepositoryImpl(serviceMock),
+            courtRepository = CourtRepositoryImpl(serviceMock)
         )
     }
 

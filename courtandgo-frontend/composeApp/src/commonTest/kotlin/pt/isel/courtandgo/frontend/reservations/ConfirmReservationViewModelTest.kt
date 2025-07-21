@@ -5,8 +5,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDateTime
+import pt.isel.courtandgo.frontend.repository.CourtRepositoryImpl
+import pt.isel.courtandgo.frontend.repository.ReservationRepositoryImpl
 import pt.isel.courtandgo.frontend.reservations.confirmReservation.ConfirmReservationUiState
 import pt.isel.courtandgo.frontend.reservations.confirmReservation.ConfirmReservationViewModel
+import pt.isel.courtandgo.frontend.service.mock.CourtAndGoServiceMock
 import pt.isel.courtandgo.frontend.service.mock.MockCourtService
 import pt.isel.courtandgo.frontend.service.mock.MockReservationService
 import pt.isel.courtandgo.frontend.service.mock.repo.CourtRepoMock
@@ -22,19 +25,16 @@ class ConfirmReservationViewModelTest {
 
     @BeforeTest
     fun setup() {
+        val serviceMock = CourtAndGoServiceMock()
         viewModel = ConfirmReservationViewModel(
-            reservationRepo = MockReservationService(ReservationRepoMock()),
-            courtRepo = MockCourtService(CourtRepoMock())
+            reservationRepo = ReservationRepositoryImpl(serviceMock),
+            courtRepo = CourtRepositoryImpl(serviceMock)
         )
     }
 
 
     @Test
     fun emitsIdleState_afterResetUiStateCalled() = runTest {
-        val viewModel = ConfirmReservationViewModel(
-            reservationRepo = MockReservationService(ReservationRepoMock()),
-            courtRepo = MockCourtService(CourtRepoMock())
-        )
 
         viewModel.placeReservation(
             playerId = 1,

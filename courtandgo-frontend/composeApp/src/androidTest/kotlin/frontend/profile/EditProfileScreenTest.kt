@@ -51,6 +51,14 @@ class EditProfileScreenTest {
             password: String
         ): User = fakeUser
         override suspend fun updateUser(user: User) : User = fakeUser
+        override suspend fun updateUserGoogle(user: User): User {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun emailNotifications(id: Int, enabled: Boolean): Boolean {
+            TODO("Not yet implemented")
+        }
+
         override fun setToken(token: String) = Unit
         override fun getToken(): String = fakeUser.name
         override fun logout() = Unit

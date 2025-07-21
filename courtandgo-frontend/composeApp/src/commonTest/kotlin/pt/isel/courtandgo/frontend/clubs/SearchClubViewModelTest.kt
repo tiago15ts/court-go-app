@@ -5,6 +5,10 @@ import kotlinx.coroutines.test.runTest
 import pt.isel.courtandgo.frontend.clubs.searchClub.ClubSearchUiState
 import pt.isel.courtandgo.frontend.clubs.searchClub.SearchClubViewModel
 import pt.isel.courtandgo.frontend.domain.SportsClub
+import pt.isel.courtandgo.frontend.repository.ClubRepositoryImpl
+import pt.isel.courtandgo.frontend.repository.CourtRepositoryImpl
+import pt.isel.courtandgo.frontend.repository.ScheduleRepositoryImpl
+import pt.isel.courtandgo.frontend.service.mock.CourtAndGoServiceMock
 import pt.isel.courtandgo.frontend.service.mock.MockClubService
 import pt.isel.courtandgo.frontend.service.mock.MockCourtService
 import pt.isel.courtandgo.frontend.service.mock.MockScheduleCourtService
@@ -22,10 +26,11 @@ class SearchClubViewModelTest {
 
     @BeforeTest
     fun setup() {
+        val serviceMock = CourtAndGoServiceMock()
         viewModel = SearchClubViewModel(
-            clubRepository = MockClubService(ClubRepoMock()),
-            courtRepository = MockCourtService(CourtRepoMock()),
-            scheduleRepo = MockScheduleCourtService(ScheduleCourtRepoMock())
+            clubRepository = ClubRepositoryImpl(serviceMock),
+            courtRepository = CourtRepositoryImpl(serviceMock),
+            scheduleRepo = ScheduleRepositoryImpl(serviceMock)
         )
     }
 

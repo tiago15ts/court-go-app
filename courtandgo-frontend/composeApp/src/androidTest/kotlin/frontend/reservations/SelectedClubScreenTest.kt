@@ -15,8 +15,12 @@ import pt.isel.courtandgo.frontend.domain.District
 import pt.isel.courtandgo.frontend.domain.Location
 import pt.isel.courtandgo.frontend.domain.SportTypeCourt
 import pt.isel.courtandgo.frontend.domain.SportsClub
+import pt.isel.courtandgo.frontend.repository.CourtRepositoryImpl
+import pt.isel.courtandgo.frontend.repository.ReservationRepositoryImpl
+import pt.isel.courtandgo.frontend.repository.ScheduleRepositoryImpl
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.CourtAvailabilityViewModel
 import pt.isel.courtandgo.frontend.reservations.reservationTimes.SelectedClubScreen
+import pt.isel.courtandgo.frontend.service.mock.CourtAndGoServiceMock
 import pt.isel.courtandgo.frontend.service.mock.MockCourtService
 import pt.isel.courtandgo.frontend.service.mock.MockReservationService
 import pt.isel.courtandgo.frontend.service.mock.MockScheduleCourtService
@@ -74,14 +78,11 @@ class SelectedClubScreenTest {
     )
 
     private fun fakeAvailabilityViewModel() : CourtAvailabilityViewModel {
+        val serviceMock = CourtAndGoServiceMock()
         return CourtAvailabilityViewModel(
-            scheduleRepo = MockScheduleCourtService(
-                ScheduleCourtRepoMock()
-            ),
-            reservationRepo = MockReservationService(
-                ReservationRepoMock()
-            ),
-            courtRepo = MockCourtService(CourtRepoMock())
+            scheduleRepo = ScheduleRepositoryImpl(serviceMock),
+            reservationRepo = ReservationRepositoryImpl(serviceMock),
+            courtRepo = CourtRepositoryImpl(serviceMock)
         )
     }
 

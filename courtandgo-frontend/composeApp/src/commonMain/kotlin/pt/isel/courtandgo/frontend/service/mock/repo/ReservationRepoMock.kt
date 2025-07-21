@@ -10,7 +10,7 @@ class ReservationRepoMock {
 
     private val reservations = mutableListOf<Reservation>(
         Reservation(1, 1, 1, LocalDateTime(2025, 5, 20, 11, 0), LocalDateTime(2025, 5, 20, 13, 0), 25.0),
-        Reservation(2, 2, 1, LocalDateTime(2025, 5, 21, 16, 0), LocalDateTime(2025, 5, 21, 17, 0), 12.5),
+        Reservation(2, 2, 1, LocalDateTime(2025, 5, 21, 16, 0), LocalDateTime(2025, 5, 21, 17, 0), 12.5, ReservationStatus.Confirmed),
         Reservation(3, 1, 1, LocalDateTime(2026, 5, 10, 10, 30), LocalDateTime(2026, 5, 10, 13, 0), 23.0, ReservationStatus.Confirmed)
     )
 

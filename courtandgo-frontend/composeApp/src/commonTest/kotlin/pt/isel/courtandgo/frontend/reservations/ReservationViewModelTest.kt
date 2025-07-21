@@ -1,7 +1,11 @@
 package pt.isel.courtandgo.frontend.reservations
 
 import kotlinx.coroutines.test.runTest
+import pt.isel.courtandgo.frontend.repository.ClubRepositoryImpl
+import pt.isel.courtandgo.frontend.repository.CourtRepositoryImpl
+import pt.isel.courtandgo.frontend.repository.ReservationRepositoryImpl
 import pt.isel.courtandgo.frontend.reservations.lastReservations.ReservationViewModel
+import pt.isel.courtandgo.frontend.service.mock.CourtAndGoServiceMock
 import pt.isel.courtandgo.frontend.service.mock.MockClubService
 import pt.isel.courtandgo.frontend.service.mock.MockCourtService
 import pt.isel.courtandgo.frontend.service.mock.MockReservationService
@@ -21,10 +25,11 @@ class ReservationViewModelTest {
     @BeforeTest
     fun setup() {
         // Initialize the ReservationViewModel with mock services
+        val serviceMock = CourtAndGoServiceMock()
         viewModel = ReservationViewModel(
-            reservationRepo = MockReservationService(ReservationRepoMock()),
-            clubRepo = MockClubService(ClubRepoMock()),
-            courtRepo = MockCourtService(CourtRepoMock())
+            reservationRepo = ReservationRepositoryImpl(serviceMock),
+            clubRepo = ClubRepositoryImpl(serviceMock),
+            courtRepo = CourtRepositoryImpl(serviceMock)
         )
     }
 

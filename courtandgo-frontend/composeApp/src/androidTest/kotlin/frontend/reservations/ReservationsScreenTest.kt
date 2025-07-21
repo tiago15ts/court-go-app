@@ -12,9 +12,13 @@ import org.junit.Rule
 import org.junit.Test
 import pt.isel.courtandgo.frontend.domain.Reservation
 import pt.isel.courtandgo.frontend.domain.ReservationStatus
+import pt.isel.courtandgo.frontend.repository.ClubRepositoryImpl
+import pt.isel.courtandgo.frontend.repository.CourtRepositoryImpl
+import pt.isel.courtandgo.frontend.repository.ReservationRepositoryImpl
 import pt.isel.courtandgo.frontend.reservations.lastReservations.ReservationViewModel
 import pt.isel.courtandgo.frontend.reservations.lastReservations.ReservationsScreen
 import pt.isel.courtandgo.frontend.service.ReservationService
+import pt.isel.courtandgo.frontend.service.mock.CourtAndGoServiceMock
 import pt.isel.courtandgo.frontend.service.mock.MockClubService
 import pt.isel.courtandgo.frontend.service.mock.MockCourtService
 import pt.isel.courtandgo.frontend.service.mock.repo.ClubRepoMock
@@ -29,12 +33,12 @@ class ReservationsScreenTest {
 
     private val fakeStartDateTime = LocalDateTime(
         date = LocalDate(2025, 6, 20),
-        time = LocalTime(10, 0)
+        time = LocalTime(11, 0)
     )
 
     private val fakeEndDateTime = LocalDateTime(
         date = LocalDate(2025, 6, 20),
-        time = LocalTime(11, 0)
+        time = LocalTime(13, 0)
     )
 
     private val fakeUserId = 1
@@ -54,51 +58,24 @@ class ReservationsScreenTest {
         courtId = 2,
         playerId = fakeUserId,
         startTime = LocalDateTime(
-            date = LocalDate(2024, 6, 21),
-            time = LocalTime(10, 0)
+            date = LocalDate(2025, 5, 21),
+            time = LocalTime(16, 0)
         ),
         endTime = LocalDateTime(
-            date = LocalDate(2024, 6, 21),
-            time = LocalTime(11, 0)
+            date = LocalDate(2025, 6, 21),
+            time = LocalTime(17, 0)
         ),
-        estimatedPrice = 20.0,
+        estimatedPrice = 12.5,
         status = ReservationStatus.Confirmed
     )
 
-    private val fakeList = listOf(fakeReservation, fakeReservation2)
-
-
-    private val fakeReservationService = object : ReservationService {
-        override suspend fun getReservations(): List<Reservation> = fakeList
-
-        override suspend fun getReservationById(id: Int): Reservation = fakeReservation
-
-        override suspend fun getReservationsForPlayer(playerId: Int): List<Reservation> = fakeList
-
-        override suspend fun createReservation(reservation: Reservation): Reservation =
-            fakeReservation.copy(id = 2) // Simulate a new reservation with a different ID
-
-        override suspend fun updateReservation(reservation: Reservation): Reservation? =
-            if (reservation.id == fakeReservation.id) fakeReservation else null
-
-        override suspend fun cancelReservation(id: Int): Boolean =
-            id == fakeReservation.id
-
-        override suspend fun setConfirmedReservation(id: Int): Boolean =
-            id == fakeReservation.id
-
-        override suspend fun getReservationsByCourtIdsAndDate(
-            courtIds: List<Int>,
-            date: LocalDate
-        ): List<Reservation> = fakeList
-
-    }
 
     private fun fakeReservationsViewModel(): ReservationViewModel {
+        val serviceMock = CourtAndGoServiceMock()
         return ReservationViewModel(
-            reservationRepo = fakeReservationService,
-            clubRepo = MockClubService(ClubRepoMock()),
-            courtRepo = MockCourtService(CourtRepoMock())
+            reservationRepo = ReservationRepositoryImpl(serviceMock),
+            clubRepo = ClubRepositoryImpl(serviceMock),
+            courtRepo = CourtRepositoryImpl(serviceMock)
         )
     }
 
@@ -160,14 +137,14 @@ class ReservationsScreenTest {
         }
 
         val fakeTime = LocalDateTime(
-            date = LocalDate(2024, 6, 21),
-            time = LocalTime(10, 0)
+            date = LocalDate(2025, 5, 21),
+            time = LocalTime(16, 0)
         )
 
         // Check if the past reservation is displayed
         composeTestRule.onNodeWithText("Passadas").performClick()
         composeTestRule.onNodeWithText("Início: ${formatToDisplay(fakeTime)}").assertExists()
-        composeTestRule.onNodeWithText("Preço: 20.0 €").assertExists()
+        composeTestRule.onNodeWithText("Preço: 12.5 €").assertExists()
     }
 
     @Test
